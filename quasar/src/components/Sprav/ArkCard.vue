@@ -88,7 +88,13 @@
             :keep-alive="keepAlive"
             keep-alive-include="main"
         -->
-          <q-tab-panels v-model="tabModel" animated>
+          <q-tab-panels
+            v-model="tabModel"
+            animated
+            :keep-alive-max="keepAliveMax"
+            :keep-alive="keepAlive"
+            keep-alive-include="main"
+          >
             <q-tab-panel v-if="keepAlive" name="main" style="padding: 0">
               <tab-sprav
                 v-if="splitHorizont"
