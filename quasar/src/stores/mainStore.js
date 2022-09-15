@@ -7,6 +7,7 @@ export const useMainStore = defineStore("MainStore", {
       //все эти свойства будут иметь свой тип автоматически
       rightDrawerOpen: false,
       leftDrawerOpen: false,
+      isLeftDrawer: true,
       modalLoginOpen: false,
     };
   },

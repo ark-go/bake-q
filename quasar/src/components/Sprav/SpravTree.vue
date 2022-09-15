@@ -1,6 +1,6 @@
 <template>
   <div class="column">
-    <q-input ref="filterRef" dense v-model="filter" label="Фильтр">
+    <!-- <q-input ref="filterRef" dense v-model="filter" label="Фильтр">
       <template v-slot:append>
         <q-icon
           v-if="filter !== ''"
@@ -9,12 +9,7 @@
           @click="resetFilter"
         />
       </template>
-    </q-input>
-    <!-- <q-scroll-area
-      :thumb-style="thumbStyle"
-      :bar-style="barStyle"
-      style="height: 200px"
-    > -->
+    </q-input> -->
     <q-tree
       class="non-selectable text-no-wrap"
       :ref="(el) => (refTree = el)"

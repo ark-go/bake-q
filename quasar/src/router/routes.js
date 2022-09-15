@@ -1,5 +1,22 @@
 const routes = [
   {
+    path: "/new",
+    component: () => import("layouts/MainLayoutMin.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("components/PageStart/PageStart.vue"),
+        meta: { title: "Главная" },
+      },
+      {
+        path: "bakeryconf",
+        name: "bakeryconf",
+        component: () => import("components/Sprav/PageSprav.vue"),
+        meta: { title: "Справочник" },
+      },
+    ],
+  },
+  {
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
     children: [

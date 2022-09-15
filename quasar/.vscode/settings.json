@@ -11,6 +11,8 @@
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
-    "**/*.code-search": true
+    "**/*.code-search": true,
+    "**/src-capacitor/android": true,
+    "**/src-capacitor/www/assets/": true
   }
 }

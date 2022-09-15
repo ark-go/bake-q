@@ -1,8 +1,10 @@
 <template>
-  <div style="padding: 5px">
+  <div style="padding: 0">
     <q-card
-      bordered
-      class="my-card bg-grey-1 shadow-10"
+      :flat="route.name == 'bakeryconf'"
+      :bordered="route.name != 'bakeryconf'"
+      class="my-card"
+      :class="{ 'shadow-10': route.name != 'bakeryconf' }"
       style="overflow: auto; min-height: 200px; user-select: none"
       :style="maxHeigh"
       @click.right.prevent="$emit('stop')"
@@ -81,13 +83,12 @@
           style="padding: 0 16px 16px 16px"
           :style="{ maxHeight: maxBodyHeight }"
         >
-          <q-tab-panels
-            v-model="tabModel"
-            animated
-            :keep-alive-max="keepAliveMax"
+          <!--
+                      :keep-alive-max="keepAliveMax"
             :keep-alive="keepAlive"
             keep-alive-include="main"
-          >
+        -->
+          <q-tab-panels v-model="tabModel" animated>
             <q-tab-panel v-if="keepAlive" name="main" style="padding: 0">
               <tab-sprav
                 v-if="splitHorizont"
@@ -159,7 +160,7 @@
 <script>
 // prettier-ignore
 import {ref,watch, onMounted, watchEffect, onUpdated, computed, nextTick, onBeforeUnmount, onUnmounted, defineAsyncComponent, } from "vue";
-import { useRouter, onBeforeRouteLeave } from "vue-router";
+import { useRouter, useRoute, onBeforeRouteLeave } from "vue-router";
 import PageSetupDialog from "./PageSetupDialog.vue";
 import SplitterSprav from "./SplitterSprav.vue";
 import TabSprav from "./TabSprav.vue";
@@ -192,6 +193,7 @@ export default {
   setup(props, { emit }) {
     const $q = useQuasar();
     const $router = useRouter();
+    const route = useRoute();
     const spravStore = useSpravStore();
     const { style, height } = dom;
     const refTopSection = ref();
@@ -208,20 +210,18 @@ export default {
     const historyOn = ref(false);
     const keepAlive = ref(true);
     const keepAliveMax = ref(10);
+    console.log("route name", route.name);
     onBeforeUnmount(() => {
       keepAlive.value = false;
       console.log("arkCard sprav before unmount", keepAlive.value);
     });
-    onUnmounted(() => {
-      console.log("arkCard sprav unmount", keepAlive.value);
-    });
+
     onBeforeRouteLeave(async (to, from, next) => {
       keepAliveMax.value = 0;
       keepAlive.value = false;
       console.log("arkCard sprav RouteLeave", keepAlive.value);
-      nextTick(() => {
-        next();
-      });
+
+      next();
     });
     watch(
       () => tabModel.value,
@@ -370,6 +370,7 @@ export default {
       },
       keepAlive,
       keepAliveMax,
+      route,
     };
   },
 };

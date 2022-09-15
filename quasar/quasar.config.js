@@ -31,7 +31,7 @@ module.exports = configure(function (/* ctx */) {
     boot: ["i18n", "socketBoot", "startApp", "axios", "errorHandlerVue"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
-    css: ["app.scss", "scrollbar.scss"],
+    css: ["app.scss", "scrollbar.scss", "scrollbar.mini.scss"],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [

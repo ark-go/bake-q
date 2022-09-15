@@ -1,10 +1,22 @@
+<style lang="scss" scoped>
+.ark-card {
+  width: v-bind(widthForm);
+  max-width: 80%;
+  @media (max-width: 1200px) {
+    max-width: 90%;
+  }
+  @media (max-width: 1000px) {
+    max-width: 99vw;
+  }
+}
+</style>
 <template>
   <!-- :title="spravStore.selectedNode.pathStr ? 'Cправочник' : 'Cправочники'" -->
   <ark-card
+    class="ark-card"
     title="Конфигурация пекарен"
     :pageMaxHeight="pageMaxHeight"
     :subTitle="subTitle"
-    :style="{ width: cardMain.width.curr + 'px', maxWidth: '98vw' }"
     :buttonArr="buttonArr"
     @buttonClick="buttonClick"
     :selectedNode="spravStore.selectedNode"
@@ -38,6 +50,7 @@
 <script>
 import {
   defineComponent,
+  computed,
   ref,
   watch,
   watchEffect,
@@ -56,7 +69,7 @@ import HelpPanel from "components/HelpPanel/HelpPanel.vue";
 
 import { useSpravStore } from "stores/spravStore";
 import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useQuasar } from "quasar";
 
 export default defineComponent({
@@ -76,11 +89,19 @@ export default defineComponent({
     const spravStore = useSpravStore();
     const { cardMain } = storeToRefs(usePagesSetupStore());
     const $router = useRouter();
+    const route = useRoute();
     const subTitle = ref("");
     const currentTableName = ref(null);
     const currentTable = ref(SpravTable);
     const $q = useQuasar();
     const splitHorizont = ref(false);
+    const widthForm = computed(() => {
+      if (route.name == "bakeryconf") {
+        return "100%";
+      } else {
+        return cardMain.value.width.curr + "px";
+      }
+    });
     onBeforeUnmount(() => {
       // при входе могло остаться чтото, желательно удалять при выходе
       spravStore.selectedNode = {};
@@ -268,6 +289,7 @@ export default defineComponent({
       subTitle,
       buttonClick,
       menuClick,
+      widthForm,
     };
   },
 });
