@@ -11,7 +11,8 @@ export default boot(async ({ router } /* { app, router, ... } */) => {
       try {
         check = await checkAccess(to.path, to.meta?.title);
         if (!check) {
-          return false; // никуда не переходим, запрещено
+          return "/";
+          // return false; // никуда не переходим, запрещено
         }
       } catch (error) {
         console.error("Ошибка проверки доступа", error);
@@ -21,7 +22,6 @@ export default boot(async ({ router } /* { app, router, ... } */) => {
     }
     // BUG: не работает, сам replace в return
 
-    // БАГ ! : 3333333
     // в роутере прописана meta.replace. при первом проходе
     // надо войти в блок и сказать, раз мы уходим со страницы которую надо переписать
     // делаем replace,
@@ -44,7 +44,7 @@ export default boot(async ({ router } /* { app, router, ... } */) => {
     }
     if (respData.error) {
       //
-      console.error("Доступ запрещен:", path);
+      console.error("Доступ запрещен:.", path);
       return false; //router.push("/");
     }
     if (respData.result) {

@@ -3,13 +3,7 @@
     class="column shadow-7 rounded-borders"
     style="width: 250px; padding: 6px"
   >
-    <q-input
-      color="indigo"
-      v-model="login"
-      label="Логин"
-      type="email"
-      autocomplete="on"
-    >
+    <q-input color="indigo" v-model="login" label="Логин" autocomplete="on">
       <template v-slot:prepend>
         <q-icon name="event" />
       </template>
@@ -20,6 +14,7 @@
       label="Пароль"
       type="password"
       autocomplete="on"
+      :filled="false"
     >
       <template v-slot:prepend>
         <q-icon name="event" />

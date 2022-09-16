@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh Lpr fFf">
-    <q-header elevated style="height: 30px">
+    <q-header elevated style="height: 35px">
       <q-toolbar style="min-height: 30px">
         <div class="title-grid">
           <div class="title-grid-item-left">
@@ -39,7 +39,8 @@
             />
           </div>
           <div class="title-grid-item-right">
-            <div>{{ userInfo.username || userInfo.email }}</div>
+            <!-- <div>{{ userInfo.username || userInfo.email }}</div> -->
+            <Menu-User></Menu-User>
             <q-btn
               dense
               flat
@@ -51,31 +52,8 @@
         </div>
       </q-toolbar>
     </q-header>
+    <drawer-left v-model="isLeftDrawer"></drawer-left>
 
-    <q-drawer side="left" v-model="isLeftDrawer" bordered class="scrollmini">
-      <Menu-Side v-if="userInfo.email != 'Arkadii@yandex1.ru'"></Menu-Side>
-      <q-list v-if="userInfo.email == 'Arkadii@yandex.ru'">
-        <q-item-label header> Только мое </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-      <div
-        class="u-u-u"
-        style="
-          background: teal;
-          width: 2px;
-          top: 0px;
-          position: absolute;
-          right: 0;
-          height: 100%;
-          cursor: e-resize;
-        "
-      ></div>
-    </q-drawer>
     <q-drawer
       side="right"
       v-model="rightDrawerOpen"
@@ -123,12 +101,13 @@
   </q-layout>
   <!-- @click.self="modalLoginOpen = modalLoginOpen" -->
   <teleport to="body">
-    <div
+    <Login-Dialog v-model="modalLoginOpen"></Login-Dialog>
+    <!-- <div
       v-if="modalLoginOpen"
       class="modal1 flex flex-center ark-popup shadow-6"
     >
       <form-login class="ark-popup-body"></form-login>
-    </div>
+    </div> -->
   </teleport>
   <teleport to="body" v-if="pdfModal">
     <pdf-dialog></pdf-dialog>
@@ -198,7 +177,8 @@
 </style>
 <script>
 import { Notify } from "quasar";
-import EssentialLink from "components/EssentialLink.vue";
+//import EssentialLink from "components/EssentialLink.vue";
+import DrawerLeft from "./drawerLeft/DrawerLeft.vue";
 import RightItems from "components/mainPage/rightDrawer/rightItems.vue";
 //import Vue from "vue";
 import {
@@ -210,7 +190,6 @@ import {
   onBeforeMount,
 } from "vue";
 import { emitter } from "boot/axios";
-//import FormLogin from "components/FormLogin.vue";
 import FormLogin from "components/Registration/FormLogin.vue";
 import pdfDialog from "components/PDF/PdfDialog.vue";
 //import { arkVuex } from "src/utils/arkVuex"; // const { pdfWindow } = createArkVuex();
@@ -229,17 +208,22 @@ import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
 import { useIoSocket } from "stores/ioSocket.js";
 import { useQuasar } from "quasar";
 import TestMove from "./TestMove.vue";
-import MenuSide from "src/components/MenuSide/MenuSide.vue";
+import MenuUser from "./menuUser/menuUser.vue";
+import LoginDialog from "./loginDialog/LoginDialog.vue";
+//import MenuSide from "src/components/MenuSide/MenuSide.vue";
 export default defineComponent({
   name: "MainLayout",
 
   components: {
-    EssentialLink,
+    DrawerLeft,
+    // EssentialLink,
     FormLogin,
     pdfDialog,
     RightItems,
     TestMove,
-    MenuSide,
+    MenuUser,
+    LoginDialog,
+    //   MenuSide,
   },
 
   setup() {

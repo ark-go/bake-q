@@ -9,6 +9,18 @@ const routes = [
         meta: { checkAccess: true, title: "Главная." },
       },
       {
+        path: "registration2/:id?/:code?",
+        name: "registration2",
+        props: true,
+        component: () => import("components/Registration/PageRegistration.vue"),
+        meta: { title: "Регистрация" },
+      },
+      {
+        path: "products",
+        component: () => import("components/Products/PageProducts.vue"),
+        meta: { checkAccess: true, title: "Продукция" },
+      },
+      {
         path: "bakeryconf",
         name: "bakeryconf",
         component: () => import("components/Sprav/PageSprav.vue"),

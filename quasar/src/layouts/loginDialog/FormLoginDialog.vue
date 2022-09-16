@@ -48,7 +48,7 @@ import { useMainStore } from "stores/mainStore.js";
 import { useUserStore } from "stores/userStore.js";
 //import { storeToRefs } from "pinia";
 export default {
-  name: "FormLogin",
+  name: "FormLoginDialog",
   setup() {
     const user = useUserStore(); //
     const router = useRouter();

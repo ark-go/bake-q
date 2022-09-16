@@ -1,6 +1,6 @@
 <template>
   <q-page
-    class="flex flex-center ark-backgound1"
+    class="flex flex-center"
     style="min-width: 360px"
     :style-fn="panelFnHeight"
   >
