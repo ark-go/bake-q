@@ -10,7 +10,7 @@ export function getMiddleExpSession(sessionStore) {
         //genid: () => uuidv4(),
         secret: config.server.secretSession,
         cookie: { secure: true, sameSite: true, maxAge: 60 * 60 * 1000 * 24 }, //24
-        resave: false, // false - не пересохранять сессиию если ничего не менялось  //! Изучать!!
+        resave: false, // false - не пересохранять сессиию если ничего не менялось
         saveUninitialized: false, // если true, то в хранилище будут попадать пустые сессии? false - Сеанс не инициализируется, если он новый, но не изменен
         // rolling: true, // нужно ли устанавливать идентификатор сессии cookie на каждый запрос
         store: sessionStore,

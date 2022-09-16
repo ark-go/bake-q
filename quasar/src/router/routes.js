@@ -6,13 +6,13 @@ const routes = [
       {
         path: "",
         component: () => import("components/PageStart/PageStart.vue"),
-        meta: { title: "Главная" },
+        meta: { checkAccess: true, title: "Главная." },
       },
       {
         path: "bakeryconf",
         name: "bakeryconf",
         component: () => import("components/Sprav/PageSprav.vue"),
-        meta: { title: "Справочник" },
+        meta: { checkAccess: true, title: "Конфигурация пекарен" },
       },
     ],
   },
@@ -23,7 +23,7 @@ const routes = [
       {
         path: "",
         component: () => import("components/PageStart/PageStart.vue"),
-        meta: { title: "Главная" },
+        meta: { checkAccess: true, title: "Главная" },
       },
       {
         path: "test",
@@ -32,14 +32,14 @@ const routes = [
       {
         path: "departments",
         component: () => import("components/Users/PageUsersTree.vue"),
-        meta: { title: "Пользователи" },
+        meta: { checkAccess: true, title: "Пользователи" },
       },
       {
         path: "registration/:id?/:code?",
         name: "registration",
         props: true,
         component: () => import("components/Registration/PageRegistration.vue"),
-        meta: { title: "Регистрация" },
+        meta: { checkAccess: true, title: "Регистрация" },
       },
       {
         path: "chartsold",
@@ -61,7 +61,7 @@ const routes = [
       {
         path: "prodaja",
         component: () => import("pages/PageProdaja.vue"),
-        meta: { title: "Продажи" },
+        meta: { checkAccess: true, title: "Продажи" },
       },
       {
         path: "specstore",
@@ -69,43 +69,51 @@ const routes = [
       },
       {
         path: "spravochnik",
-        component: () => import("components/Sprav/PageSprav.vue"),
-        meta: { title: "Справочник" },
+        component: () =>
+          import(
+            /* webpackChunkName: "spravochnik" */ "components/Sprav/PageSprav.vue"
+          ),
+        meta: {
+          checkAccess: true,
+          title: "Справочник",
+          replace: true,
+          yesReplace: false,
+        },
       },
       // {
       //   path: "price",
       //   component: () => import("components/Price/PagePrice.vue"),
-      //   meta: { title: "Прайсы" },
+      //   meta: { checkAccess: true,  title: "Прайсы" },
       // },
       {
         path: "sale",
         component: () => import("components/Sale/PageSale.vue"),
-        meta: { title: "Продажи" },
+        meta: { checkAccess: true, title: "Продажи" },
       },
       {
         path: "kagent",
         component: () => import("components/Kagent/PageKagent.vue"),
-        meta: { title: "Контрагенты" },
+        meta: { checkAccess: true, title: "Контрагенты" },
       },
       {
         path: "bakery",
         component: () => import("components/Bakery/PageBakery.vue"),
-        meta: { title: "Пекарни" },
+        meta: { checkAccess: true, title: "Пекарни" },
       },
       {
         path: "products",
         component: () => import("components/Products/PageProducts.vue"),
-        meta: { title: "Продукция" },
+        meta: { checkAccess: true, title: "Продукция" },
       },
       {
         path: "docprice",
         component: () => import("components/Docprice/PageDocprice.vue"),
-        meta: { title: "Прайс" },
+        meta: { checkAccess: true, title: "Прайс" },
       },
       {
         path: "bakeryttk",
         component: () => import("components/BakeryTTK/PageBakeryTTK.vue"),
-        meta: { title: "Продукты" },
+        meta: { checkAccess: true, title: "Продукты" },
       },
       {
         path: "xls",
@@ -144,7 +152,7 @@ const routes = [
       {
         path: "",
         component: () => import("components/Price/PagePrice.vue"),
-        meta: { title: "Прайсы" },
+        meta: { checkAccess: true, title: "Прайсы" },
       },
     ],
   },

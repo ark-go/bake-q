@@ -117,7 +117,7 @@
     <pdf-dialog></pdf-dialog>
   </teleport>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .main-background {
   background-image: url("/bg/pattern-vintage-small.svg");
 }
@@ -258,10 +258,10 @@ export default defineComponent({
       // });
     };
     onMounted(async () => {
-      if (!(await checkAccess(route.path, route.meta?.title))) {
-        // если мы заходим по URL проверяем доступность первый раз
-        router.push("/");
-      }
+      // if (!(await checkAccess(route.path, route.meta?.title))) {
+      //   // если мы заходим по URL проверяем доступность первый раз
+      //   router.push("/");
+      // }
       console.log("User rol", userInfo.value.roles);
       essentialLinks.value = linkList(
         userInfo.value.roles,
@@ -277,26 +277,21 @@ export default defineComponent({
     //     document.title += title ? " | " + title : "";
     //   });
     // });
-    router.beforeEach(async (to, from, next) => {
-      // если переходим с корня то затираем ссылку на login  в истории - rplace
-      if (from.path === "/") {
-        if (!from.meta.replace) {
-          from.meta.replace = true; // чтоб не зацикливать
-          console.log("beforeEach", from.meta.replace, from.meta);
-          next({ path: to.path, replace: true }); // начинает обход хуков с начала
-          return;
-        }
-        from.meta.replace = false;
-      }
-      //from.meta.replace = false;
-      // если мы переходим по кнопке проверяем доступность второй раз
-      if (await checkAccess(to.path, to.meta?.title)) {
-        next(); // без этого стоим на месте
-      } else {
-        //  next({ path: "/", replace: true }); // начинает обход хуков с начала replace затираем путь
-        next(false);
-      }
-    });
+    // router.beforeEach(async (to, from) => {
+    //   if (to.meta.checkAccess) {
+    //     let check = null;
+    //     try {
+    //       check = await checkAccess(to.path, to.meta?.title);
+    //       if (!check) {
+    //         return true; // никуда не переходим
+    //       }
+    //     } catch (error) {
+    //       // ошибка при запросе, остаемся на месте
+    //       //throw error;
+    //       return true; // никуда не переходим
+    //     }
+    //   }
+    // });
     // ошибки роута
     router.onError((err, to, from) => {
       // ловим ошибки роута или при пропадании сети
@@ -341,38 +336,7 @@ export default defineComponent({
         ],
       });
     });
-    //! Здесь будем проверять доступ
-    console.log("route", route.path);
-    async function checkAccess(path, title) {
-      let check = await arkUtils.dataLoad(
-        "/api/accessCheck",
-        { path: path },
-        title
-      );
-      console.log("check:", check.toString());
-      if (check.error) {
-        // выдали ошибку? она выдается в arkUtils.dataLoad
-        console.log("запрет accessCheck :", path, check.error);
-        return false; //router.push("/");
-      }
-      if (check.result) {
-        // запрос прошел, и без ошибки
-        console.log("разрешено accessCheck :", path, check.result);
-        return true;
-      }
-    }
-    watchEffect(
-      async () => {
-        console.log("route2", route.path);
-        // await checkAccess(route.path);
-        let title = route.meta.title;
-        document.title = "ХиТ";
-        document.title += title ? " | " + title : "";
-      }
-      // async newId => {
-      //   userData.value = await fetchUser(newId)
-      // }
-    );
+
     // onBeforeMount(() => {
     //   // Вроде не используем нигде
     //   onBeforeRouteLeave(async (to, from, next) => {

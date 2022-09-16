@@ -188,7 +188,7 @@ export default defineComponent({
       selectedPriceValueFranch.value = row;
       // selectedRowPrice.value = row;
       //    priceStore.selectedRowPrice = row;
-      //  emit("selectedRow", row); //! необходимо отдать для Sprav ? да и ваще полезно
+      //  emit("selectedRow", row);
     }
     return {
       title,

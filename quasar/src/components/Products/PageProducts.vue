@@ -75,8 +75,8 @@ export default defineComponent({
 .component-fade-leave-to {
   opacity: 0;
 }
-.ark-backgound1 {
-  // background-image: url("/bg/background1.svg");
-  background-image: url("/bg/pattern-vintage-small.svg");
-}
+// .ark-backgound1 {
+//   // background-image: url("/bg/background1.svg");
+//   background-image: url("/bg/pattern-vintage-small.svg");
+// }
 </style>

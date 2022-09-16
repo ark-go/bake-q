@@ -110,7 +110,7 @@ export default defineComponent({
       console.log("Нажали по строке");
       selectedRowPrice.value = row;
       //    priceStore.selectedRowPrice = row;
-      //  emit("selectedRow", row); //! необходимо отдать для Sprav ? да и ваще полезно
+      //  emit("selectedRow", row);
     }
     return {
       //    currentRow,

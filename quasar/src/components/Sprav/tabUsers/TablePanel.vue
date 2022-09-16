@@ -123,7 +123,7 @@ export default defineComponent({
         console.log("Нажали по строке");
         currentRow.value = row;
         store.selectedRow = row;
-        emit("selectedRow", row); //! необходимо отдать для Sprav ? да и ваще полезно
+        emit("selectedRow", row);
       },
     };
   },

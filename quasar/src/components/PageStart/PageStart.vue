@@ -10,8 +10,3 @@ export default defineComponent({
   components: { MenuGrid },
 });
 </script>
-<style lang="scss" scoped>
-// .ark {
-//   background-image: url("/bg/pattern-vintage-small.svg");
-// }
-</style>

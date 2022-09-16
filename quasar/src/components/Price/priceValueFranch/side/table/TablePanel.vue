@@ -92,11 +92,7 @@ export default defineComponent({
       selectedBakeryPrice,
       RowsBakeryPriceFranch,
     } = storeToRefs(usePriceStore());
-    // onActivated(() => {
-    //   console.log("onactivate       d++++++++++++++++++");
-    //   selectedFranchPrice.value = [];
-    // });
-    //TODO:  ,,,????
+
     priceStore.watchStore(() => {
       return watch(
         () => RowsBakeryPriceFranch.value.length,

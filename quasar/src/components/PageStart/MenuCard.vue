@@ -58,8 +58,3 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss" scoped>
-// .ark {
-//   background-image: url("/bg/pattern-vintage-small.svg");
-// }
-</style>

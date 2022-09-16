@@ -6,7 +6,6 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import routes from "./routes";
-
 /*
  * Если вы не строите в режиме SSR, вы можете
  * напрямую экспортировать экземпляр маршрутизатора;
@@ -34,6 +33,5 @@ export default route(function (/* { store, ssrContext } */) {
       process.env.MODE === "ssr" ? void 0 : process.env.VUE_ROUTER_BASE
     ),
   });
-
   return Router;
 });

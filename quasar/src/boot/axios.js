@@ -45,7 +45,7 @@ export default boot(({ app }) => {
       const user = useUserStore();
       // входящий сюда
       console.log("axios вход ", response.headers?.["x-info-site"]);
-      console.log("response:", response);
+      console.log("boot response:", response);
       if (response.headers?.["x-info-site"] == "NoLogin") {
         user.userInfo = {};
         user.isAllowPath = response.data?.isAllowPath || [];
@@ -81,16 +81,15 @@ export default boot(({ app }) => {
     const user = useUserStore();
     user.isAdmin = true;
     //! только чтоб не посылать, лишний раз запросы если было закрыто.
-    //! т.е. если уже было запрещено, то не стоит и посылать запрос, пока не пройдет разрешение
+    // т.е. если уже было запрещено, то не стоит и посылать запрос, пока не пройдет разрешение
     // вобщемэто можно отключить - пока не вижу нужности
     if (user.isAllowPath && user.isAllowPath.length > 0) {
       if (!user.isAllowPath.includes(config.url.replace(new RegExp("^/api")))) {
         return Promise.reject(new Error("Запрещено."));
       }
     }
-    //! ------
     //const value = Cookies.getAll(); //
-    //получим таймзону и засунем header
+    //! получим таймзону и засунем header
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     console.log("TimeZone", tz);
     // const token = localStorage.getItem('token');

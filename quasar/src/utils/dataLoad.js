@@ -29,7 +29,7 @@ export async function dataLoad(url, data, logInfo = "") {
       delay: 400, // ms
     });
     let resp = await axios.post(url, data);
-    console.dir("resp", resp);
+    console.dir("dataLoad", url, data, resp);
     let respData = resp.data;
     let keyRes = Object.keys(respData);
     if (!keyRes.includes("result") && !keyRes.includes("error")) {

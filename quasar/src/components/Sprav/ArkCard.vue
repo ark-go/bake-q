@@ -13,7 +13,7 @@
         <q-card-section
           :class="{ 'bg-red-3': spravStore.historyOn && historyOn }"
         >
-          <q-badge
+          <!-- <q-badge
             class="cursor-pointer q-mt-sm"
             style="margin-top: 5px; margin-right: 4px"
             rounded
@@ -21,7 +21,7 @@
             label="X"
             floating
             @click="$router.go(-1)"
-          />
+          /> -->
           <div class="row items-center no-wrap">
             <div class="col">
               <div

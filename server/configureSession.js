@@ -38,12 +38,12 @@ export function configureSession(app) {
     name: process.env.COOKIE_NAME,
     secret: process.env.SESSION_SECRET, // Любой ключ но требуется переменная SESSION_SECRET
     cookie: {
-      secure: true, //! nginx: proxy_set_header x-forwarded-proto https; и это: app.set("trust proxy", 1);
+      secure: true, // nginx: proxy_set_header x-forwarded-proto https; и это: app.set("trust proxy", 1);
       sameSite: true,
       httpOnly: true, //!true
       maxAge: 1 * 60 * 1000, //7 * 24 * 60 * 60 * 1000, // дней сек мин часы 1000
     },
-    resave: true, // false - не пересохранять сессиию если ничего не менялось //! Возможно не дает удалить сессию ..https://github.com/tj/connect-redis/issues/252
+    resave: true, // false - не пересохранять сессиию если ничего не менялось // Возможно не дает удалить сессию ..https://github.com/tj/connect-redis/issues/252
     saveUninitialized: false, // если true, то в хранилище будут попадать пустые сессии
     rolling: true, // нужно ли устанавливать идентификатор сессии cookie на каждый запрос
     //store: redisStore,

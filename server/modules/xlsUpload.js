@@ -22,7 +22,7 @@ export async function xlsUpload(req, res) {
   console.log("xls ячейка: ", cell_ref, " : ", worksheet[cell_ref]); // A77
   console.log("xls ячейка парам-v: ", cell_ref, " : ", worksheet[cell_ref]?.v); // A77
   console.log("xls допустимый диапазон: ", worksheet["!ref"]);
-  console.log("xls допустимый диапазон в коде: ", worksheet["!range"]); //! --------------------
+  console.log("xls допустимый диапазон в коде: ", worksheet["!range"]); 
   */
     //var table = XLSX.utils.sheet_to_csv(worksheet);
     // worksheet["!ref"] = "A1:D9000"; // ограничивает рабочую зону

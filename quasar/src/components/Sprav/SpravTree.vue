@@ -219,7 +219,7 @@ const dataTree = [
       {
         key: 311,
         label: "Пекарни",
-        helpCode: "Пекарни вкладка", //! менять коды нельзя.. это ключи в базу данных
+        helpCode: "Пекарни вкладка", // менять коды нельзя.. это ключи в базу данных
         // icon: "room_service",
         tableType: "tabBakeryMain", // для выбора
         tableName: "tabBakeryMain", // хрен знает
