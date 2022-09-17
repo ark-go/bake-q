@@ -1,94 +1,80 @@
 <template>
-  <div :ref="(el) => (refAllForm = el)" style="padding: 5px">
-    <q-card
-      bordered
-      class="my-card bg-grey-1 shadow-10"
-      style="overflow: auto; min-height: 200px; user-select: none"
-      :style="maxHeigh"
-      @click.right.prevent="$emit('stop')"
-    >
-      <div :ref="(el) => (refTopSection = el)">
-        <q-card-section class="q-pb-xs q-pt-xs">
-          <q-badge
-            class="cursor-pointer q-mt-sm"
-            style="margin-top: 5px; margin-right: 4px"
-            color="red-3"
-            label="X"
-            floating
-            @click="$router.push({ path: '/' })"
-          />
-          <div class="row items-center no-wrap">
-            <div class="col">
-              <div class="text-h6 row">
-                {{ saleTitle }}
-              </div>
-              <div v-if="!!saleSubTitle" class="text-subtitle2">
-                {{ saleSubTitle }}
-              </div>
+  <q-card
+    flat
+    class="ark-card-panel"
+    style="overflow: auto; user-select: none"
+    @click.right.prevent="$emit('stop')"
+  >
+    <div :ref="(el) => (refTopSection = el)">
+      <q-card-section class="q-pb-xs q-pt-xs">
+        <div class="row items-center no-wrap">
+          <div class="col">
+            <div class="text-h6 row">
+              {{ saleTitle }}
             </div>
-
-            <div class="col-auto">
-              <q-btn v-if="menuObj" color="grey-7" round flat icon="more_vert">
-                <q-menu cover auto-close>
-                  <q-list>
-                    <q-item
-                      clickable
-                      :key="nameKey"
-                      v-for="(value, nameKey) in menuObj"
-                    >
-                      <q-item-section @click="onClickMenu(nameKey)">{{
-                        value
-                      }}</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
-              </q-btn>
+            <div v-if="!!saleSubTitle" class="text-subtitle2">
+              {{ saleSubTitle }}
             </div>
           </div>
-        </q-card-section>
-      </div>
-      <div :ref="(el) => (refInfoSection = el)">
-        <q-card-section class="q-py-xs">
-          <Tab-Button></Tab-Button>
-        </q-card-section>
-      </div>
-      <div :ref="(el) => (refBodySection = el)">
-        <q-card-section
-          style="padding: 0 16px 16px 16px"
-          :style="{ maxHeight: maxBodyHeight }"
-        >
-          <slot name="tabPanels"> </slot>
-        </q-card-section>
-      </div>
-      <div
-        :ref="(el) => (refBottomSection = el)"
-        style="position: absolute; bottom: 0; width: 100%"
-      >
-        <q-separator v-if="buttonArrProp" />
 
-        <q-card-actions>
-          <slot v-if="buttonArrProp" name="buttons">
-            <q-btn
-              disable
-              flat
-              :key="item.key"
-              v-for="item in buttonArrProp"
-              @click="emit('buttonClick', item.key)"
-            >
-              {{ item.name }}
+          <div class="col-auto">
+            <q-btn v-if="menuObj" color="grey-7" round flat icon="more_vert">
+              <q-menu cover auto-close>
+                <q-list>
+                  <q-item
+                    clickable
+                    :key="nameKey"
+                    v-for="(value, nameKey) in menuObj"
+                  >
+                    <q-item-section @click="onClickMenu(nameKey)">{{
+                      value
+                    }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
             </q-btn>
-          </slot>
-          <!-- <q-btn flat @click="clickNewRecept">Создать</q-btn>
-        <q-btn flat @click="emit('closeModal')">Отмена</q-btn> -->
-        </q-card-actions>
-        <div id="tabTeleport"></div>
-      </div>
-      <slot name="bottomSlot"> </slot>
-    </q-card>
-    <Page-Setup-Dialog
-      v-model:menuDialogShow="menuDialogShow"
-    ></Page-Setup-Dialog>
-  </div>
+          </div>
+        </div>
+      </q-card-section>
+    </div>
+    <div :ref="(el) => (refInfoSection = el)">
+      <q-card-section class="q-py-xs">
+        <Tab-Button></Tab-Button>
+      </q-card-section>
+    </div>
+    <div :ref="(el) => (refBodySection = el)">
+      <q-card-section
+        style="padding: 0 16px 16px 16px"
+        :style="{ maxHeight: maxBodyHeight }"
+      >
+        <slot></slot>
+      </q-card-section>
+    </div>
+    <div
+      :ref="(el) => (refBottomSection = el)"
+      style="position: absolute; bottom: 0; width: 100%"
+    >
+      <!-- <q-separator v-if="buttonArrProp" />
+
+      <q-card-actions>
+        <slot v-if="buttonArrProp" name="buttons">
+          <q-btn
+            disable
+            flat
+            :key="item.key"
+            v-for="item in buttonArrProp"
+            @click="emit('buttonClick', item.key)"
+          >
+            {{ item.name }}
+          </q-btn>
+        </slot>
+      </q-card-actions> -->
+      <div id="tabTeleport"></div>
+    </div>
+  </q-card>
+  <Page-Setup-Dialog
+    v-model:menuDialogShow="menuDialogShow"
+  ></Page-Setup-Dialog>
 </template>
 
 <script>
@@ -149,30 +135,30 @@ export default defineComponent({
       saleTitle,
       saleSubTitle,
     } = storeToRefs(useSaleStore());
-    watch(
-      () => props.fullScreenTr,
-      () => {
-        if (!$q.fullscreen.isActive) {
-          $q.fullscreen
-            .request(refAllForm.value)
-            .then(() => {
-              // success!
-            })
-            .catch((err) => {
-              console.log("fullscreen1", err);
-            });
-        } else {
-          $q.fullscreen
-            .exit()
-            .then(() => {
-              // success!
-            })
-            .catch((err) => {
-              // oh, no!!!
-            });
-        }
-      }
-    );
+    // watch(
+    //   () => props.fullScreenTr,
+    //   () => {
+    //     if (!$q.fullscreen.isActive) {
+    //       $q.fullscreen
+    //         .request(refAllForm.value)
+    //         .then(() => {
+    //           // success!
+    //         })
+    //         .catch((err) => {
+    //           console.log("fullscreen1", err);
+    //         });
+    //     } else {
+    //       $q.fullscreen
+    //         .exit()
+    //         .then(() => {
+    //           // success!
+    //         })
+    //         .catch((err) => {
+    //           // oh, no!!!
+    //         });
+    //     }
+    //   }
+    // );
     function onClickMenu(nameKey) {
       emit("menuClick", nameKey);
       if (nameKey == "sizeForm") {
@@ -183,9 +169,6 @@ export default defineComponent({
         });
       }
     }
-    watchEffect(() => {
-      console.log("refTopSection", refTopSection.value);
-    });
     watchEffect(() => {
       splitHorizont.value = $q.screen.width < $q.screen.height;
     });
@@ -253,7 +236,6 @@ export default defineComponent({
       refBodySection,
       refInfoSection,
       refBottomSection,
-      refAllForm,
       maxBodyHeight,
       maxHeigh,
       splitterModel,

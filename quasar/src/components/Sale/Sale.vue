@@ -3,21 +3,12 @@
     title="Прайс"
     :subTitle="subTitle"
     :pageMaxHeight="pageMaxHeight"
-    :style="{
-      width: cardMain.width.curr + 'px',
-      maxWidth: '98vw',
-    }"
     :selectedRow="saleStore.selectedSaleRowDoc"
     :menuObj="menuObj"
     @menuClick="menuClick"
     :fullScreenTr="fullScreen"
   >
-    <template v-slot:tabPanels>
-      <Tab-Panels></Tab-Panels>
-    </template>
-    <template v-slot:bottomSlot>
-      <Corner-Size v-model:sizeX="cardMain.width.curr"></Corner-Size>
-    </template>
+    <Tab-Panels></Tab-Panels>
   </ark-card>
 
   <Help-Panel v-model:helpShow="helpShow" :helpCode="helpCode"></Help-Panel>
@@ -30,7 +21,6 @@ import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
 // все назначается в tabPanels в подкаталогах
 import TabPanels from "./TabPanels.vue";
 import HelpPanel from "components/HelpPanel/HelpPanel.vue";
-import CornerSize from "./CornerSize.vue";
 export default defineComponent({
   name: "PageSale",
   props: {
@@ -40,7 +30,6 @@ export default defineComponent({
     ArkCard,
     HelpPanel,
     TabPanels,
-    CornerSize,
   },
   setup() {
     const saleStore = useSaleStore();

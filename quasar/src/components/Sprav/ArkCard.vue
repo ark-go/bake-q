@@ -1,19 +1,15 @@
 <template>
-  <div style="padding: 0">
-    <q-card
-      :flat="route.name == 'bakeryconf'"
-      :bordered="route.name != 'bakeryconf'"
-      class="my-card"
-      :class="{ 'shadow-10': route.name != 'bakeryconf' }"
-      style="overflow: auto; min-height: 200px; user-select: none"
-      :style="maxHeigh"
-      @click.right.prevent="$emit('stop')"
-    >
-      <div :ref="(el) => (refTopSection = el)">
-        <q-card-section
-          :class="{ 'bg-red-3': spravStore.historyOn && historyOn }"
-        >
-          <!-- <q-badge
+  <q-card
+    flat
+    class="ark-card-panel"
+    style="overflow: auto; user-select: none"
+    @click.right.prevent="$emit('stop')"
+  >
+    <div :ref="(el) => (refTopSection = el)">
+      <q-card-section
+        :class="{ 'bg-red-3': spravStore.historyOn && historyOn }"
+      >
+        <!-- <q-badge
             class="cursor-pointer q-mt-sm"
             style="margin-top: 5px; margin-right: 4px"
             rounded
@@ -22,82 +18,78 @@
             floating
             @click="$router.go(-1)"
           /> -->
-          <div class="row items-center no-wrap">
-            <div class="col">
-              <div
-                class="text-h6 row"
-                :style="{
-                  color: spravStore.historyOn && historyOn ? 'red' : 'black',
-                }"
-              >
-                {{ title }}
-                <q-space />
-                <div class="row items-center" v-if="spravStore.historyOn">
-                  <div class="row items-center">История:</div>
-                  <q-toggle
-                    v-model="historyOn"
-                    :color="historyOn ? 'red' : 'green'"
-                  />
-                  <Select-Date-Ext
-                    v-if="historyOn"
-                    v-model:valueDate="spravStore.historyDate"
-                  ></Select-Date-Ext>
-                </div>
+        <div class="row items-center no-wrap">
+          <div class="col">
+            <div
+              class="text-h6 row"
+              :style="{
+                color: spravStore.historyOn && historyOn ? 'red' : 'black',
+              }"
+            >
+              {{ title }}
+              <q-space />
+              <div class="row items-center" v-if="spravStore.historyOn">
+                <div class="row items-center">История:</div>
+                <q-toggle
+                  v-model="historyOn"
+                  :color="historyOn ? 'red' : 'green'"
+                />
+                <Select-Date-Ext
+                  v-if="historyOn"
+                  v-model:valueDate="spravStore.historyDate"
+                ></Select-Date-Ext>
               </div>
-              <div v-if="!!subTitle" class="text-subtitle2">{{ subTitle }}</div>
             </div>
-
-            <div class="col-auto">
-              <q-btn v-if="menuObj" color="grey-7" round flat icon="more_vert">
-                <q-menu cover auto-close>
-                  <q-list>
-                    <q-item
-                      clickable
-                      :key="nameKey"
-                      v-for="(value, nameKey) in menuObj"
-                    >
-                      <q-item-section @click="onClickMenu(nameKey)">{{
-                        value
-                      }}</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
-              </q-btn>
-            </div>
+            <div v-if="!!subTitle" class="text-subtitle2">{{ subTitle }}</div>
           </div>
-        </q-card-section>
-      </div>
-      <div :ref="(el) => (refInfoSection = el)">
-        <q-card-section
-          v-if="spravStore.selectedRow.name"
-          style="padding-top: 0"
-        >
-          <Tab-Button
-            v-model:tabModel="tabModel"
-            :selectedNode="selectedNode"
-          ></Tab-Button>
-        </q-card-section>
-      </div>
-      <div :ref="(el) => (refBodySection = el)">
-        <q-card-section
-          style="padding: 0 16px 16px 16px"
-          :style="{ maxHeight: maxBodyHeight }"
-        >
-          <!--
+
+          <div class="col-auto">
+            <q-btn v-if="menuObj" color="grey-7" round flat icon="more_vert">
+              <q-menu cover auto-close>
+                <q-list>
+                  <q-item
+                    clickable
+                    :key="nameKey"
+                    v-for="(value, nameKey) in menuObj"
+                  >
+                    <q-item-section @click="onClickMenu(nameKey)">{{
+                      value
+                    }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
+        </div>
+      </q-card-section>
+    </div>
+    <div :ref="(el) => (refInfoSection = el)">
+      <q-card-section v-if="spravStore.selectedRow.name" style="padding-top: 0">
+        <Tab-Button
+          v-model:tabModel="tabModel"
+          :selectedNode="selectedNode"
+        ></Tab-Button>
+      </q-card-section>
+    </div>
+    <div :ref="(el) => (refBodySection = el)">
+      <q-card-section
+        style="padding: 0 16px 16px 16px"
+        :style="{ maxHeight: maxBodyHeight }"
+      >
+        <!--
                       :keep-alive-max="keepAliveMax"
             :keep-alive="keepAlive"
             keep-alive-include="main"
         -->
-          <q-tab-panels
-            v-model="tabModel"
-            animated
-            :keep-alive-max="keepAliveMax"
-            :keep-alive="keepAlive"
-            keep-alive-include="main"
-          >
-            <q-tab-panel v-if="keepAlive" name="main" style="padding: 0">
-              <tab-sprav
-                v-if="splitHorizont"
+        <q-tab-panels
+          v-model="tabModel"
+          animated
+          :keep-alive-max="keepAliveMax"
+          :keep-alive="keepAlive"
+          keep-alive-include="main"
+        >
+          <q-tab-panel v-if="keepAlive" name="main" style="padding: 0">
+            <!-- <tab-sprav
                 :maxBodyHeight="maxBodyHeight"
                 :selectedNode="selectedNode"
                 :keepAliveMax="keepAliveMax"
@@ -109,58 +101,39 @@
                 <template v-slot:after>
                   <slot name="after"></slot>
                 </template>
-              </tab-sprav>
-              <Splitter-Sprav v-else :maxBodyHeight="maxBodyHeight">
-                <template v-slot:before>
-                  <slot name="before"></slot>
-                </template>
-                <template v-slot:after>
-                  <slot name="after"></slot>
-                </template>
-              </Splitter-Sprav>
-            </q-tab-panel>
-          </q-tab-panels>
-          <component
-            v-if="currentTabComponent"
-            :is="currentTabComponent"
-            v-bind="{
-              maxBodyHeight: maxBodyHeight,
-              tabModel: tabModel,
-            }"
-          ></component>
-          <!-- <Tab-Territory
+              </tab-sprav> -->
+            <Splitter-Sprav :maxBodyHeight="maxBodyHeight">
+              <template v-slot:before>
+                <slot name="before"></slot>
+              </template>
+              <template v-slot:after>
+                <slot name="after"></slot>
+              </template>
+            </Splitter-Sprav>
+          </q-tab-panel>
+        </q-tab-panels>
+        <component
+          v-if="currentTabComponent"
+          :is="currentTabComponent"
+          v-bind="{
+            maxBodyHeight: maxBodyHeight,
+            tabModel: tabModel,
+          }"
+        ></component>
+        <!-- <Tab-Territory
             :maxBodyHeight="maxBodyHeight"
             :tabModel="tabModel"
           ></Tab-Territory> -->
-        </q-card-section>
-      </div>
-      <div
-        :ref="(el) => (refBottomSection = el)"
-        style="position: absolute; bottom: 0; width: 100%"
-      >
-        <q-separator v-if="buttonArrProp" />
-
-        <q-card-actions>
-          <slot v-if="buttonArrProp" name="buttons">
-            <q-btn
-              disable
-              flat
-              :key="item.key"
-              v-for="item in buttonArrProp"
-              @click="emit('buttonClick', item.key)"
-            >
-              {{ item.name }}
-            </q-btn>
-          </slot>
-          <!-- <q-btn flat @click="clickNewRecept">Создать</q-btn>
-        <q-btn flat @click="emit('closeModal')">Отмена</q-btn> -->
-        </q-card-actions>
-      </div>
-    </q-card>
-    <Page-Setup-Dialog
-      v-model:menuDialogShow="menuDialogShow"
-    ></Page-Setup-Dialog>
-  </div>
+      </q-card-section>
+    </div>
+    <div
+      :ref="(el) => (refBottomSection = el)"
+      style="position: absolute; bottom: 0; width: 100%"
+    ></div>
+  </q-card>
+  <Page-Setup-Dialog
+    v-model:menuDialogShow="menuDialogShow"
+  ></Page-Setup-Dialog>
 </template>
 
 <script>
@@ -169,7 +142,7 @@ import {ref,watch, onMounted, watchEffect, onUpdated, computed, nextTick, onBefo
 import { useRouter, useRoute, onBeforeRouteLeave } from "vue-router";
 import PageSetupDialog from "./PageSetupDialog.vue";
 import SplitterSprav from "./SplitterSprav.vue";
-import TabSprav from "./TabSprav.vue";
+//import TabSprav from "./TabSprav.vue";
 import TabButton from "./TabButton.vue";
 import { useSpravStore } from "stores/spravStore";
 import { useQuasar, dom } from "quasar";
@@ -191,7 +164,7 @@ export default {
   },
   components: {
     SplitterSprav,
-    TabSprav,
+    //    TabSprav,
     TabButton,
     PageSetupDialog,
     SelectDateExt,
@@ -207,7 +180,6 @@ export default {
     const refInfoSection = ref();
     const refBottomSection = ref();
     const cardHeight = ref(400);
-    const buttonArrProp = ref();
     const tabModel = ref("main"); // чтото должно быть на экране
     const splitterModel = ref(30);
     const splitHorizont = ref(false);
@@ -296,7 +268,7 @@ export default {
           height(refTopSection.value) +
           height(refInfoSection.value) +
           height(refBottomSection.value);
-        let N = `calc(${maxHeigh.value.maxHeight} - ${topBottom}px)`;
+        let N = `calc(${maxHeigh.value.maxHeight} - ${topBottom + 16}px)`;
         //    console.log("Новый Body", N, maxHeigh.value);
         maxBodyHeight.value = N;
       } catch (e) {
@@ -311,17 +283,6 @@ export default {
     });
     onMounted(() => {
       reSizeCard();
-      console.log("Чтото тут", props?.buttonArr);
-      //   if (buttonArrProp.value.length > 0) {
-      buttonArrProp.value = props.buttonArr; // кнопки пришли
-      //   }
-      //  else {
-      //   buttonArrProp.value = [{ key: "back", name: "Назад" }]; // кнопки забыли
-      // }
-    });
-    watch(props, () => {
-      buttonArrProp.value = props.buttonArr;
-      console.log("Кнопки:", buttonArrProp.value);
     });
     function clickSelectButton() {
       $q.dialog({
@@ -329,7 +290,7 @@ export default {
         message: spravStore.selectedRow.name,
         cancel: true,
         persistent: true,
-        ok: { label: "куй", color: "orange-3" }, // q-btn
+        ok: { label: "vvvm", color: "orange-3" }, // q-btn
         cancel: { label: "Отменить", color: "blue-5" },
         focus: "cancel",
       })
@@ -369,7 +330,6 @@ export default {
       splitStyleH,
       splitStyleW,
       cardHeight,
-      buttonArrProp,
       emit,
       onClose() {
         emit("onClose");

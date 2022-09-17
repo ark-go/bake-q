@@ -79,8 +79,6 @@ import FindTable from "./FindTable.vue";
 import { useQuasar } from "quasar";
 import { useDocPrice } from "stores/storeDocPrice.js";
 import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
-//import { emitter } from "src/boot/axios";
-//import { Meta } from "quasar";
 
 export default defineComponent({
   name: "TableDoc",

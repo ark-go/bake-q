@@ -142,6 +142,14 @@ app.use((req, res, next) => {
   req.session.ipAddress = req.headers["x-forwarded-for"];
   next();
 });
+// BUG Убрать ограничение IP
+// app.use((req, res, next) => {
+//   console.log("ip", req.session.ipAddress);
+//   if (req.session.ipAddress == "46.17.43.10") next();
+//   else {
+//     res.json({ error: "Ошибка" });
+//   }
+// });
 
 await mainRoutes(app, express); // там расставляем роуты
 

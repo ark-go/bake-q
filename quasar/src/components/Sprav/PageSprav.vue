@@ -1,15 +1,12 @@
 <template>
-  <q-page
-    :style-fn="panelFnHeight"
-    class="flex flex-center"
-    style="min-width: 360px"
-  >
+  <!-- :style-fn="panelFnHeight" -->
+  <q-page class="flex flex-center" style="min-width: 360px">
     <sprav :pageMaxHeight="pageMaxHeight"></sprav>
   </q-page>
 </template>
 
 <script>
-import { defineComponent, ref, toRefs } from "vue";
+import { defineComponent, ref, toRefs, computed } from "vue";
 import { useRoute } from "vue-router";
 import Sprav from "components/Sprav/Sprav.vue";
 import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
@@ -24,24 +21,27 @@ export default defineComponent({
     pageSetup.currentPage = "sprav";
     const { cardMain } = storeToRefs(usePagesSetupStore());
     // const {fontSize} = toRefs(state)
-    const pageMaxHeight = ref();
-    function panelFnHeight(offset, height2) {
-      if (route.name == "bakeryconf") {
-        let height = `calc(100vh - ${offset}px)`;
-        pageMaxHeight.value = {
-          minHeight: height,
-          maxHeight: height,
-        };
-        return { minHeight: height, maxHeight: height };
-      }
-      let height = `calc(100vh - ${offset}px)`;
-      let heightChild = `calc(100vh - ${offset}px - 60px)`;
-      pageMaxHeight.value = { minHeight: heightChild, maxHeight: heightChild };
-      return { minHeight: height, maxHeight: height };
-    }
+    // const pageMaxHeight = ref();
+    const pageMaxHeight = computed(() => {
+      let HH = {
+        minHeight: `calc(100vh - ${pageSetup.pageOffset}px)`,
+        maxHeight: `calc(100vh - ${pageSetup.pageOffset}px)`,
+      };
+      return HH;
+    });
+    // function panelFnHeight(offset, height2) {
+    //   let height = `calc(100vh - ${offset}px)`;
+
+    //   pageMaxHeight.value = {
+    //     minHeight: height,
+    //     maxHeight: height,
+    //   };
+    //   console.log("nmmmmmmmmmmmmmmmmmmmmmmmm", pageMaxHeight.value);
+    //   return { minHeight: height, maxHeight: height };
+    // }
     function clickHelp() {}
     return {
-      panelFnHeight,
+      //  panelFnHeight,
       pageMaxHeight,
       cardMain,
       clickHelp,

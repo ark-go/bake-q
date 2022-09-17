@@ -1,7 +1,7 @@
 <template>
   <q-card
-    bordered
-    class="arkcard-size my-card bg-grey-1 shadow-10"
+    flat
+    class="ark-card-panel"
     style="user-select: none; overflow: hidden"
     @click.right.prevent
   >
@@ -63,12 +63,12 @@
       :ref="(el) => (refBottomSection = el)"
       style="position: absolute; bottom: 0; width: 100%"
     >
-      <q-separator v-if="$slots.bottomSection" />
+      <!-- <q-separator v-if="$slots.bottomSection" />
 
       <q-card-actions>
         <slot name="bottomSection" />
         <div stile="height:5px;min-height:5px;"></div>
-      </q-card-actions>
+      </q-card-actions> -->
     </div>
   </q-card>
   <Page-Setup-Dialog

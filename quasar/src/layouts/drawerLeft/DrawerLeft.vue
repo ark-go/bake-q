@@ -9,7 +9,10 @@
   >
     <q-tab-panels v-model="drawerPanel" animated class="rounded-borders">
       <q-tab-panel name="main" style="padding: 0">
-        <Menu-Side v-if="userInfo.email != 'Arkadii@yandex1.ru'"></Menu-Side>
+        <Menu-Side
+          v-if="userInfo.email != 'Arkadii@yandex1.ru'"
+          v-model:drawerPanel="drawerPanel"
+        ></Menu-Side>
         <q-list v-if="userInfo.email == 'Arkadii@yandex.ru'">
           <q-item-label header> Только мое </q-item-label>
 
@@ -19,6 +22,11 @@
             v-bind="link"
           />
         </q-list>
+      </q-tab-panel>
+      <q-tab-panel name="bakeryConfig" style="padding: 0">
+        <Menu-Side-Bakery-Config
+          v-model:drawerPanel="drawerPanel"
+        ></Menu-Side-Bakery-Config>
       </q-tab-panel>
     </q-tab-panels>
     <div
@@ -42,6 +50,7 @@ import { defineComponent, ref, onMounted } from "vue";
 import { useUserStore, storeToRefs } from "stores/userStore.js";
 import EssentialLink from "components/EssentialLink.vue";
 import MenuSide from "src/components/MenuSide/MenuSide.vue";
+import MenuSideBakeryConfig from "src/components/Sprav/tabPanelSide/MenuSideBakeryConfig.vue";
 export default defineComponent({
   name: "DrawerLeft",
   props: ["modelValue"],
@@ -49,6 +58,7 @@ export default defineComponent({
   components: {
     EssentialLink,
     MenuSide,
+    MenuSideBakeryConfig,
   },
   setup() {
     const { userInfo } = storeToRefs(useUserStore());

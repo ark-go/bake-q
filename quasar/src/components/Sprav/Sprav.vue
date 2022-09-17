@@ -1,19 +1,6 @@
-<style lang="scss" scoped>
-.ark-card {
-  width: v-bind(widthForm);
-  max-width: 80%;
-  @media (max-width: 1200px) {
-    max-width: 90%;
-  }
-  @media (max-width: 1000px) {
-    max-width: 99vw;
-  }
-}
-</style>
 <template>
   <!-- :title="spravStore.selectedNode.pathStr ? 'Cправочник' : 'Cправочники'" -->
   <ark-card
-    class="ark-card"
     title="Конфигурация пекарен"
     :pageMaxHeight="pageMaxHeight"
     :subTitle="subTitle"
@@ -95,13 +82,6 @@ export default defineComponent({
     const currentTable = ref(SpravTable);
     const $q = useQuasar();
     const splitHorizont = ref(false);
-    const widthForm = computed(() => {
-      if (route.name == "bakeryconf") {
-        return "100%";
-      } else {
-        return cardMain.value.width.curr + "px";
-      }
-    });
     onBeforeUnmount(() => {
       // при входе могло остаться чтото, желательно удалять при выходе
       spravStore.selectedNode = {};
@@ -289,7 +269,6 @@ export default defineComponent({
       subTitle,
       buttonClick,
       menuClick,
-      widthForm,
     };
   },
 });

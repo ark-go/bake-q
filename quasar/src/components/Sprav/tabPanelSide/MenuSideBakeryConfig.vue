@@ -1,13 +1,13 @@
 <template>
   <q-list>
-    <q-item clickable @click="router.push({ path: '/' })">
+    <q-item clickable @click="$emit('update:drawerPanel', 'main')">
       <q-item-section avatar>
-        <q-icon name="home" color="blue-grey-4" />
+        <q-icon name="eva-arrowhead-left" color="blue-grey-4" />
       </q-item-section>
 
       <q-item-section>
-        <q-item-label>Главная</q-item-label>
-        <q-item-label caption> "в начало" </q-item-label>
+        <q-item-label>Назад</q-item-label>
+        <q-item-label caption> "назад" </q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-checkbox
@@ -20,31 +20,25 @@
         />
       </q-item-section>
     </q-item>
-    <q-item
-      v-if="userInfo.email == 'Arkadii@yandex.ru'"
-      clickable
-      @click="$emit('update:drawerPanel', 'bakeryConfig')"
-    ></q-item>
     <q-separator />
     <!-- <q-item-label header> </q-item-label> -->
-    <Menu-Side-Items
+    <!-- <Menu-Side-Items
       v-for="link in listMenuSide"
       :key="link.title"
       v-bind="link"
-    />
+    /> -->
   </q-list>
 </template>
 
 <script>
-// tab main
+// tabbakeryConfig
 import { defineComponent, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import MenuSideItems from "./MenuSideItems.vue";
+//import MenuSideItems from "./MenuSideItems.vue";
 import { useStartPageStore, storeToRefs } from "src/stores/startPageStore";
-import { useUserStore } from "src/stores/userStore";
 export default defineComponent({
-  name: "MenuSide",
-  components: { MenuSideItems },
+  name: "MenuSideBakeryConfig",
+  components: {},
   props: {
     drawerPanel: {
       type: String,
@@ -55,7 +49,6 @@ export default defineComponent({
     //>tag="a" :href="link">
     const router = useRouter();
     const { listMenuSide } = storeToRefs(useStartPageStore());
-    const { userInfo } = storeToRefs(useUserStore());
     function onClick(lnk) {
       if (lnk == "api/pdf") {
         window.open(lnk, "_blank");
@@ -68,7 +61,6 @@ export default defineComponent({
       listMenuSide,
       router,
       pinCheckbox: ref(false),
-      userInfo,
     };
   },
 });

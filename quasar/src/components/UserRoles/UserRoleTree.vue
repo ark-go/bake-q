@@ -217,7 +217,7 @@ import {
   nextTick,
   onUnmounted,
 } from "vue";
-import ArkCard from "components/Card/ArkCard.vue";
+import ArkCard from "./ArkCard.vue";
 import { useArkUtils } from "src/utils/arkUtils"; // const arkUtils = useArkUtils();
 //import { useQuasar } from "quasar";
 import { emitter } from "boot/axios.js";

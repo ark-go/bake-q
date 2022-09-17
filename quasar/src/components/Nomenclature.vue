@@ -157,7 +157,7 @@
 
 <script>
 import { ref, onMounted, reactive, watch, computed, toRefs } from "vue";
-import { axios, emitter } from "boot/axios";
+import { axios } from "boot/axios";
 //import NomenclatureForm from "components/NomenclatureForm.vue";
 import PopNomenclatureForm from "components/PopNomenclatureForm.vue";
 import SelectIdName from "components/select/SelectIdName.vue";

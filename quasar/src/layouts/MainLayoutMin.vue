@@ -5,6 +5,7 @@
         <div class="title-grid">
           <div class="title-grid-item-left">
             <q-btn
+              v-if="userInfo.email"
               flat
               dense
               round
@@ -41,20 +42,20 @@
           <div class="title-grid-item-right">
             <!-- <div>{{ userInfo.username || userInfo.email }}</div> -->
             <Menu-User></Menu-User>
-            <q-btn
+            <!-- <q-btn
               dense
               flat
               round
               icon="menu"
               @click="rightDrawerOpen = !rightDrawerOpen"
-            />
+            /> -->
           </div>
         </div>
       </q-toolbar>
     </q-header>
-    <drawer-left v-model="isLeftDrawer"></drawer-left>
+    <drawer-left v-if="userInfo.email" v-model="isLeftDrawer"></drawer-left>
 
-    <q-drawer
+    <!-- <q-drawer
       side="right"
       v-model="rightDrawerOpen"
       overlay
@@ -63,12 +64,12 @@
       elevated
     >
       <right-items></right-items>
-    </q-drawer>
+    </q-drawer> -->
     <q-page-container @click="onContainer" class="main-background">
       <!-- <router-view /> -->
       <router-view v-slot="{ Component }">
         <transition name="mode-fade">
-          <component :is="Component" />
+          <component :is="Component" v-bind="{ styleFn: pageFnHeight }" />
         </transition>
       </router-view>
     </q-page-container>
@@ -179,7 +180,7 @@
 import { Notify } from "quasar";
 //import EssentialLink from "components/EssentialLink.vue";
 import DrawerLeft from "./drawerLeft/DrawerLeft.vue";
-import RightItems from "components/mainPage/rightDrawer/rightItems.vue";
+//import RightItems from "components/mainPage/rightDrawer/rightItems.vue";
 //import Vue from "vue";
 import {
   defineComponent,
@@ -189,7 +190,6 @@ import {
   watchEffect,
   onBeforeMount,
 } from "vue";
-import { emitter } from "boot/axios";
 import FormLogin from "components/Registration/FormLogin.vue";
 import pdfDialog from "components/PDF/PdfDialog.vue";
 //import { arkVuex } from "src/utils/arkVuex"; // const { pdfWindow } = createArkVuex();
@@ -219,7 +219,7 @@ export default defineComponent({
     // EssentialLink,
     FormLogin,
     pdfDialog,
-    RightItems,
+    //    RightItems,
     TestMove,
     MenuUser,
     LoginDialog,
@@ -238,7 +238,9 @@ export default defineComponent({
     const footerVisible = ref(false);
     const route = useRoute();
     const router = useRouter();
-    const { currentPage } = storeToRefs(usePagesSetupStore());
+    const pageSetup = usePagesSetupStore();
+    const maxHeight = ref(300);
+    const $q = useQuasar();
     const { notify, platform } = useQuasar();
     const ioSocket = useIoSocket();
     const { userInfo } = storeToRefs(useUserStore());
@@ -248,17 +250,6 @@ export default defineComponent({
     // const pdfModal = ref(pdfWindow.show);
     const essentialLinks = ref([]);
     const username = ref("");
-    //const modalLoginOpen = ref(false);
-    const emittMitt = () => {
-      emitter.on("on-login", (mess) => {
-        if (mess == "NoLogin") {
-          modalLoginOpen.value = true;
-        }
-      });
-      // emitter.on("close-login", () => {
-      //   modalLoginOpen.value = false;
-      // });
-    };
     onMounted(async () => {
       // if (!(await checkAccess(route.path, route.meta?.title))) {
       //   // если мы заходим по URL проверяем доступность первый раз
@@ -270,23 +261,30 @@ export default defineComponent({
         userInfo.value.email
       );
     });
-    onMounted(emittMitt);
-    // router.beforeEach(async (to, from) => {
-    //   if (to.meta.checkAccess) {
-    //     let check = null;
-    //     try {
-    //       check = await checkAccess(to.path, to.meta?.title);
-    //       if (!check) {
-    //         return true; // никуда не переходим
-    //       }
-    //     } catch (error) {
-    //       // ошибка при запросе, остаемся на месте
-    //       //throw error;
-    //       return true; // никуда не переходим
-    //     }
-    //   }
-    // });
-    // ошибки роута
+    // TODO Глобальные размеры окна
+    function pageFnHeight(offset, height) {
+      console.log("global ofset - height", offset, height);
+      pageSetup.pageOffset = offset;
+      pageSetup.pageHeight = height;
+      pageSetup.screenWidth = $q.screen.width;
+      if ($q.platform.is.mobile) pageSetup.pagePaddingY = 2;
+      else pageSetup.pagePaddingY = 4;
+      maxHeight.value = height - offset - pageSetup.pagePaddingY + 26 + "px"; // добавляем на глаз padding 16, не хватает милиметра убрать скрола
+
+      console.log("pageSetup.arkCardHeight", pageSetup.arkCardHeight);
+
+      // let heightCss = `calc(100vh - ${offset}px)`;
+      let heightCss = `${height - offset - pageSetup.pagePaddingY}px`;
+      //cardMain.value.width.max = $q.screen.width - 20;
+      // возвращаем рабочий размер окна, прокрутка?
+      return {
+        minHeight: heightCss,
+        maxHeight: heightCss,
+        minWidth: "100px",
+      };
+      return {};
+    }
+
     router.onError((err, to, from) => {
       // ловим ошибки роута или при пропадании сети
       console.error("MainLayout route error", err);
@@ -387,6 +385,8 @@ export default defineComponent({
       modalLoginOpen,
       username,
       essentialLinks,
+      pageFnHeight,
+      maxHeight,
       getAllUsers() {
         ioSocket.socket
           .timeout(5000)
@@ -429,6 +429,7 @@ export default defineComponent({
     };
   },
 });
+
 function linkList(roles = [], email) {
   return [
     {
@@ -545,3 +546,17 @@ function linkList(roles = [], email) {
   ];
 }
 </script>
+<style lang="scss" scoped>
+:deep(.ark-card-panel) {
+  width: 100%;
+  max-width: 80%;
+  min-height: v-bind(maxHeight);
+  max-height: v-bind(maxHeight);
+  @media (max-width: 1200px) {
+    max-width: 90%;
+  }
+  @media (max-width: 1000px) {
+    max-width: 99vw;
+  }
+}
+</style>

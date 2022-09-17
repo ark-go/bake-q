@@ -6,7 +6,7 @@ export default boot(async ({ router } /* { app, router, ... } */) => {
   let yesReplace = true;
   router.beforeEach(async (to, from) => {
     // console.log("router boot: router BeforeEach", to.meta.checkAccess);
-    if (to.meta.checkAccess) {
+    if (to.meta?.checkAccess) {
       let check = null;
       try {
         check = await checkAccess(to.path, to.meta?.title);
@@ -26,7 +26,7 @@ export default boot(async ({ router } /* { app, router, ... } */) => {
     // надо войти в блок и сказать, раз мы уходим со страницы которую надо переписать
     // делаем replace,
     // yesReplace - для предотвращения цикла, при повторном проходе, по return
-    if (from.meta.replace && yesReplace) {
+    if (from.meta?.replace && yesReplace) {
       // если стояли на том который не надо запоминать
       yesReplace = false; // флаг, мы делаем замену
       // console.log("Замена истории");

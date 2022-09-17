@@ -27,7 +27,7 @@
 <script>
 import { defineComponent, ref, defineAsyncComponent } from "vue";
 import BakeryTable from "components/Bakery/BakeryTable.vue";
-import ArkCard from "components/Card/ArkCard.vue";
+import ArkCard from "./ArkCard.vue";
 //import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 //import InfoPanel from "./InfoPanel.vue";

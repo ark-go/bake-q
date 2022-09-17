@@ -26,7 +26,7 @@ export default defineComponent({
       pageSetup.pageOffset = offset;
       pageSetup.pageHeight = height;
       if ($q.platform.is.mobile) pageSetup.pagePaddingY = 10;
-      else pageSetup.pagePaddingY = 60;
+      else pageSetup.pagePaddingY = 2;
       console.log("pageSetup.arkCardHeight", pageSetup.arkCardHeight);
       let height2 = `calc(100vh - ${offset}px)`;
       cardMain.value.width.max = $q.screen.width - 20;

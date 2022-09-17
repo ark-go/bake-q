@@ -192,7 +192,6 @@ import {
   watchEffect,
   onBeforeMount,
 } from "vue";
-import { emitter } from "boot/axios";
 //import FormLogin from "components/FormLogin.vue";
 import FormLogin from "components/Registration/FormLogin.vue";
 import pdfDialog from "components/PDF/PdfDialog.vue";
@@ -246,17 +245,6 @@ export default defineComponent({
     // const pdfModal = ref(pdfWindow.show);
     const essentialLinks = ref([]);
     const username = ref("");
-    //const modalLoginOpen = ref(false);
-    const emittMitt = () => {
-      emitter.on("on-login", (mess) => {
-        if (mess == "NoLogin") {
-          modalLoginOpen.value = true;
-        }
-      });
-      // emitter.on("close-login", () => {
-      //   modalLoginOpen.value = false;
-      // });
-    };
     onMounted(async () => {
       // if (!(await checkAccess(route.path, route.meta?.title))) {
       //   // если мы заходим по URL проверяем доступность первый раз
@@ -268,7 +256,7 @@ export default defineComponent({
         userInfo.value.email
       );
     });
-    onMounted(emittMitt);
+    //onMounted(emittMitt);
     //
     // router.afterEach((to, from) => {
     //   nextTick(() => {

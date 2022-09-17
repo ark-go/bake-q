@@ -1,36 +1,37 @@
 const routes = [
-  {
-    path: "/new",
-    component: () => import("layouts/MainLayoutMin.vue"),
-    children: [
-      {
-        path: "",
-        component: () => import("components/PageStart/PageStart.vue"),
-        meta: { checkAccess: true, title: "Главная." },
-      },
-      {
-        path: "registration2/:id?/:code?",
-        name: "registration2",
-        props: true,
-        component: () => import("components/Registration/PageRegistration.vue"),
-        meta: { title: "Регистрация" },
-      },
-      {
-        path: "products",
-        component: () => import("components/Products/PageProducts.vue"),
-        meta: { checkAccess: true, title: "Продукция" },
-      },
-      {
-        path: "bakeryconf",
-        name: "bakeryconf",
-        component: () => import("components/Sprav/PageSprav.vue"),
-        meta: { checkAccess: true, title: "Конфигурация пекарен" },
-      },
-    ],
-  },
+  // {
+  //   path: "/new",
+  //   component: () => import("layouts/MainLayoutMin.vue"),
+  //   children: [
+  //     {
+  //       path: "",
+  //       component: () => import("components/PageStart/PageStart.vue"),
+  //       meta: { checkAccess: true, title: "Главная." },
+  //     },
+  //     {
+  //       path: "registration2/:id?/:code?",
+  //       name: "registration2",
+  //       props: true,
+  //       component: () => import("components/Registration/PageRegistration.vue"),
+  //       meta: { title: "Регистрация" },
+  //     },
+  //     {
+  //       path: "products",
+  //       component: () => import("components/Products/PageProducts.vue"),
+  //       meta: { checkAccess: true, title: "Продукция" },
+  //     },
+  //     {
+  //       path: "bakeryconf",
+  //       name: "bakeryconf",
+  //       component: () => import("components/Sprav/PageSprav.vue"),
+  //       meta: { checkAccess: true, title: "Конфигурация пекарен" },
+  //     },
+  //   ],
+  // },
   {
     path: "/",
-    component: () => import("layouts/MainLayout.vue"),
+    component: () => import("layouts/MainLayoutMin.vue"),
+    // component: () => import("layouts/MainLayout.vue"),
     children: [
       {
         path: "",
@@ -62,10 +63,10 @@ const routes = [
         path: "login",
         component: () => import("pages/PageLogin.vue"),
       },
-      {
-        path: "nomencl",
-        component: () => import("pages/PageNomencl.vue"),
-      },
+      // {
+      //   path: "nomencl",
+      //   component: () => import("pages/PageNomencl.vue"),
+      // },
       {
         path: "photo",
         component: () => import("pages/PagePhoto.vue"),
@@ -80,6 +81,12 @@ const routes = [
         component: () => import("pages/PageSpecStore.vue"),
       },
       {
+        path: "bakeryconf",
+        name: "bakeryconf",
+        component: () => import("components/Sprav/PageSprav.vue"),
+        meta: { checkAccess: true, title: "Конфигурация пекарен" },
+      },
+      {
         path: "spravochnik",
         component: () =>
           import(
@@ -92,11 +99,11 @@ const routes = [
           yesReplace: false,
         },
       },
-      // {
-      //   path: "price",
-      //   component: () => import("components/Price/PagePrice.vue"),
-      //   meta: { checkAccess: true,  title: "Прайсы" },
-      // },
+      {
+        path: "price",
+        component: () => import("components/Price/PagePrice.vue"),
+        meta: { checkAccess: true, title: "Прайсы" },
+      },
       {
         path: "sale",
         component: () => import("components/Sale/PageSale.vue"),
@@ -135,11 +142,20 @@ const routes = [
         path: "parsery",
         component: () => import("components/testParser/PageParser.vue"),
       },
+      {
+        path: "charts/:id",
+        component: () => import("components/Chart/PageCharts.vue"),
+        // children: [
+        //   {
+        //     path: "",
+        //     component: () => import("components/Chart/PageCharts.vue"),
+        //   },
+        // ],
+      },
     ],
   },
-
   {
-    path: "/charts/:id",
+    path: "/charts2/:id",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
@@ -157,17 +173,17 @@ const routes = [
     ],
   },
 
-  {
-    path: "/price",
-    component: () => import("layouts/MainLayout.vue"),
-    children: [
-      {
-        path: "",
-        component: () => import("components/Price/PagePrice.vue"),
-        meta: { checkAccess: true, title: "Прайсы" },
-      },
-    ],
-  },
+  // {
+  //   path: "/price",
+  //   component: () => import("layouts/MainLayout.vue"),
+  //   children: [
+  //     {
+  //       path: "",
+  //       component: () => import("components/Price/PagePrice.vue"),
+  //       meta: { checkAccess: true, title: "Прайсы" },
+  //     },
+  //   ],
+  // },
   {
     path: "/tables",
     component: () => import("layouts/MainLayout.vue"),

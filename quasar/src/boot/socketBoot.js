@@ -12,7 +12,7 @@ export default boot(({ app }) => {
     // socket.off(); // удаляет всех слушателей
     ioSocket.onLine = true;
     socket.onAny((eventName, arg) => {
-      // Все сообщения вообще рассылаем почемуто так ,,???
+      //! Все сообщения вообще рассылаем почемуто так ,,???
       // console.log("socket io onAny: ", eventName, arg);
       emitter.emit(eventName, arg);
     });
@@ -59,10 +59,6 @@ export default boot(({ app }) => {
   socket.on("connect_error", (err) => {
     console.log("IO connect_error ", err.message); // prints the message associated with the error
   });
-  // socket.on("on-reload-tree", (val) => {
-  //   emitter.emit("on-reload-tree", val);
-  // });
-  // =========================================================
 });
 function notifSite() {
   Notify.create({

@@ -18,6 +18,7 @@ export const usePagesSetupStore = defineStore("PagesSetupStore", {
       pageOffset: 100,
       pageHeight: 200,
       pagePaddingY: 60,
+      screenWidth: 300,
 
       // cardMain: {
       //   width: {

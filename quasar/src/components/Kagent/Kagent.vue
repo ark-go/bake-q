@@ -2,7 +2,6 @@
   <ark-card
     title="Контрагенты"
     subTitle=""
-    style="width: 700px"
     :buttonArr="buttonArr"
     @buttonClick="buttonClick"
     :menuObj="{ pdf: 'Не жми' }"
@@ -15,7 +14,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import KagentTable from "components/Kagent/KagentTable.vue";
-import ArkCard from "components/Card/ArkCard.vue";
+import ArkCard from "./ArkCard.vue";
 //import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 

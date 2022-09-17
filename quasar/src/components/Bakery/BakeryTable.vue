@@ -1,6 +1,7 @@
 <template>
   <div class="column no-wrap">
     <Table-Template
+      flat
       title="Пекарни"
       :tableName="tableName"
       :rows="rows"

@@ -2,7 +2,6 @@
   <ark-card
     title="Продукция"
     :subTitle="currentLabel"
-    :style="{ width: cardMain.width.curr + 'px' }"
     :pageMaxHeight="pageMaxHeight"
     :buttonArr="buttonArr"
     @buttonClick="buttonClick"
@@ -58,16 +57,14 @@ import {
   nextTick,
   onMounted,
 } from "vue";
-import NoTable from "components/Products/NoTable.vue";
+//import NoTable from "components/Products/NoTable.vue";
 //import ArkCard from "components/Card/ArkCard.vue";
 import ArkCard from "components/Products/ArkCard.vue";
 import ProductsTree from "components/Products/ProductsTree.vue";
 import { useQuasar } from "quasar";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { arkVuex } from "src/utils/arkVuex.js";
 import ProductsAction from "./ProductsAction.vue";
-import { emitter } from "../../boot/axios";
-import { getPDF } from "src/utils/getPDF.js";
 import PdfDialog from "../PDF/PdfDialog.vue";
 import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
 //import { arkVuex } from "src/utils/arkVuex"; // const { pdfWindow } = createArkVuex();
@@ -177,12 +174,6 @@ export default defineComponent({
     }
     async function menuClick(val, val2) {
       if (val == "pdf") {
-        // getPDF("ingredientSostav", { title: "Все продукты" }); // id: "" опущен параметр.
-        // router.push({
-        //   name: "products",
-        //   params: { cmd: "ww" },
-        //   //target: "_blank",
-        // });
         pdfDialogParam.value = {
           typePdf: "base64", // file/base64
           tgFormat: "pdf", // pdf/jpg
@@ -210,19 +201,6 @@ export default defineComponent({
       buttonClick,
       selectedRowsVuex,
       currentRowText,
-      // onClickPdf(row) {
-      //   // console.log("в PDF состав продукта id", row);
-      //   getPDF("ingredientSostav", {
-      //     id: row ? row.id : "",
-      //     title: row?.id
-      //       ? "Состав продукта\n" +
-      //         row.productvid_name +
-      //         " " +
-      //         row.name +
-      //         (row.massa ? " (" + row.massa + ")" : "")
-      //       : "Все продукты",
-      //   });
-      // },
     };
   },
 });

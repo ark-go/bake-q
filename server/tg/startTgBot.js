@@ -1,7 +1,8 @@
 import { Telegraf } from "telegraf";
 
-const bot = new Telegraf(process.env.TG_botToken);
+let bot = null;
 try {
+  bot = new Telegraf(process.env.TG_botToken);
   bot.start((ctx) => ctx.reply("Привет."));
   console.log("Старт телеграм бот.");
   bot.help((ctx) => ctx.reply("Справок не даем."));
@@ -16,6 +17,7 @@ try {
 }
 
 export function botSendMessage(message, req) {
+  if (!bot) return;
   let idBotUser = "";
   let userEmail = req?.session?.user?.email || "?";
   try {

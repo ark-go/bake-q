@@ -3,21 +3,14 @@
     title="Прайс"
     :subTitle="subTitle"
     :pageMaxHeight="pageMaxHeight"
-    :style="{
-      width: cardMain.width.curr + 'px',
-      maxWidth: '98vw',
-    }"
-    :selectedRow="priceStore.selectedRowDoc"
     :menuObj="menuObj"
     @menuClick="menuClick"
     :fullScreenTr="fullScreen"
   >
-    <template v-slot:tabPanels>
-      <Tab-Panels></Tab-Panels>
-    </template>
-    <template v-slot:bottomSlot>
+    <Tab-Panels></Tab-Panels>
+    <!-- <template v-slot:bottomSlot>
       <Corner-Size v-model:sizeX="cardMain.width.curr"></Corner-Size>
-    </template>
+    </template> -->
   </ark-card>
 
   <Help-Panel v-model:helpShow="helpShow" :helpCode="helpCode"></Help-Panel>
@@ -41,7 +34,7 @@ import { useLoadPriceValueFranch } from "./loadPriceValueFranch";
 // все назначается в tabPanels в подкаталогах
 import TabPanels from "./TabPanels.vue";
 import HelpPanel from "components/HelpPanel/HelpPanel.vue";
-import CornerSize from "./CornerSize.vue";
+//import CornerSize from "./CornerSize.vue";
 import { useQuasar } from "quasar";
 export default defineComponent({
   name: "PagePrice",
@@ -52,7 +45,7 @@ export default defineComponent({
     ArkCard,
     HelpPanel,
     TabPanels,
-    CornerSize,
+    //    CornerSize,
     // PriceDocTable
   },
   setup() {

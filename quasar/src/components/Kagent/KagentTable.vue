@@ -15,6 +15,7 @@
       <q-btn dense flat color="primary" @click="addNew()">ДОБАВИТЬ</q-btn>
     </div> -->
     <Table-Template
+      flat
       title="Контрагенты"
       :tableName="tableName"
       :rows="rows"
