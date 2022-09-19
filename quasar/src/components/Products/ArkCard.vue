@@ -1,6 +1,7 @@
 <template>
-  <q-card flat class="ark-card-panel" style="overflow: auto" :style="maxHeigh">
-    <div :ref="(el) => (refTop = el)">
+  <q-card flat class="ark-card-panel" style="overflow: auto">
+    <div>
+      <q-resize-observer @resize="(val) => (topSectionSize = val)" />
       <q-card-section>
         <div class="row items-center no-wrap">
           <div class="col">
@@ -28,17 +29,17 @@
         </div>
       </q-card-section>
     </div>
-    <q-card-section
-      style="padding: 0 16px 16px 16px"
-      :style="{ maxHeight: maxBodyHeight }"
-    >
-      <slot></slot>
-      <!-- <q-input v-model="nameRecept" label="Наименование (выход/вес)" /> -->
-    </q-card-section>
-    <div
-      :ref="(el) => (refBottom = el)"
-      style="position: absolute; bottom: 0; width: 100%"
-    ></div>
+    <div>
+      <q-resize-observer @resize="(val) => (bodySectionSize = val)" />
+
+      <q-card-section class="q-py-none maxBodyHeight">
+        <slot></slot>
+        <!-- <q-input v-model="nameRecept" label="Наименование (выход/вес)" /> -->
+      </q-card-section>
+    </div>
+    <div style="position: absolute; bottom: 0; width: 100%">
+      <q-resize-observer @resize="(val) => (bottomSectionSize = val)" />
+    </div>
   </q-card>
 </template>
 
@@ -46,7 +47,7 @@
 import { ref, watch, onMounted, computed, watchEffect, onUpdated } from "vue";
 import { useQuasar, Screen } from "quasar";
 import { dom } from "quasar";
-
+import { useArkCardStore, storeToRefs } from "src/stores/arkCardStore";
 // menuObj объект для меню ключ/знчение  значение - показано в меню
 // menuClick вернет событие с именем ключа из объекта menuObj
 export default {
@@ -57,34 +58,25 @@ export default {
     buttonArr: Object,
     menuObj: Object,
     maxWidth: String,
-    pageMaxHeight: Object,
   },
   setup(props, { emit }) {
     const { style, height } = dom; //import { dom } from "quasar";
-    const refTop = ref({});
-    const refBottom = ref({});
-    const maxHeigh = computed(() => {
-      return props.pageMaxHeight;
-    });
-    const maxBodyHeight = ref("");
-    onUpdated(() => {
-      try {
-        let topBottom = height(refTop.value) + height(refBottom.value);
-        let N = `calc(${maxHeigh.value.maxHeight} - ${topBottom}px)`;
-        //    console.log("Новый Body", N);
-        maxBodyHeight.value = N;
-      } catch (e) {
-        console.log("нет элемента. пропуск");
-        maxBodyHeight.value = maxHeigh.value; //! не правильно
-      }
-    });
+    const {
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
+      maxBodyHeight,
+      maxBodyHeightCss,
+    } = storeToRefs(useArkCardStore());
     return {
-      maxHeigh,
       maxBodyHeight,
       Screen,
       emit,
-      refBottom,
-      refTop,
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
       onClose() {
         emit("onClose");
       },

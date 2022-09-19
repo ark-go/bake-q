@@ -67,7 +67,6 @@ import { useBakeryStore } from "stores/bakeryStore.js";
 import { useSpravStore } from "stores/spravStore";
 import { useQuasar } from "quasar";
 import FormDialog from "./FormDialog.vue";
-//import { waitOnEventOrTimeout } from "app/public/pdfjs/web/viewer.js";
 export default defineComponent({
   name: "TablePanelTerritory",
   components: {

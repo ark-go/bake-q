@@ -17,7 +17,7 @@
               <router-link to="/" style="color: white; text-decoration: none">
                 <q-img
                   v-if="!platform.is.mobile"
-                  src="/public/images/logo.png"
+                  src="/images/logo.png"
                   spinner-color="silver"
                   height="40px"
                   width="156px"
@@ -52,7 +52,7 @@
     </q-header>
 
     <q-drawer side="left" v-model="leftDrawerOpen" overlay bordered>
-      <Menu-Side v-if="userInfo.email != 'Arkadii@yandex1.ru'"></Menu-Side>
+      <!-- <Menu-Side v-if="userInfo.email != 'Arkadii@yandex1.ru'"></Menu-Side> -->
       <q-list v-if="userInfo.email == 'Arkadii@yandex.ru'">
         <q-item-label header> Выберите раздел </q-item-label>
 
@@ -211,7 +211,7 @@ import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
 import { useIoSocket } from "stores/ioSocket.js";
 import { useQuasar } from "quasar";
 import TestMove from "./TestMove.vue";
-import MenuSide from "src/components/MenuSide/MenuSide.vue";
+
 export default defineComponent({
   name: "MainLayout",
 
@@ -221,7 +221,7 @@ export default defineComponent({
     pdfDialog,
     RightItems,
     TestMove,
-    MenuSide,
+  //  MenuSide,
   },
 
   setup() {

@@ -1,7 +1,29 @@
 <template>
-  <div class="column no-wrap">
-    <q-table
-      style="min-width: 100px; display: grid"
+  <div class="column no-wrap" style="max-height: inherit">
+    <Table-Template
+      flat
+      title="Тип продукции"
+      :rows="rows"
+      :columns="columns"
+      :tableFunc="tableFunc"
+      yesBtnEdit
+      yesBtnDelete
+      @onInfoRow="onInfoRow"
+      @onBtnDelete="onDelete"
+      @onBtnEdit="onEdit"
+      @onRowClick="onRowClick"
+      @onAdd="addNew"
+      @onRowDblClick="dblClickRow"
+      :currentRow="currentRow"
+      noExpandPanel
+      :noEditTable="false"
+      :store="store"
+      :rowsPerPage="0"
+    >
+    </Table-Template>
+    <!-- <q-table
+      flat
+      style="min-width: 100px; display: grid; overflow: auto"
       dense
       :filter="filter"
       no-data-label="Нет данных."
@@ -52,10 +74,10 @@
       <template v-slot:no-data="dataslot">
         <no-data-footer :dataslot="dataslot"></no-data-footer>
       </template>
-    </q-table>
+    </q-table> -->
   </div>
   <form-dialog
-    :rowData="rowCurrent"
+    :rowData="currentRow"
     v-model:showDialog="showDialog"
     @onSave="onSave"
     v-model:edit-mode="editMode"
@@ -75,30 +97,27 @@ import {
   unref,
 } from "vue";
 import { useArkUtils } from "src/utils/arkUtils"; // const arkUtils = useArkUtils();
-import NoDataFooter from "components/NoDataFooter.vue";
+
 import FormDialog from "./FormDialog.vue";
-import TableBody from "./TableBody.vue";
-import FindTable from "./FindTable.vue";
+import TableTemplate from "src/components/template/table/TableTemplate.vue";
 import { useQuasar } from "quasar";
 export default defineComponent({
   name: "SpravTable",
   components: {
-    NoDataFooter,
-    TableBody,
+    TableTemplate,
     FormDialog,
-    FindTable,
   },
   props: {
-    tabname: String,
-    tablabel: String,
+    tabname: { type: String, default: "producttype" },
+    tablabel: { type: String, default: "Тип продукции" },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const $q = useQuasar();
     const arkUtils = useArkUtils();
     const rows = ref([]);
     const visibleColumns = ref([]);
     const showDialog = ref(false);
-    const rowCurrent = ref({});
+    const currentRow = ref({});
     //const visibleOffDefault = ref([]);
     //const columns = ref([]);
     onMounted(async () => {
@@ -223,12 +242,15 @@ export default defineComponent({
 
       //--------------------
     }
-
+    function onRowClick(row) {
+      currentRow.value = row;
+      emit("selectedRow", row);
+    }
     return {
       showDialog,
       onDelete,
       onSave,
-      rowCurrent,
+      currentRow,
       rows,
       filter: ref(""),
       paginationСatalog: ref({
@@ -238,13 +260,14 @@ export default defineComponent({
       visibleColumns,
       visibleOffDefault,
       onAdd(row) {
-        rowCurrent.value = row;
+        currentRow.value = row;
         showDialog.value = true;
       },
       onEdit(row) {
-        rowCurrent.value = row;
+        currentRow.value = row;
         showDialog.value = true;
       },
+      onRowClick,
     };
   },
 });

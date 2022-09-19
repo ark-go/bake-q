@@ -4,7 +4,7 @@
  * @returns
  */
 export function isAllowPath(path) {
-  console.log(" pathhhhhh", path);
+  //console.log(" pathhhhhh", path);
   return allowPath.includes(path);
 }
 export const allowPath = [

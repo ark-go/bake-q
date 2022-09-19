@@ -14,42 +14,43 @@ export const useStartPageStore = defineStore("StartPageStore", {
       listMenuDef: [
         {
           id: 1,
-          header: "Ввод данных",
+          header: "Отчеты",
           visible: true,
         },
         {
           id: 2,
+          title: "Chart",
+          link: "/charts/3",
+          icon: "bar_chart",
+          visible: true,
+        },
+        {
+          id: 3,
+          header: "Документы",
+          visible: true,
+        },
+        {
+          id: 4,
           title: "Продажи",
           link: "/sale",
           icon: "arrow_right",
           visible: true,
         },
         {
-          id: 3,
-          title: "Продукция<br>рецепты по ТТК",
-          link: "/products",
-          icon: "arrow_right",
-          visible: true,
-        },
-        {
-          id: 4,
-          title: "Документы<br>прайсы",
+          id: 5,
+          title: "Установка цен<br>прайсы",
           link: "/price",
           icon: "arrow_right",
           visible: true,
         },
         {
-          id: 5,
-          header: "Отчеты",
-          visible: true,
-        },
-        {
           id: 6,
-          title: "Chart",
-          link: "/charts/3",
-          icon: "bar_chart",
+          title: "Продукция<br>рецепты по ТТК",
+          link: "/products",
+          icon: "arrow_right",
           visible: true,
         },
+
         {
           id: 7,
           header: "Справочники",
@@ -99,7 +100,7 @@ export const useStartPageStore = defineStore("StartPageStore", {
       ],
       listMenu: [],
       listMenuSorted: [],
-      toggleStorage: "13-09-2022-2",
+      toggleStorage: "18-09-2022",
       //  listMenu: [],
     };
   },
@@ -166,7 +167,6 @@ const pageStart = useStartPageStore();
 pageStart.$state.listMenu = pageStart.$state.listMenuDef.filter(
   (val) => !val.header
 );
-console.log(">D>D>D>D>", pageStart.$state.listMenu);
 // прочитаем при загрузке данные из компа
 const lockStat = localStorage.getItem("pageStart");
 // внимание надо объединить данные из кода и данные прочитанные из LocalStorage компа

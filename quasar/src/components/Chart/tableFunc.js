@@ -8,7 +8,7 @@ export function useTableFunc(tabUrl) {
   async function loadSaleOtchet() {
     let command = {
       cmd: "loadSaleOtchet",
-      bakery_id: 3,
+      bakery_id: 21,
       dateBetween: {
         from: dateToDateUnix("01.01.2022"),
         to: dateToDateUnix("31.12.2022"),

@@ -1,6 +1,7 @@
 <template>
   <div class="column no-wrap" style="max-height: inherit">
     <q-table
+      flat
       :ref="(el) => (refTable = el)"
       style="min-width: 100px; display: grid; overflow: auto"
       table-header-class="bg-grey-2"
@@ -93,8 +94,8 @@ export default defineComponent({
     FindTable,
   },
   props: {
-    tabname: String,
-    tablabel: String,
+    tabname: { type: String, default: "products" },
+    tablabel: { type: String, default: "Продукция" },
   },
   setup(props) {
     const $q = useQuasar();

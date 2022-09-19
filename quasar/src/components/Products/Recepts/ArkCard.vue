@@ -1,12 +1,7 @@
 <template>
-  <q-card
-    flat
-    bordered
-    class="my-card bg-grey-1 shadow-7"
-    style="overflow: auto"
-    :style="maxHeigh"
-  >
-    <div :ref="(el) => (refTop = el)">
+  <q-card flat bordered class="ark-card-panel" style="overflow: auto">
+    <div>
+      <q-resize-observer @resize="(val) => (topSectionSize = val)" />
       <q-card-section>
         <div class="row items-center no-wrap">
           <div class="col">
@@ -34,43 +29,45 @@
         </div>
       </q-card-section>
     </div>
-    <q-card-section
-      style="padding: 0 16px 16px 16px"
-      :style="{ maxHeight: maxBodyHeight }"
-    >
-      <div class="ark-grid">
-        <div class="ark-grid-left">
-          <div :ref="(el) => (refLeftTop = el)">
-            <slot name="leftTop"></slot>
+    <div class="row">
+      <q-resize-observer @resize="(val) => (infoSectionSize = val)" />
+      <div class="col-6"><slot name="leftTop"></slot></div>
+      <div class="col-6"><slot name="rightTop"></slot></div>
+    </div>
+    <div>
+      <q-resize-observer @resize="(val) => (bodySectionSize = val)" />
+      <q-card-section style="padding: 0 16px 16px 16px" class="maxBodyHeight">
+        <div class="ark-grid" :style="{ maxHeight: tableLeftHeight }">
+          <div class="ark-grid-left">
+            <!-- <div :ref="(el) => (refLeftTop = el)">
+              <q-resize-observer @resize="(val) => (infoSectionSize = val)" />
+              <slot name="leftTop"></slot>
+            </div> -->
+            <div :style="{ maxHeight: tableLeftHeight }">
+              <slot name="leftCenter"></slot>
+            </div>
           </div>
-          <div :style="{ maxHeight: tableLeftHeight + 'px' }">
-            <slot name="leftCenter"></slot>
+          <div class="ark-grid-right">
+            <div :style="{ maxHeight: tableLeftHeight }">
+              <slot name="rightCenter"></slot>
+            </div>
           </div>
         </div>
-        <div class="ark-grid-right">
-          <div :ref="(el) => (refRightTop = el)">
-            <slot name="rightTop"></slot>
-          </div>
-          <div :style="{ maxHeight: tableRightHeight + 'px' }">
-            <slot name="rightCenter"></slot>
-          </div>
-        </div>
-      </div>
-    </q-card-section>
-    <div
-      :ref="(el) => (refBottom = el)"
-      style="position: absolute; bottom: 0; width: 100%"
-    >
+      </q-card-section>
+    </div>
+    <div style="position: absolute; bottom: 0; width: 100%">
+      <q-resize-observer @resize="(val) => (bottomSectionSize = val)" />
       <q-separator v-if="buttonArrProp" />
-      <q-card-actions>
+      <q-card-actions class="q-py-none" style="background-color: whitesmoke">
         <slot v-if="buttonArrProp" name="buttons">
           <q-btn
             flat
+            icon="eva-arrowhead-left"
             :key="item.key"
             v-for="item in buttonArrProp"
             @click="emit('buttonClick', item.key)"
           >
-            {{ item.name }}
+            Назад к продукции
           </q-btn>
         </slot>
         <!-- <q-btn flat @click="clickNewRecept">Создать</q-btn>
@@ -93,7 +90,7 @@ import {
 } from "vue";
 import { useQuasar, Screen } from "quasar";
 import { dom } from "quasar";
-
+import { useArkCardStore, storeToRefs } from "src/stores/arkCardStore";
 // menuObj объект для меню ключ/знчение  значение - показано в меню
 // menuClick вернет событие с именем ключа из объекта menuObj
 export default {
@@ -104,72 +101,34 @@ export default {
     buttonArr: Object,
     menuObj: Object,
     maxWidth: String,
-    heightRabZone: [String, Number],
   },
   emits: ["onBodyResize"],
   setup(props, { emit }) {
     const { style, height } = dom;
     const buttonArrProp = ref([]);
-    const refTop = ref({});
-    const refLeftTop = ref({});
-    const refRightTop = ref("");
-    const refBottom = ref({});
-    const maxHeigh = ref("");
     const tableLeftHeight = ref("");
-    const tableRightHeight = ref("");
-    const maxBodyHeight = ref("");
-    // вычисляем размеры элементов, пропускаем ошибки если они есть
-    function heightTry(val) {
-      try {
-        return height(val);
-      } catch (e) {
-        return 0;
-      }
-    }
+    const {
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
+      maxBodyHeight,
+      maxBodyHeightCss,
+    } = storeToRefs(useArkCardStore());
     // вычисляем размер рабочей области
+    watch(
+      [() => maxBodyHeight.value, () => infoSectionSize.value.height],
+      () => {
+        nextTick(() => {
+          reResize();
+        });
+      },
+      { immediate: true }
+    );
     function reResize() {
-      let a = props.heightRabZone; // общий по окну за вычетом отступа
-      a -= heightTry(refTop.value); // заголовок
-      a -= heightTry(refBottom.value); // подвал
-      let refLeftTopH = heightTry(refLeftTop.value); // левый топ над таблицей
-      let refRightTopH = heightTry(refRightTop.value); // правый топ над таблицей
-      console.log(
-        "Размер рабочей области ++++++++>>>>>>>>>>>>>> : ",
-        a,
-        "=",
-        props.heightRabZone,
-        heightTry(refTop.value),
-        heightTry(refBottom.value)
-      );
-      maxBodyHeight.value = `${a}px`; // весь размер тела между верхом и низом
-      maxHeigh.value = `minHeight:${props.heightRabZone}px;maxHeight:${props.heightRabZone}px;`;
-      tableLeftHeight.value = a - refLeftTopH; // размер левой таблицы
-      tableRightHeight.value = a - refRightTopH; // размер правой таблицы
-      emit("onBodyResize", maxBodyHeight.value); // можем отдать размер тела
+      tableLeftHeight.value = `calc( ${maxBodyHeight.value} - ${infoSectionSize.value.height}px )`;
+      console.log("MMMMMMMMMMMMMMMMME", tableLeftHeight.value);
     }
-    // ловим изменение размера экрана, от родителя
-    watchEffect(() => {
-      let a = props.heightRabZone;
-      reResize();
-    });
-    // при показе ДОМ пересчитаем размеры
-    onMounted(() => {
-      nextTick(() => {
-        reResize();
-      });
-    });
-    // приперерисовке ДОМ проверим размеры
-    onUpdated(() => {
-      nextTick(() => {
-        reResize();
-      });
-    });
-    // при возврате из KeepAlive. и перерисовке ДОМ проверим размеры
-    onActivated(() => {
-      nextTick(() => {
-        reResize();
-      });
-    });
     // -----------------------------------^^^^^^^--------------------
     onMounted(() => {
       buttonArrProp.value = props?.buttonArr;
@@ -179,17 +138,16 @@ export default {
       console.log("Кнопки:", buttonArrProp.value);
     });
     return {
-      maxHeigh,
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
       maxBodyHeight,
+      maxBodyHeightCss,
       Screen,
       buttonArrProp,
       emit,
-      refBottom,
-      refTop,
-      refLeftTop,
-      refRightTop,
       tableLeftHeight,
-      tableRightHeight,
       onClose() {
         emit("onClose");
       },

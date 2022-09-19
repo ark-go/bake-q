@@ -28,6 +28,9 @@
           v-model:drawerPanel="drawerPanel"
         ></Menu-Side-Bakery-Config>
       </q-tab-panel>
+      <q-tab-panel name="treeMenu" style="padding: 0">
+        <Tree-Global-Menu v-model:drawerPanel="drawerPanel"></Tree-Global-Menu>
+      </q-tab-panel>
     </q-tab-panels>
     <div
       v-touch-pan.horizontal.prevent.mouse="handlePan"
@@ -46,11 +49,14 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, watch } from "vue";
 import { useUserStore, storeToRefs } from "stores/userStore.js";
 import EssentialLink from "components/EssentialLink.vue";
-import MenuSide from "src/components/MenuSide/MenuSide.vue";
-import MenuSideBakeryConfig from "src/components/Sprav/tabPanelSide/MenuSideBakeryConfig.vue";
+import MenuSide from "./MenuSide/MenuSide.vue";
+import MenuSideBakeryConfig from "./tabsSide/MenuSideBakeryConfig.vue";
+import TreeGlobalMenu from "./tabsSide/TreeGlobalMenu.vue";
+import { useRoute } from "vue-router";
+
 export default defineComponent({
   name: "DrawerLeft",
   props: ["modelValue"],
@@ -58,10 +64,12 @@ export default defineComponent({
   components: {
     EssentialLink,
     MenuSide,
+    TreeGlobalMenu,
     MenuSideBakeryConfig,
   },
   setup() {
     const { userInfo } = storeToRefs(useUserStore());
+    const route = useRoute();
     const essentialLinks = ref([]);
     const info = ref(null);
     const panning = ref(false);
@@ -74,6 +82,18 @@ export default defineComponent({
         userInfo.value.email
       );
     });
+    watch(
+      () => route.path,
+      (val, valOld) => {
+        console.log(" переход роута", val);
+        if (val.includes("/tbl/")) {
+          drawerPanel.value = "treeMenu";
+        } else {
+          drawerPanel.value = "main";
+        }
+      },
+      { immediate: true }
+    );
     function handlePan({ evt, ...newInfo }) {
       info.value = newInfo;
       widthDrawer.value = newInfo.position.left;

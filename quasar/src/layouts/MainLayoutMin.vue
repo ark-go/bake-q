@@ -18,7 +18,7 @@
               <router-link to="/" style="color: white; text-decoration: none">
                 <!-- <q-img
                   v-if="!platform.is.mobile"
-                  src="/public/images/logo.png"
+                  src="/images/logo.png"
                   spinner-color="silver"
                   height="40px"
                   width="156px"
@@ -187,7 +187,7 @@ import {
   ref,
   onMounted,
   nextTick,
-  watchEffect,
+  watch,
   onBeforeMount,
 } from "vue";
 import FormLogin from "components/Registration/FormLogin.vue";
@@ -204,13 +204,13 @@ import {
 import { useUserStore } from "stores/userStore.js";
 import { useMainStore } from "stores/mainStore.js";
 import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
+import { useArkCardStore } from "src/stores/arkCardStore";
 //import { storeToRefs } from "pinia";
 import { useIoSocket } from "stores/ioSocket.js";
 import { useQuasar } from "quasar";
 import TestMove from "./TestMove.vue";
 import MenuUser from "./menuUser/menuUser.vue";
 import LoginDialog from "./loginDialog/LoginDialog.vue";
-//import MenuSide from "src/components/MenuSide/MenuSide.vue";
 export default defineComponent({
   name: "MainLayout",
 
@@ -226,19 +226,23 @@ export default defineComponent({
     //   MenuSide,
   },
 
-  setup() {
+  setup(props) {
     const arkUtils = useArkUtils();
     const titleBrand = ref("");
+    const arkCard = useArkCardStore();
     onMounted(async () => {
       titleBrand.value = platform.is.mobile ? "ХиТ" : "Хлеб и Тандыр";
     });
     const { rightDrawerOpen, isLeftDrawer, modalLoginOpen } = storeToRefs(
       useMainStore()
     );
+
     const footerVisible = ref(false);
     const route = useRoute();
     const router = useRouter();
     const pageSetup = usePagesSetupStore();
+    //const arkCard = useArkCardStore();
+    const { maxBodyHeight } = storeToRefs(useArkCardStore());
     const maxHeight = ref(300);
     const $q = useQuasar();
     const { notify, platform } = useQuasar();
@@ -250,6 +254,13 @@ export default defineComponent({
     // const pdfModal = ref(pdfWindow.show);
     const essentialLinks = ref([]);
     const username = ref("");
+    watch(
+      () => route.params,
+      () => {
+        arkCard.$reset();
+        console.log("Смена параметра роута", props);
+      }
+    );
     onMounted(async () => {
       // if (!(await checkAccess(route.path, route.meta?.title))) {
       //   // если мы заходим по URL проверяем доступность первый раз
@@ -263,16 +274,14 @@ export default defineComponent({
     });
     // TODO Глобальные размеры окна
     function pageFnHeight(offset, height) {
-      console.log("global ofset - height", offset, height);
       pageSetup.pageOffset = offset;
       pageSetup.pageHeight = height;
       pageSetup.screenWidth = $q.screen.width;
       if ($q.platform.is.mobile) pageSetup.pagePaddingY = 2;
       else pageSetup.pagePaddingY = 4;
-      maxHeight.value = height - offset - pageSetup.pagePaddingY + 26 + "px"; // добавляем на глаз padding 16, не хватает милиметра убрать скрола
+      maxHeight.value = height - offset - pageSetup.pagePaddingY + "px"; // добавляем на глаз padding 16, не хватает милиметра убрать скрола
 
-      console.log("pageSetup.arkCardHeight", pageSetup.arkCardHeight);
-
+      console.log("1 pageSetup.arkCardHeight", pageSetup.arkCardHeight);
       // let heightCss = `calc(100vh - ${offset}px)`;
       let heightCss = `${height - offset - pageSetup.pagePaddingY}px`;
       //cardMain.value.width.max = $q.screen.width - 20;
@@ -387,6 +396,7 @@ export default defineComponent({
       essentialLinks,
       pageFnHeight,
       maxHeight,
+      maxBodyHeight,
       getAllUsers() {
         ioSocket.socket
           .timeout(5000)
@@ -558,5 +568,10 @@ function linkList(roles = [], email) {
   @media (max-width: 1000px) {
     max-width: 99vw;
   }
+}
+:deep(.maxBodyHeight) {
+  height: v-bind(maxBodyHeight);
+  max-height: v-bind(maxBodyHeight);
+  overflow: auto;
 }
 </style>

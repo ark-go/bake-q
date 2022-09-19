@@ -2,7 +2,7 @@
   <img
     ref="refDrag"
     alt="Тындыр"
-    src="/public/images/logo.png"
+    src="/images/logo.png"
     :style="{
       left: `${x}px`,
       top: `${y}px`,

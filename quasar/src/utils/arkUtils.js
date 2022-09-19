@@ -39,7 +39,6 @@ export function useArkUtils() {
         delay: 400, // ms
       });
       let resp = await axios.post(url, data);
-      console.log("resp >", resp);
       // if (resp.status == 429) {
       //   throw new Error("Не надо часто делать запросы ! бан.");
       // }

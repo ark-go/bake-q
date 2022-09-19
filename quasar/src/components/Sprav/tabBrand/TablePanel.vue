@@ -25,6 +25,7 @@
 <template>
   <Table-Template
     v-if="tableName"
+    flat
     :title="title"
     :tableName="tableName"
     :rows="rows"
@@ -68,7 +69,6 @@ import { useSpravStore } from "stores/spravStore";
 import { useQuasar } from "quasar";
 //import FormDialog from "./FormDialog.vue";
 import FormDialog from "./FormDialog.vue";
-//import { waitOnEventOrTimeout } from "app/public/pdfjs/web/viewer.js";
 export default defineComponent({
   name: "TablePanel",
   components: {
@@ -84,12 +84,12 @@ export default defineComponent({
     },
     tableName: {
       type: String,
-      default: "tabTrademark", // для запроса с сервера
+      default: "tabBrand", // для запроса с сервера
     },
     tableInfo: Object,
     title: {
       type: String,
-      default: "Торговые сети",
+      default: "Бренды",
     },
     panelName: String,
   },
@@ -99,7 +99,7 @@ export default defineComponent({
     const showDialog = ref(false);
     const currentRow = ref({});
     const rows = ref([]);
-    const tableFunc = useTableFunc(rows, props.tableInfo.tableName);
+    const tableFunc = useTableFunc(rows, props.tableName);
     const spravStore = useSpravStore();
     const store = useBakeryStore();
     const rowToDialog = ref({});

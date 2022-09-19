@@ -502,7 +502,6 @@ export default defineComponent({
       // await nextTick();
     }
     function onDblClick(event, node) {
-      console.log("onDblClick click", node);
       //let nodeCl = refTree.value.getNodeByKey(node.id);
       if (refTree.value.isExpanded(node.id)) {
         refTree.value.setExpanded(node.id, false);

@@ -1,14 +1,6 @@
 <template>
   <q-page class="flex flex-center" style="min-width: 360px">
-    <q-card class="chart-full">
-      <!-- <q-card-section class="q-py-xs"
-        ><q-btn
-          class="fixed-top-left q-pl-10 q-pt-10"
-          flat
-          label="Еще"
-          @click="$emit('onClickNext')"
-        ></q-btn>
-      </q-card-section> -->
+    <q-card class="chart-full ark-card-panel">
       <q-card-section style="font-size: 16px">
         <q-btn
           class="absolute q-pl-10 q-pt-10"

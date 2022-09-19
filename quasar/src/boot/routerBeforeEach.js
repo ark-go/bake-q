@@ -1,8 +1,10 @@
 import { boot } from "quasar/wrappers";
 import { axios } from "boot/axios";
+import { useArkCardStore } from "src/stores/arkCardStore";
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 export default boot(async ({ router } /* { app, router, ... } */) => {
+  const arkCard = useArkCardStore();
   let yesReplace = true;
   router.beforeEach(async (to, from) => {
     // console.log("router boot: router BeforeEach", to.meta.checkAccess);
@@ -11,6 +13,7 @@ export default boot(async ({ router } /* { app, router, ... } */) => {
       try {
         check = await checkAccess(to.path, to.meta?.title);
         if (!check) {
+          arkCard.$reset(); // сбрасываем размеры
           return "/";
           // return false; // никуда не переходим, запрещено
         }
@@ -19,6 +22,7 @@ export default boot(async ({ router } /* { app, router, ... } */) => {
         // ошибка при запросе, остаемся на месте
         return false; // никуда не переходим
       }
+      arkCard.$reset(); // сбрасываем размеры
     }
     // BUG: не работает, сам replace в return
 

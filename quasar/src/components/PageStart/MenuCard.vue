@@ -8,7 +8,7 @@
   background-color: rgb(242, 243, 242);
   cursor: pointer;
   border-style: outset;
-  border-color: silver;
+  // border-color: silver;
   // border-width: 3px;
   overflow: hidden;
 }
@@ -20,8 +20,24 @@
   font-size: 1.1rem;
 
   overflow-wrap: anywhere;
-  background-image: url("/images/metall1.jpg");
+  // background-image: url("/images/metall1.jpg");
+  background: linear-gradient(135deg, #ffffff55 25%, transparent 25%) -10px 0/
+      20px 20px,
+    linear-gradient(225deg, #ffffff 25%, transparent 25%) -10px 0/ 20px 20px,
+    linear-gradient(315deg, #ffffff55 25%, transparent 25%) 0px 0/ 20px 20px,
+    linear-gradient(45deg, #ffffff 25%, #f4f4ff 25%) 0px 0/ 20px 20px;
 }
+//
+.menu-card-section-1 {
+  background-color: #f4f4ff;
+  opacity: 0.8;
+  background: linear-gradient(135deg, #ffffff55 25%, transparent 25%) -10px 0/
+      20px 20px,
+    linear-gradient(225deg, #ffffff 25%, transparent 25%) -10px 0/ 20px 20px,
+    linear-gradient(315deg, #ffffff55 25%, transparent 25%) 0px 0/ 20px 20px,
+    linear-gradient(45deg, #ffffff 25%, #f4f4ff 25%) 0px 0/ 20px 20px;
+}
+//
 </style>
 <template>
   <q-card v-if="!header && !hiddenMenuCard" class="menu-card">

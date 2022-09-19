@@ -68,7 +68,6 @@ export default defineComponent({
 
     onMounted(() => {
       dataTreeFilter.value = dataTreePermiss(dataTree);
-      console.log("ЮЗЕР: ", userStore.userInfo.email);
     });
     function dataTreePermiss(rootOriginal) {
       let result = [];

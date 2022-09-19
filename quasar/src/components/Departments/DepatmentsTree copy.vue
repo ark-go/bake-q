@@ -365,13 +365,11 @@ export default defineComponent({
       //console.log(tree);
     }
     async function rightClick(event, node) {
-      console.log("right click", node);
       selectedNode.value = node;
       selectedKey.value = node.id;
       // await nextTick();
     }
     function onDblClick(event, node) {
-      console.log("onDblClick click", node);
       //let nodeCl = refTree.value.getNodeByKey(node.id);
       if (refTree.value.isExpanded(node.id)) {
         refTree.value.setExpanded(node.id, false);

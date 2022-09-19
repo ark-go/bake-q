@@ -19,14 +19,11 @@ export const usePagesSetupStore = defineStore("PagesSetupStore", {
       pageHeight: 200,
       pagePaddingY: 60,
       screenWidth: 300,
+      // ссылки
+      refTopSection: 50,
+      refInfoSection: 50,
+      refBottomSection: 50,
 
-      // cardMain: {
-      //   width: {
-      //     curr: 704,
-      //     min: 360,
-      //     max: 1200,
-      //   },
-      // },
       page: {
         docPrice: {
           width: {
@@ -132,6 +129,15 @@ export const usePagesSetupStore = defineStore("PagesSetupStore", {
   },
 
   getters: {
+    pageBodyHeight: (state) => {
+      return state.pageHeight - state.pageOffset;
+    },
+    pageMaxHeight: (state) => {
+      return {
+        minHeight: `calc(100vh - ${state.pageOffset}px)`,
+        maxHeight: `calc(100vh - ${state.pageOffset}px)`,
+      };
+    },
     cardMain: (state) => {
       let page = {};
       switch (state.currentPage) {

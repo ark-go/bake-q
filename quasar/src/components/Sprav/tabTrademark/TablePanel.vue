@@ -69,7 +69,6 @@ import { useSpravStore } from "stores/spravStore";
 import { useQuasar } from "quasar";
 //import FormDialog from "./FormDialog.vue";
 import TrademarkDialog from "./TrademarkDialog.vue";
-//import { waitOnEventOrTimeout } from "app/public/pdfjs/web/viewer.js";
 export default defineComponent({
   name: "TablePanel",
   components: {
@@ -183,7 +182,7 @@ export default defineComponent({
         console.log("Нажали по строке");
         currentRow.value = row;
         store.selectedRow = row;
-        emit("selectedRow", row); 
+        emit("selectedRow", row);
       },
       sprav,
     };

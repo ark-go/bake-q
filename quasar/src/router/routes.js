@@ -145,12 +145,24 @@ const routes = [
       {
         path: "charts/:id",
         component: () => import("components/Chart/PageCharts.vue"),
-        // children: [
-        //   {
-        //     path: "",
-        //     component: () => import("components/Chart/PageCharts.vue"),
-        //   },
-        // ],
+      },
+      {
+        path: "tbl",
+        props: true,
+        component: () => import("components/Sprav/PageSprav.vue"),
+        meta: { checkAccess: true, title: "Конфигурация пекарен" },
+      },
+      {
+        path: "tbl/:paramTabName/:formFactor",
+        props: true,
+        component: () =>
+          import("components/CatalogAllTables/SpravPageTables.vue"),
+      },
+      {
+        path: "tbl/:paramTabName",
+        props: true,
+        component: () =>
+          import("components/CatalogAllTables/SpravPageTables.vue"),
       },
     ],
   },

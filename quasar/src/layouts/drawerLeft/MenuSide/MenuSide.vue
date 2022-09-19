@@ -1,13 +1,13 @@
 <template>
   <q-list>
-    <q-item clickable @click="$emit('update:drawerPanel', 'main')">
+    <q-item clickable @click="router.push({ path: '/' })">
       <q-item-section avatar>
-        <q-icon name="eva-arrowhead-left" color="blue-grey-4" />
+        <q-icon name="home" color="blue-grey-4" />
       </q-item-section>
 
       <q-item-section>
-        <q-item-label>Назад</q-item-label>
-        <q-item-label caption> "назад" </q-item-label>
+        <q-item-label>Главная</q-item-label>
+        <q-item-label caption> "в начало" </q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-checkbox
@@ -20,25 +20,35 @@
         />
       </q-item-section>
     </q-item>
+    <q-item
+      v-if="userInfo.email != '1Arkadii@yandex.ru'"
+      clickable
+      @click="$emit('update:drawerPanel', 'treeMenu')"
+    >
+      <q-item-section>
+        <q-item-label>?</q-item-label>
+      </q-item-section>
+    </q-item>
     <q-separator />
     <!-- <q-item-label header> </q-item-label> -->
-    <!-- <Menu-Side-Items
+    <Menu-Side-Items
       v-for="link in listMenuSide"
       :key="link.title"
       v-bind="link"
-    /> -->
+    />
   </q-list>
 </template>
 
 <script>
-// tabbakeryConfig
+// tab main
 import { defineComponent, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-//import MenuSideItems from "./MenuSideItems.vue";
+import MenuSideItems from "./MenuSideItems.vue";
 import { useStartPageStore, storeToRefs } from "src/stores/startPageStore";
+import { useUserStore } from "src/stores/userStore";
 export default defineComponent({
-  name: "MenuSideBakeryConfig",
-  components: {},
+  name: "MenuSide",
+  components: { MenuSideItems },
   props: {
     drawerPanel: {
       type: String,
@@ -49,18 +59,13 @@ export default defineComponent({
     //>tag="a" :href="link">
     const router = useRouter();
     const { listMenuSide } = storeToRefs(useStartPageStore());
-    function onClick(lnk) {
-      if (lnk == "api/pdf") {
-        window.open(lnk, "_blank");
-      } else {
-        router.push({ path: lnk });
-      }
-    }
+    const { userInfo } = storeToRefs(useUserStore());
+
     return {
-      onClick,
       listMenuSide,
       router,
       pinCheckbox: ref(false),
+      userInfo,
     };
   },
 });

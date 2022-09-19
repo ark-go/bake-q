@@ -1,14 +1,13 @@
 <template>
   <ark-card
+    class="ark-card-panel arkadiii"
     :title="'Составление рецепта' + ttkNumberStr"
     :subTitle="curentRowName"
     style="width: 700px"
-    :heightRabZone="heightRabZone"
     :buttonArr="buttonArr"
     @buttonClick="buttonClick"
     :menuObj="{ pdf: 'Получить PDF' }"
     @menuClick="menuClick"
-    @onBodyResize="onBodyResize"
   >
     <template v-slot:leftTop>
       <button-down
@@ -57,7 +56,7 @@ import TableRaw from "./TableRaw.vue";
 import TableIngred from "./TableIngred.vue";
 export default defineComponent({
   name: "p-recept",
-  props: ["heightRabZone"],
+  props: [],
   components: { ArkCard, TableRaw, TableIngred, ButtonDown },
   emits: ["onToMain"],
   setup(props, { emit }) {
@@ -136,7 +135,6 @@ export default defineComponent({
       topElement,
       refTable,
       refTableIngred,
-      onBodyResize(val) {},
     };
   },
 });

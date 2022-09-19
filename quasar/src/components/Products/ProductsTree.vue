@@ -1,38 +1,21 @@
 <template>
-  <div class="column">
-    <q-input ref="filterRef" dense v-model="filter" label="Фильтр">
-      <template v-slot:append>
-        <q-icon
-          v-if="filter !== ''"
-          name="clear"
-          class="cursor-pointer"
-          @click="resetFilter"
-        />
-      </template>
-    </q-input>
-    <!-- <q-scroll-area
-      :thumb-style="thumbStyle"
-      :bar-style="barStyle"
-      style="height: 200px"
-    > -->
-    <q-tree
-      class="non-selectable"
-      :ref="(el) => (refTree = el)"
-      :nodes="dataTree"
-      node-key="key"
-      v-model:selected="selected"
-      no-connectors
-      accordion
-      no-nodes-label="Нет узлов"
-      no-results-label="Ничего не найдено"
-      selected-color="blue"
-      v-model:expanded="expanded"
-      @update:selected="onSelected"
-      :no-selection-unset="true"
-      :filter="filter"
-    />
-    <!-- </q-scroll-area> -->
-  </div>
+  <q-tree
+    class="non-selectable"
+    style="overflow: auto; max-height: inherit"
+    :ref="(el) => (refTree = el)"
+    :nodes="dataTree"
+    node-key="key"
+    v-model:selected="selected"
+    no-connectors
+    accordion
+    no-nodes-label="Нет узлов"
+    no-results-label="Ничего не найдено"
+    selected-color="blue"
+    v-model:expanded="expanded"
+    @update:selected="onSelected"
+    :no-selection-unset="true"
+    :filter="filter"
+  />
 </template>
 
 <script>

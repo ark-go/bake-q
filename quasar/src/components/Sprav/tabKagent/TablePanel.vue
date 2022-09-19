@@ -67,7 +67,6 @@ import { useBakeryStore } from "stores/bakeryStore.js";
 import { useSpravStore } from "stores/spravStore";
 import { useQuasar } from "quasar";
 import FormDialog from "./FormDialog.vue";
-//import { waitOnEventOrTimeout } from "app/public/pdfjs/web/viewer.js";
 export default defineComponent({
   name: "TablePanel",
   components: {
@@ -98,7 +97,7 @@ export default defineComponent({
     const showDialog = ref(false);
     const currentRow = ref({});
     const rows = ref([]);
-    const tableFunc = useTableFunc(rows, props.tableInfo.tableName);
+    const tableFunc = useTableFunc(rows, props.tableName);
     const spravStore = useSpravStore();
     const store = useBakeryStore();
     const rowToDialog = ref({});

@@ -1,25 +1,75 @@
 <template>
   <div class="column no-wrap" style="display: grid; max-height: inherit">
-    <Table-Template
+    <div class="row" style="justify-content: space-between">
+      <q-input ref="filterRef" dense v-model="filter" label="Поиск">
+        <template v-slot:append>
+          <q-icon
+            v-if="filter !== ''"
+            name="clear"
+            class="cursor-pointer"
+            @click.stop="filter = ''"
+          />
+          <q-icon v-else name="search" />
+        </template>
+      </q-input>
+      <q-btn
+        v-if="tableInfo.tableName"
+        dense
+        flat
+        color="primary"
+        :disable="addNewEnabled"
+        @click="addNew"
+        >ДОБАВИТЬ</q-btn
+      >
+    </div>
+    <q-table
       flat
-      title="Города"
+      style="min-width: 100px; max-height: inherit; overflow: auto"
+      dense
+      :filter="filter"
+      no-data-label="Нет данных."
+      no-results-label="Ничего не найдено."
+      class="my-sticky-virtscroll-table table-sprav-column-table"
+      virtual-scroll
+      v-model:pagination="paginationСatalog"
+      :rows-per-page-options="[0]"
+      :virtual-scroll-sticky-size-start="48"
+      row-key="id"
+      :title="tableInfo.tableName ? tableInfo.label : 'Выберите справочник'"
       :rows="rows"
       :columns="columns"
-      :tableFunc="tableFunc"
-      yesBtnEdit
-      yesBtnDelete
-      @onInfoRow="onInfoRow"
-      @onBtnDelete="onDeleteData"
-      @onBtnEdit="onEditData"
-      @onRowClick="onRowClick"
-      @onAdd="addNew"
-      :currentRow="currentRow"
-      noExpandPanel
-      :noEditTable="false"
-      :store="store"
-      :rowsPerPage="0"
+      :visible-columns="visibleColumns"
+      @row-dblclick="dblClickRow"
     >
-    </Table-Template>
+      <template v-slot:body="props">
+        <ark-table-body
+          :propsV="props"
+          :rowEdit="onEditData"
+          :rowDelete="onDeleteData"
+        ></ark-table-body>
+      </template>
+
+      <template v-slot:top-right>
+        <q-space />
+
+        <q-select
+          v-model="visibleColumns"
+          multiple
+          dense
+          options-dense
+          display-value="Вид"
+          emit-value
+          map-options
+          :options="columns"
+          option-value="name"
+          options-cover
+          style="min-width: 30px"
+        />
+      </template>
+      <template v-slot:no-data="dataslot">
+        <no-data-footer :dataslot="dataslot"></no-data-footer>
+      </template>
+    </q-table>
   </div>
   <trademark-dialog
     v-model:showDialog="showDialog"
@@ -43,15 +93,22 @@ import {
 import { useArkUtils } from "src/utils/arkUtils"; // const arkUtils = useArkUtils();
 import { getSprav } from "./getSprav";
 import { useQuasar } from "quasar";
-import TableTemplate from "../template/table/TableTemplate.vue";
+import NoDataFooter from "components/NoDataFooter.vue";
+//import ArkTableCell from "components/Sprav/ArkTableCell.vue";
+import ArkTableBody from "./ArkTableBody.vue";
 import TrademarkDialog from "./Dialog.vue";
 export default defineComponent({
   name: "CityTable",
   components: {
-    TableTemplate,
+    NoDataFooter,
+    // ArkTableCell,
+    ArkTableBody,
     TrademarkDialog,
   },
   props: {
+    //tableName: String,
+    tableInfo: Object, // информация о таблице БД
+    //..
     subTitle: String,
     buttonArr: Object,
     menuObj: Object,
@@ -68,38 +125,57 @@ export default defineComponent({
     const showDialog = ref(false);
     const confirmDelete = ref({});
     const nameElement = ref("");
+    const tableName = ref("");
     const url = ref("/api/");
     const sprav = ref({}); // Справочники сюда
     const rowToDialog = ref({});
 
+    // const columns = ref([]);
     const paginationСatalog = ref({
       rowsPerPage: 10,
     });
+    // function prepareDate(val) {
+    //   return {
+    //     id: val.value.id,
+    //     name: val.value.name,
+    //   };
+    // }
+
     async function restartComponent() {
       // необходимо при создании, или вставке :is компонета срабатывает
       sprav.value.region = await getSprav("region_kl", "Регионы"); // если нужны справочники
       console.log("region", sprav.value.region);
-      url.value = url.value + "city";
-      await loadTable(); // читаем, и там заполняем rows
+      tableName.value = props.tableInfo.tableName; // подали название таблицы которая в базе данных
+      url.value = url.value + tableName.value;
+      columnFilter();
+      if (tableName.value) {
+        await loadTable(); // читаем, и там заполняем rows
+      }
     }
     onMounted(async () => {
       // срабатывает при назначении таблицы  :is=
       await restartComponent(); // подготовка переменных, загрузка
     });
-
+    watch(
+      //! может лишнее
+      () => props.tableInfo.tableName, // ловим изменение входящей таблицы из tree?
+      async () => {
+        await restartComponent();
+      }
+    );
     // ------------- //!не применяем  -------------------------------
     function dblClickRow(val) {
       console.log("sprav dblClick", val);
     }
     // ------------- закрываем/сворачиваем лишние колонки  -------------------------------
-    // function columnFilter() {
-    //   visibleColumns.value = [];
-    //   columns.value.forEach((item, index, array) => {
-    //     if (item.name == "user_email" || item.name == "user_date") return;
-    //     visibleColumns.value.push(item.name);
-    //   });
-    //   console.log("Колонки показать", visibleColumns.value);
-    // }
+    function columnFilter() {
+      visibleColumns.value = [];
+      columns.value.forEach((item, index, array) => {
+        if (item.name == "user_email" || item.name == "user_date") return;
+        visibleColumns.value.push(item.name);
+      });
+      console.log("Колонки показать", visibleColumns.value);
+    }
 
     // -------------  Запись строки Update-------------------------------
     async function onSaveData(val) {
@@ -109,7 +185,7 @@ export default defineComponent({
         cmd = "update";
       }
       console.log("Пришло и готово на запись ", cmd, valUn);
-      let mess = "Обновление города"; // сообщение в загрузчик для
+      let mess = "Обновление " + props.tableInfo.label; // сообщение в загрузчик для
       let res = await arkUtils.dataLoad(
         url.value,
         { ...valUn, cmd: cmd }, // если нет cmd то update
@@ -169,11 +245,11 @@ export default defineComponent({
     }
     // ------------------- читаем все данные
     async function loadTable() {
-      tableNameSting.value = "city";
+      tableNameSting.value = props.tableInfo.tableName;
       let dat = {
         cmd: "load",
       };
-      let mess = "Города ";
+      let mess = "Загрузка " + props.tableInfo.label;
       let res = await arkUtils.dataLoad(url.value, dat, mess);
       if (res.result) {
         rows.value = res.result;
@@ -203,19 +279,18 @@ export default defineComponent({
         label: "Е-Mail",
         align: "left",
         field: "user_email",
-        hidden: true,
       },
       {
         name: "user_date",
         label: "Дата",
         align: "left",
         field: "user_date",
-        hidden: true,
       },
     ]);
 
     return {
       sprav,
+      tableName,
       url,
       tableNameSting,
       rows,

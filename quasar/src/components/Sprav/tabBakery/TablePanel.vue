@@ -25,6 +25,7 @@
 <template>
   <Table-Template
     v-if="tableName"
+    flat
     :title="title"
     :tableName="tableName"
     :rows="rows"
@@ -58,7 +59,6 @@ import { useTableFunc } from "./tableFunc.js";
 import { columns } from "./tableColumnList.js";
 import { useBakeryStore } from "stores/bakeryStore.js";
 import { useSpravStore } from "stores/spravStore";
-//import { waitOnEventOrTimeout } from "app/public/pdfjs/web/viewer.js";
 export default defineComponent({
   name: "TablePanel",
   components: {

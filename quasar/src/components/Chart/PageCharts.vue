@@ -12,10 +12,11 @@
 </style>
 <template>
   <q-page
-    class="flex flex-center column"
+    class="flex flex-center column ark-card-panel"
     style="min-width: 360px"
-    :style-fn="styleFn"
-  >
+    ><div style="min-width: 5px">
+      <q-resize-observer @resize="(val) => (topSectionSize = val)" />
+    </div>
     <component
       :is="chartArr[currentChart]"
       :data-body="{ row: '' }"
@@ -35,7 +36,7 @@ import {
   ref,
   onMounted,
   computed,
-  watchEffect,
+  watch,
   nextTick,
 } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -43,10 +44,20 @@ import { useQuasar } from "quasar";
 import Chart1 from "./Chart1.vue";
 import Chart2 from "./Chart2.vue";
 import Chart3 from "./Chart3.vue";
+import { useArkCardStore, storeToRefs } from "src/stores/arkCardStore";
 export default defineComponent({
   name: "PageCharts",
   components: {},
   setup() {
+    const {
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
+      maxBodyHeight,
+      maxBodyHeightCss,
+    } = storeToRefs(useArkCardStore());
+
     const chartArr = ref([Chart1, Chart2, Chart3]);
     const route = useRoute();
     const $q = useQuasar();
@@ -63,20 +74,40 @@ export default defineComponent({
     const screenWidth = ref("250px");
     const screenWidthChart = ref("300px");
     const screenHeightChart = ref("300px");
-    function styleFn(offset, height) {
-      //  () => $q.screen.width,
-      screenWidthChart.value = $q.screen.width - 8 - paddingXz.value * 2 + "px";
-      screenHeightChart.value =
-        height - offset - 8 - paddingYz.value * 2 + "px";
-      screenWidth.value = $q.screen.width - paddingXz.value + "px";
-      console.log("Высота высчитали:", screenHeightChart.value, height, offset);
-      nextTick(() => {
-        reStartChart.value = !reStartChart.value;
-        console.log("поворот..", reStartChart.value);
-      });
 
-      return {};
-    }
+    // function styleFn(offset, height) {
+    //   //  () => $q.screen.width,
+    //   screenWidthChart.value = $q.screen.width - 8 - paddingXz.value * 2 + "px";
+    //   screenHeightChart.value =
+    //     height - offset - 8 - paddingYz.value * 2 + "px";
+    //   screenWidth.value = $q.screen.width - paddingXz.value + "px";
+    //   console.log("Высота высчитали:", screenHeightChart.value, height, offset);
+    //   nextTick(() => {
+    //     reStartChart.value = !reStartChart.value;
+    //     console.log("поворот..", reStartChart.value);
+    //   });
+
+    //   return {};
+    // }
+
+    watch(
+      () => maxBodyHeight.value,
+      () => {
+        screenWidthChart.value =
+          $q.screen.width - 8 - paddingXz.value * 2 + "px";
+        // screenHeightChart.value =
+        //   height - offset - 8 - paddingYz.value * 2 + "px";
+        screenHeightChart.value = maxBodyHeight.value;
+        screenWidth.value = $q.screen.width - paddingXz.value + "px";
+        console.log("Высота высчитали Height:", screenHeightChart.value);
+        nextTick(() => {
+          reStartChart.value = !reStartChart.value;
+          console.log("поворот..", reStartChart.value);
+        });
+      },
+      { immediate: true }
+    );
+
     // chart.value = Chart1;
     onMounted(() => {
       console.log("start", route.params.id);
@@ -113,7 +144,7 @@ export default defineComponent({
       screenWidthChart,
       screenHeightChart,
       reStartChart,
-      styleFn,
+      topSectionSize,
     };
   },
 });

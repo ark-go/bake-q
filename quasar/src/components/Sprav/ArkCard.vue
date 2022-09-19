@@ -5,19 +5,11 @@
     style="overflow: auto; user-select: none"
     @click.right.prevent="$emit('stop')"
   >
-    <div :ref="(el) => (refTopSection = el)">
+    <div>
+      <q-resize-observer @resize="(val) => (topSectionSize = val)" />
       <q-card-section
         :class="{ 'bg-red-3': spravStore.historyOn && historyOn }"
       >
-        <!-- <q-badge
-            class="cursor-pointer q-mt-sm"
-            style="margin-top: 5px; margin-right: 4px"
-            rounded
-            color="red-3"
-            label="X"
-            floating
-            @click="$router.go(-1)"
-          /> -->
         <div class="row items-center no-wrap">
           <div class="col">
             <div
@@ -63,7 +55,8 @@
         </div>
       </q-card-section>
     </div>
-    <div :ref="(el) => (refInfoSection = el)">
+    <div>
+      <q-resize-observer @resize="(val) => (infoSectionSize = val)" />
       <q-card-section v-if="spravStore.selectedRow.name" style="padding-top: 0">
         <Tab-Button
           v-model:tabModel="tabModel"
@@ -71,16 +64,9 @@
         ></Tab-Button>
       </q-card-section>
     </div>
-    <div :ref="(el) => (refBodySection = el)">
-      <q-card-section
-        style="padding: 0 16px 16px 16px"
-        :style="{ maxHeight: maxBodyHeight }"
-      >
-        <!--
-                      :keep-alive-max="keepAliveMax"
-            :keep-alive="keepAlive"
-            keep-alive-include="main"
-        -->
+    <div>
+      <q-resize-observer @resize="(val) => (bodySectionSize = val)" />
+      <q-card-section class="q-py-none" :style="{ maxHeight: maxBodyHeight }">
         <q-tab-panels
           v-model="tabModel"
           animated
@@ -89,19 +75,6 @@
           keep-alive-include="main"
         >
           <q-tab-panel v-if="keepAlive" name="main" style="padding: 0">
-            <!-- <tab-sprav
-                :maxBodyHeight="maxBodyHeight"
-                :selectedNode="selectedNode"
-                :keepAliveMax="keepAliveMax"
-                v-model:keepAlive="keepAlive"
-              >
-                <template v-slot:before>
-                  <slot name="before"></slot>
-                </template>
-                <template v-slot:after>
-                  <slot name="after"></slot>
-                </template>
-              </tab-sprav> -->
             <Splitter-Sprav :maxBodyHeight="maxBodyHeight">
               <template v-slot:before>
                 <slot name="before"></slot>
@@ -120,16 +93,11 @@
             tabModel: tabModel,
           }"
         ></component>
-        <!-- <Tab-Territory
-            :maxBodyHeight="maxBodyHeight"
-            :tabModel="tabModel"
-          ></Tab-Territory> -->
       </q-card-section>
     </div>
-    <div
-      :ref="(el) => (refBottomSection = el)"
-      style="position: absolute; bottom: 0; width: 100%"
-    ></div>
+    <div style="position: absolute; bottom: 0; width: 100%">
+      <q-resize-observer @resize="(val) => (bottomSectionSize = val)" />
+    </div>
   </q-card>
   <Page-Setup-Dialog
     v-model:menuDialogShow="menuDialogShow"
@@ -148,6 +116,8 @@ import { useSpravStore } from "stores/spravStore";
 import { useQuasar, dom } from "quasar";
 import { getComponent } from "./selectComponent.js";
 import SelectDateExt from "./SelectDateExt.vue";
+//import { usePagesSetupStore, storeToRefs } from "src/stores/pagesSetupStore";
+import { useArkCardStore, storeToRefs } from "src/stores/arkCardStore";
 
 // menuObj объект для меню ключ/знчение  значение - показано в меню
 // menuClick вернет событие с именем ключа из объекта menuObj
@@ -159,7 +129,6 @@ export default {
     subTitle: String,
     buttonArr: [Object, Boolean],
     menuObj: Object,
-    pageMaxHeight: Object,
     selectedNode: Object, // выбраный пункт Tree дерева
   },
   components: {
@@ -175,10 +144,6 @@ export default {
     const route = useRoute();
     const spravStore = useSpravStore();
     const { style, height } = dom;
-    const refTopSection = ref();
-    const refBodySection = ref();
-    const refInfoSection = ref();
-    const refBottomSection = ref();
     const cardHeight = ref(400);
     const tabModel = ref("main"); // чтото должно быть на экране
     const splitterModel = ref(30);
@@ -188,6 +153,14 @@ export default {
     const historyOn = ref(false);
     const keepAlive = ref(true);
     const keepAliveMax = ref(10);
+    const {
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
+      maxBodyHeight,
+    } = storeToRefs(useArkCardStore());
+
     console.log("route name", route.name);
     onBeforeUnmount(() => {
       keepAlive.value = false;
@@ -208,9 +181,6 @@ export default {
         console.log("Выбрана вкладка", tabModel.value, props.selectedNode);
       }
     );
-
-    //   const historyDate = ref(null);
-    //  const valueDate = ref("");
     watch(
       // ловим изменение т.е. выбор дерева
       () => props.selectedNode.key,
@@ -251,38 +221,9 @@ export default {
     watchEffect(() => {
       splitHorizont.value = $q.screen.width < $q.screen.height;
     });
-    watch(
-      () => spravStore.selectedRow.name,
-      () => {
-        reSizeCard();
-      }
-    );
-    const maxHeigh = computed(() => {
-      return props.pageMaxHeight;
-    });
-    const maxBodyHeight = ref("");
-    function reSizeCard() {
-      // console.log("maxHeighmaxHeighmaxHeigh", maxHeigh.value);
-      try {
-        let topBottom =
-          height(refTopSection.value) +
-          height(refInfoSection.value) +
-          height(refBottomSection.value);
-        let N = `calc(${maxHeigh.value.maxHeight} - ${topBottom + 16}px)`;
-        //    console.log("Новый Body", N, maxHeigh.value);
-        maxBodyHeight.value = N;
-      } catch (e) {
-        console.log("нет элемента. пропуск1");
-        maxBodyHeight.value = maxHeigh.value; //! не правильно
-      }
-    }
-
-    onUpdated(() => {
-      // помоему срабатывает если объект внутри keep-alive
-      reSizeCard();
-    });
     onMounted(() => {
-      reSizeCard();
+      // reSizeCard();
+      console.log("PageSprav size", maxBodyHeight.value);
     });
     function clickSelectButton() {
       $q.dialog({
@@ -312,6 +253,11 @@ export default {
       $router,
       //  valueDate,
       //  historyDate,
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
+
       historyOn,
       currentTabComponent,
       onClickMenu,
@@ -319,12 +265,8 @@ export default {
       tabModel,
       spravStore,
       clickSelectButton,
-      refTopSection,
-      refBodySection,
-      refInfoSection,
-      refBottomSection,
       maxBodyHeight,
-      maxHeigh,
+      // maxHeigh,
       splitterModel,
       splitHorizont,
       splitStyleH,

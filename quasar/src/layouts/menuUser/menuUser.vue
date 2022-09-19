@@ -21,7 +21,7 @@
 
           <div v-else class="column items-center">
             <q-avatar size="72px">
-              <img src="/public/images/user_avatar.png" />
+              <img src="/images/user_avatar.png" />
             </q-avatar>
 
             <div class="text-subtitle1 q-mt-md q-mb-xs">

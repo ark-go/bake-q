@@ -2,44 +2,45 @@
   <ark-card
     title="Продукция"
     :subTitle="currentLabel"
-    :pageMaxHeight="pageMaxHeight"
     :buttonArr="buttonArr"
     @buttonClick="buttonClick"
     :menuObj="{ pdf: 'Получить PDF' }"
     @menuClick="menuClick"
   >
-    <div class="ark-grid">
-      <div class="ark-grid-left">
-        <transition appear name="comp-fade" mode="out-in">
-          <keep-alive include="ProductsTree">
+    <keep-alive include="ProductsTree">
+      <div class="row" style="max-height: inherit">
+        <div class="col-4" style="max-height: inherit">
+          <div v-if="!currentRowText" style="max-height: inherit">
+            <div v-if="yesCatalogAll">Выберите продукт</div>
             <products-tree
-              v-if="!currentRowText"
+              v-else
               style="min-width: 100px"
               @on-selected-node="onSelectedNode"
             ></products-tree>
-            <products-action
-              v-else
-              @on-click-recept="$emit('onToRecept')"
-              @on-click-pdf="menuClick('pdf')"
-            >
-            </products-action>
-          </keep-alive>
-        </transition>
+          </div>
+          <products-action
+            v-else
+            @on-click-recept="$emit('onToRecept')"
+            @on-click-pdf="menuClick('pdf')"
+          >
+          </products-action>
+        </div>
+
+        <div class="col-8 ark-grid-right88" style="max-height: inherit">
+          <!-- <transition appear name="comp-fade" mode="out-in"> -->
+          <component
+            v-if="!!currentTable"
+            :is="currentTable"
+            v-bind="{
+              tableInfo: selectedNode2,
+              tabname: currentTabname,
+              tablabel: currentLabel,
+            }"
+          ></component>
+          <!-- </transition> -->
+        </div>
       </div>
-      <div class="ark-grid-right">
-        <!-- <transition appear name="comp-fade" mode="out-in"> -->
-        <component
-          v-if="!!currentTable"
-          :is="currentTable"
-          v-bind="{
-            tableInfo: selectedNode2,
-            tabname: currentTabname,
-            tablabel: currentLabel,
-          }"
-        ></component>
-        <!-- </transition> -->
-      </div>
-    </div>
+    </keep-alive>
     <Pdf-Dialog
       v-model:showDialog="showPdfDialog"
       :param="pdfDialogParam"
@@ -56,13 +57,14 @@ import {
   onActivated,
   nextTick,
   onMounted,
+  watch,
 } from "vue";
 //import NoTable from "components/Products/NoTable.vue";
 //import ArkCard from "components/Card/ArkCard.vue";
 import ArkCard from "components/Products/ArkCard.vue";
 import ProductsTree from "components/Products/ProductsTree.vue";
 import { useQuasar } from "quasar";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { arkVuex } from "src/utils/arkVuex.js";
 import ProductsAction from "./ProductsAction.vue";
 import PdfDialog from "../PDF/PdfDialog.vue";
@@ -76,7 +78,7 @@ export default defineComponent({
     ProductsAction,
     PdfDialog,
   },
-  props: ["pageMaxHeight"],
+  props: [],
   emits: ["onToRecept"],
   setup(props, { emit }) {
     const { pdfWindow } = arkVuex();
@@ -87,10 +89,12 @@ export default defineComponent({
     const selectedNode2 = ref({});
     const currentTabname = ref("");
     const router = useRouter();
+    const route = useRoute();
     const currentTable = ref(null); // подключаемые таблицу
     const currentLabel = ref(null);
     const showPdfDialog = ref(false);
     const pdfDialogParam = ref({});
+    const yesCatalogAll = ref(false);
     onMounted(() => {
       currentPage.value = "products";
     });
@@ -109,6 +113,23 @@ export default defineComponent({
       // выбор сбросится при переходе с другой страницы
       if (!currentLabel.value) selectedRowsVuex.products.length = 0;
     });
+    watch(
+      () => route.path,
+      (val) => {
+        // если открыли страницу по пути справочника tbl то симитируем переход по пути дерева, на продукцию
+        if (val.includes("/tbl/")) {
+          console.warn("Удалииить++++++:ЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖ");
+          yesCatalogAll.value = true;
+          onSelectedNode({
+            key: "start",
+            label: "Продукция",
+            table: "products",
+          });
+        }
+      },
+      { immediate: true }
+    );
+
     function onSelectedNode(node) {
       selectedRowsVuex.products.length = 0;
       currentLabel.value = node.label;
@@ -201,6 +222,8 @@ export default defineComponent({
       buttonClick,
       selectedRowsVuex,
       currentRowText,
+      route,
+      yesCatalogAll,
     };
   },
 });

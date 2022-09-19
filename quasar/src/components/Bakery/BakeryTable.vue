@@ -1,116 +1,25 @@
 <template>
-  <div class="column no-wrap">
-    <Table-Template
-      flat
-      title="Пекарни"
-      :tableName="tableName"
-      :rows="rows"
-      :columns="columns"
-      yesBtnEdit
-      yesBtnDelete
-      @onInfoRow="onInfoRow"
-      @onBtnDelete="onDelete"
-      @onBtnEdit="onEdit"
-      @onRowClick="onRowClick"
-      @onAdd="onAdd"
-      :currentRow="currentRow"
-      noExpandPanel
-      :noEditTable="noEditTable"
-      :store="store"
-      :rowsPerPage="0"
-    >
-    </Table-Template>
-    <!-- <q-table
-      style="min-width: 100px"
-      dense
-      :filter="filter"
-      no-data-label="Нет данных."
-      no-results-label="Ничего не найдено."
-      class="my-sticky-virtscroll-table table-kagent-column-table maxBodyHeight"
-      virtual-scroll
-      v-model:pagination="paginationСatalog"
-      :rows-per-page-options="[0]"
-      :virtual-scroll-sticky-size-start="48"
-      row-key="id"
-      title="Пекарни"
-      :rows="rows"
-      :columns="columns"
-      :visible-columns="visibleColumns"
-      @row-dblclick="dblClickRow"
-    >
-      <template v-slot:body="props">
-        <table-body
-          :propsV="props"
-          @on-btn-edit="onEdit"
-          @on-btn-delete="onDelete"
-          :noEditTable="noEditTable"
-          @on-Info-Row="$emit('onInfoRow', $event)"
-          :funcTable="loadTable"
-          :componentBodyMenu="componentBodyMenu"
-        ></table-body>
-      </template>
-      <template v-slot:top-left>
-        <div class="row">
-          <q-btn
-            v-if="!noEditTable"
-            flat
-            dense
-            round
-            color="green"
-            icon="add"
-            @click="onAdd()"
-          />
-          <div v-if="!noEditTable" style="min-width: 25px"></div>
-          <find-table v-model:filter="filter"></find-table>
-        </div>
-      </template>
-      <template v-slot:top-right v-if="!noEditTable">
-        <q-space />
+  <Table-Template
+    flat
+    title="Пекарни"
+    :tableName="tableName"
+    :rows="rows"
+    :columns="columns"
+    yesBtnEdit
+    yesBtnDelete
+    @onInfoRow="onInfoRow"
+    @onBtnDelete="onDelete"
+    @onBtnEdit="onEdit"
+    @onRowClick="onRowClick"
+    @onAdd="onAdd"
+    :currentRow="currentRow"
+    noExpandPanel
+    :noEditTable="noEditTable"
+    :store="store"
+    :rowsPerPage="0"
+  >
+  </Table-Template>
 
-        <q-select
-          v-model="visibleColumns"
-          multiple
-          dense
-          options-dense
-          display-value="Вид"
-          emit-value
-          map-options
-          :options="columns"
-          option-value="name"
-          options-cover
-          style="min-width: 30px"
-          borderless
-        />
-      </template>
-      <template v-slot:no-data="dataslot">
-        <no-data-footer :dataslot="dataslot"></no-data-footer>
-      </template>
-      <template v-slot:bottom v-if="noEditTable">
-        <q-select
-          v-model="visibleColumns"
-          multiple
-          dense
-          options-dense
-          display-value="Вид"
-          emit-value
-          map-options
-          :options="columns"
-          option-value="name"
-          options-cover
-          style="min-width: 30px"
-          borderless
-        />
-        <q-space />
-        <q-pagination
-          dense
-          v-model="paginationСatalog.page"
-          :max="Math.ceil(rows.length / paginationСatalog.rowsPerPage)"
-          input
-          input-class="text-orange-10"
-        />
-      </template>
-    </q-table> -->
-  </div>
   <bakery-dialog
     :rowData="rowCurrent"
     v-model:showDialog="showDialog"
@@ -138,7 +47,12 @@ export default defineComponent({
       default: false,
     },
     // команда для чтения  таблицы, задается при вставке в слот из других компонент
-    commandLoad: Object,
+    commandLoad: {
+      type: Object,
+      default: () => {
+        return { cmd: "load" };
+      },
+    },
   },
   emits: [],
   components: {
