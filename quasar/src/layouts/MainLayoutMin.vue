@@ -68,7 +68,7 @@
     <q-page-container @click="onContainer" class="main-background">
       <!-- <router-view /> -->
       <router-view v-slot="{ Component }">
-        <transition name="mode-fade">
+        <transition name="fade">
           <component :is="Component" v-bind="{ styleFn: pageFnHeight }" />
         </transition>
       </router-view>
@@ -258,7 +258,7 @@ export default defineComponent({
       () => route.params,
       () => {
         arkCard.$reset();
-        console.log("Смена параметра роута", props);
+        console.log("Смена параметра роута", props, "и ресет ArkCardSize");
       }
     );
     onMounted(async () => {

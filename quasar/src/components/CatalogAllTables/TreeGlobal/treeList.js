@@ -5,10 +5,9 @@ export function useTreeList() {
     const treeArr = [
       {
         itemLabel: "Справочники",
-        itemValue: "config",
+        itemValue: "title",
         description: " настройка установка назначение размещение управление",
-        // pathUrl: "/tbl/bakery",
-
+        pathUrl: "/tbl/title",
         expandable: true,
         children: [
           {
@@ -16,22 +15,6 @@ export function useTreeList() {
             itemValue: "bakery",
             pathUrl: "/tbl/bakery/card",
             description: "Все пекарни",
-            expandable: true,
-          },
-          {
-            itemLabel: "Контрагенты",
-            itemValue: "kagents",
-            pathUrl: "/tbl/kagent/card",
-            description: "Контрагенты",
-            disabled: false,
-            expandable: true,
-          },
-          {
-            itemLabel: "Бренды",
-            itemValue: "brand",
-            pathUrl: "/tbl/brand/card",
-            description: "Бренды торговых сетей",
-            disabled: false,
             expandable: true,
           },
 
@@ -88,6 +71,58 @@ export function useTreeList() {
               },
             ],
           },
+          {
+            itemLabel: "Контрагенты",
+            itemValue: "kagent",
+            pathUrl: "/tbl/kagent/card",
+            description: "Контрагенты",
+            disabled: false,
+            expandable: true,
+            children: [
+              {
+                itemLabel: "Виды контрагентов",
+                itemValue: "kagentvid",
+                pathUrl: "/tbl/kagentvid/card",
+                description: "",
+                disabled: false,
+                expandable: true,
+              },
+              {
+                itemLabel: "Виды регистрации контрагентов",
+                itemValue: "kagentreg",
+                pathUrl: "/tbl/kagentreg/card",
+                description: "",
+                disabled: false,
+                expandable: true,
+              },
+              {
+                itemLabel: "Группы контрагентов",
+                itemValue: "kagentgroups",
+                pathUrl: "/tbl/kagentgroups/card",
+                description: "",
+                disabled: false,
+                expandable: true,
+              },
+            ],
+          },
+          {
+            itemLabel: "Торговые сети",
+            itemValue: "trademark",
+            pathUrl: "/tbl/trademark/card",
+            description: "",
+            disabled: false,
+            expandable: true,
+            children: [
+              {
+                itemLabel: "Бренды",
+                itemValue: "brand",
+                pathUrl: "/tbl/brand/card",
+                description: "Бренды торговых сетей",
+                disabled: false,
+                expandable: true,
+              },
+            ],
+          },
 
           {
             itemLabel: "Города",
@@ -99,13 +134,33 @@ export function useTreeList() {
           },
         ],
       },
+      {
+        itemLabel: "Пользователи",
+        itemValue: "department",
+        pathUrl: "/tbl/department/page",
+        description: "",
+        disabled: false,
+        expandable: true,
+      },
+
+      {
+        itemLabel: "Конфигурация пекарен",
+        itemValue: "bakeryconfig",
+        pathUrl: "/tbl/bakeryconfig/page",
+        description: "",
+        disabled: false,
+        expandable: true,
+      },
     ];
     return dataTreeCheck(treeArr);
   }
   function dataTreeCheck(rootOriginal) {
     let result = [];
+
     let tree = new TreeModel();
     // если много корневых узлов, перебираем все
+    // удаляем из дерева узлы, например по доступу.. ролям и тп
+    // в данном случае тут пример
     rootOriginal.forEach((element) => {
       let root = tree.parse(element);
       // подготовим, если найдем, список для удаления
@@ -114,13 +169,40 @@ export function useTreeList() {
       });
       // удаляем то что нашли
       nodesDrop.forEach(function (node) {
-        console.log("node>>", node);
         node.drop();
       });
-      console.log("rootres>>", root);
       result.push(root.model);
     });
-    return result;
+    let result2 = [];
+    // Расставляем всем узлам parent - родительский узел
+    // нам нужен parent, чтоб раскрывать узлы в дереве
+    // и parentPath массив , будет создан
+    result.forEach((element) => {
+      let root = tree.parse(element); // в модель
+      root.walk({ strategy: "pre" }, (node) => {
+        // обход всех элементов
+        if (node.model.children && node.model.children.length > 0) {
+          // если есть дети то обходим их
+          node.model.children.forEach((el, idx) => {
+            // тут наш родитель
+            node.model.children[idx].parent = node.model.itemValue;
+            // и поместим его в список всех родителей узла
+            if (node.model.parentPath) {
+              node.model.children[idx].parentPath = [
+                ...node.model.parentPath,
+                node.model.itemValue,
+              ];
+            } else {
+              node.model.children[idx].parentPath = [node.model.itemValue];
+            }
+          });
+          // node.model.children.parent = node.model.itemValue;
+        }
+      });
+      result2.push(root.model);
+    });
+    console.log("rootres>> parent", result2);
+    return result2;
   }
   return { getList };
 }

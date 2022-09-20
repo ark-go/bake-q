@@ -6,7 +6,7 @@
 
     <q-item-section>
       <q-item-label>Назад</q-item-label>
-      <q-item-label caption> "назад" </q-item-label>
+      <q-item-label caption>В главное меню</q-item-label>
     </q-item-section>
   </q-item>
   <q-separator />

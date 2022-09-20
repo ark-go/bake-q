@@ -46,8 +46,6 @@
       </q-item-section>
     </q-item>
   </q-list>
-
-  <!-- <q-btn @click="selectedRowsVuex.products.length = 0" label="сброс" /> -->
 </template>
 
 <script>

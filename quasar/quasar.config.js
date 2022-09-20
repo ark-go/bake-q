@@ -143,9 +143,9 @@ module.exports = configure(function (/* ctx */) {
       plugins: ["Notify", "Cookies", "Dialog", "Loading", "AppFullscreen"],
     },
 
-    // animations: 'all', // --- includes all animations
+    animations: "all", // --- includes all animations
     // https://v2.quasar.dev/options/animations
-    animations: ["flipInX", "flipOutX"],
+    // animations:  ["flipInX", "flipOutX"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#property-sourcefiles
     sourceFiles: {

@@ -20,6 +20,14 @@ export const useArkCardStore = defineStore("ArkCardStore", {
       infoSectionSize: {},
       bodySectionSize: {},
       bottomSectionSize: {},
+      /**
+       * Размеры arkCard-2
+       */
+      // pagePaddingY2: 10,
+      // topSectionSize2: {},
+      // infoSectionSize2: {},
+      // bodySectionSize2: {},
+      // bottomSectionSize2: {},
     };
   },
   actions: {
@@ -52,14 +60,6 @@ export const useArkCardStore = defineStore("ArkCardStore", {
       topBottom += state.bottomSectionSize.height
         ? state.bottomSectionSize.height
         : 0;
-      // console.log(
-      //   "++++++++++++ size",
-      //   topBottom,
-      //   state.topSectionSize?.height,
-      //   state.infoSectionSize?.height,
-      //   state.bottomSectionSize?.height,
-      //   pageSetup.pageBodyHeight
-      // );
       return `${pageSetup.pageBodyHeight - topBottom - state.pagePaddingY}px `;
     },
     maxBodyHeightCss(state) {

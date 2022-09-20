@@ -1,6 +1,6 @@
 <template>
   <div class="column full-width">
-    <div><slot name="title"></slot></div>
+    <div class="row no-wrap"><slot name="title"></slot></div>
     <div><slot></slot></div>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default defineComponent({
   props: [],
   emits: [],
   setup(props) {
-    return {  };
+    return {};
   },
 });
 </script>

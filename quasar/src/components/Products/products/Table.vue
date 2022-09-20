@@ -1,63 +1,27 @@
 <template>
   <div class="column no-wrap" style="max-height: inherit">
-    <q-table
+    <Table-Template
       flat
-      :ref="(el) => (refTable = el)"
-      style="min-width: 100px; display: grid; overflow: auto"
-      table-header-class="bg-grey-2"
-      dense
-      :filter="filter"
-      no-data-label="Нет данных."
-      no-results-label="Ничего не найдено."
-      class="my-sticky-virtscroll-table table-kagent-column-table"
-      virtual-scroll
-      v-model:pagination="paginationСatalog"
-      :rows-per-page-options="[0]"
-      :virtual-scroll-sticky-size-start="48"
-      row-key="id"
-      title="Тип продукции"
+      title="Продукция"
       :rows="rows"
       :columns="columns"
-      :visible-columns="visibleColumns"
-      @row-dblclick="dblClickRow"
+      :tableFunc="tableFunc"
+      yesBtnEdit
+      yesBtnDelete
+      @onInfoRow="onInfoRow"
+      @onBtnDelete="onDelete"
+      @onBtnEdit="onEdit"
+      @onRowClick="onRowClick"
+      @onAdd="onAdd"
+      @onRowDblClick="dblClickRow"
+      :currentRow="selectedRows.length > 0 && selectedRows[0]"
+      noExpandPanel
+      :noEditTable="false"
+      :store="store"
+      :rowsPerPage="0"
+      noInfoBtn
     >
-      <template v-slot:body="props">
-        <table-body
-          :propsV="props"
-          @on-btn-edit="onEdit"
-          @on-btn-delete="onDelete"
-          @onRowClick="onRowClick"
-          :selected-rows="selectedRows"
-        ></table-body>
-      </template>
-      <template v-slot:top-left>
-        <div class="row">
-          <q-btn flat round color="green" icon="add" @click="onAdd()" />
-          <div style="min-width: 25px"></div>
-          <find-table v-model:filter="filter"></find-table>
-        </div>
-      </template>
-      <template v-slot:top-right>
-        <q-space />
-
-        <q-select
-          v-model="visibleColumns"
-          multiple
-          dense
-          options-dense
-          display-value="Вид"
-          emit-value
-          map-options
-          :options="columns"
-          option-value="name"
-          options-cover
-          style="min-width: 30px"
-        />
-      </template>
-      <template v-slot:no-data="dataslot">
-        <no-data-footer :dataslot="dataslot"></no-data-footer>
-      </template>
-    </q-table>
+    </Table-Template>
   </div>
   <form-dialog
     :rowData="rowCurrent"
@@ -79,19 +43,15 @@ import {
   unref,
 } from "vue";
 import { useArkUtils } from "src/utils/arkUtils"; // const arkUtils = useArkUtils();
-import NoDataFooter from "components/NoDataFooter.vue";
 import FormDialog from "./FormDialog.vue";
-import TableBody from "./TableBody.vue";
-import FindTable from "./FindTable.vue";
 import { useQuasar } from "quasar";
 import { arkVuex } from "src/utils/arkVuex.js";
+import TableTemplate from "src/components/template/table/TableTemplate.vue";
 export default defineComponent({
   name: "SpravTable",
   components: {
-    NoDataFooter,
-    TableBody,
     FormDialog,
-    FindTable,
+    TableTemplate,
   },
   props: {
     tabname: { type: String, default: "products" },
@@ -161,16 +121,21 @@ export default defineComponent({
         mess
       );
       if (res.result) {
-        rows.value = res.result;
+        //  rows.value = res.result;
+        selectedRows.value = []; // сбросим выделение
+        // await loadTable();
         try {
+          // мы не перечитываем всю таблицу, а просто удаляем из списка, то что удалили
           let idx = rows.value.findIndex((val) => {
             return val.id == row.id;
           });
           if (idx != -1) {
             // если нашли то что удаляли, то удалим из нашего Array таблицы
-            //  rows.value.splice(idx, 1);
-            await loadTable();
+            rows.value.splice(idx, 1);
+            // await loadTable();
             //console.log("посде удал", rows.value);
+          } else {
+            await loadTable();
           }
         } catch {
           console.log("тут ошибка № 2410");
@@ -220,7 +185,6 @@ export default defineComponent({
     }
     async function onDelete(val) {
       onRowClick(val);
-      // selectedRowsVuex.products = val;
       //------------- Dialog
       $q.dialog({
         title: "Удалить запись?",
@@ -232,7 +196,6 @@ export default defineComponent({
         focus: "cancel",
       })
         .onOk(async () => {
-          // console.log('>>>> OK')
           await deleteTable(val);
         })
         .onOk(() => {
@@ -343,24 +306,28 @@ let columns = [
     label: "Дата документа",
     align: "left",
     field: "document_date",
+    hidden: true,
   },
   {
     name: "article_buh",
     label: "Артикул Б",
     align: "left",
     field: "article_buh",
+    hidden: true,
   },
   {
     name: "article",
     label: "Артикул",
     align: "left",
     field: "article",
+    hidden: true,
   },
   {
     name: "description",
     label: "Примечание",
     align: "left",
     field: "description",
+    hidden: true,
   },
 ];
 </script>

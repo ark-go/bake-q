@@ -1,27 +1,28 @@
 <template>
-  <div class="column no-wrap" style="max-height: inherit">
-    <Table-Template
-      flat
-      title="Тип сырья"
-      :rows="rows"
-      :columns="columns"
-      :tableFunc="tableFunc"
-      yesBtnEdit
-      yesBtnDelete
-      @onInfoRow="onInfoRow"
-      @onBtnDelete="onDelete"
-      @onBtnEdit="onEdit"
-      @onRowClick="onRowClick"
-      @onAdd="addNew"
-      @onRowDblClick="dblClickRow"
-      :currentRow="currentRow"
-      noExpandPanel
-      :noEditTable="false"
-      :store="store"
-      :rowsPerPage="0"
-    >
-    </Table-Template>
-    <!-- <q-table
+  <div>
+    <div class="column no-wrap" style="max-height: inherit">
+      <Table-Template
+        flat
+        title="Тип сырья"
+        :rows="rows"
+        :columns="columns"
+        :tableFunc="tableFunc"
+        yesBtnEdit
+        yesBtnDelete
+        @onInfoRow="onInfoRow"
+        @onBtnDelete="onDelete"
+        @onBtnEdit="onEdit"
+        @onRowClick="onRowClick"
+        @onAdd="addNew"
+        @onRowDblClick="dblClickRow"
+        :currentRow="currentRow"
+        noExpandPanel
+        :noEditTable="false"
+        :store="store"
+        :rowsPerPage="0"
+      >
+      </Table-Template>
+      <!-- <q-table
       flat
       style="min-width: 100px; display: grid; overflow: auto"
       dense
@@ -75,13 +76,14 @@
         <no-data-footer :dataslot="dataslot"></no-data-footer>
       </template>
     </q-table> -->
+    </div>
+    <form-dialog
+      :rowData="currentRow"
+      v-model:showDialog="showDialog"
+      @onSave="onSave"
+      :title="tablabel"
+    ></form-dialog>
   </div>
-  <form-dialog
-    :rowData="currentRow"
-    v-model:showDialog="showDialog"
-    @onSave="onSave"
-    :title="tablabel"
-  ></form-dialog>
 </template>
 
 <script>

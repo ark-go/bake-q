@@ -22,6 +22,7 @@ export default boot(async ({ router } /* { app, router, ... } */) => {
         // ошибка при запросе, остаемся на месте
         return false; // никуда не переходим
       }
+      console.warn("Сброс ArkCardSize");
       arkCard.$reset(); // сбрасываем размеры
     }
     // BUG: не работает, сам replace в return

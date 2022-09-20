@@ -137,7 +137,7 @@ export default defineComponent({
     async function loadTable(cmd = "loadRaw", tabname = "recept") {
       //! вызывается снаружи из родительского компонента напрямую
       currentTab.value = cmd;
-      let mess = "Загрузка продукции";
+      let mess = "Загрузка продукции " + tabname;
       let res = await arkUtils.dataLoad(
         "/api/products",
         { cmd: cmd, tabname: tabname },

@@ -1,31 +1,10 @@
 <template>
-  <div>
-    <div class="column no-wrap" style="max-height: inherit">
-      <Table-Template
-        flat
-        title="Ассортимент"
-        :rows="rows"
-        :columns="columns"
-        :tableFunc="tableFunc"
-        yesBtnEdit
-        yesBtnDelete
-        @onInfoRow="onInfoRow"
-        @onBtnDelete="onDelete"
-        @onBtnEdit="onEdit"
-        @onRowClick="onRowClick"
-        @onAdd="addNew"
-        @onRowDblClick="dblClickRow"
-        :currentRow="currentRow"
-        noExpandPanel
-        :noEditTable="false"
-        :store="store"
-        :rowsPerPage="0"
-      >
-      </Table-Template>
-
-      <!-- <q-table
+  <div class="column no-wrap" style="max-height: inherit">
+    <q-table
       flat
+      :ref="(el) => (refTable = el)"
       style="min-width: 100px; display: grid; overflow: auto"
+      table-header-class="bg-grey-2"
       dense
       :filter="filter"
       no-data-label="Нет данных."
@@ -47,6 +26,8 @@
           :propsV="props"
           @on-btn-edit="onEdit"
           @on-btn-delete="onDelete"
+          @onRowClick="onRowClick"
+          :selected-rows="selectedRows"
         ></table-body>
       </template>
       <template v-slot:top-left>
@@ -76,16 +57,15 @@
       <template v-slot:no-data="dataslot">
         <no-data-footer :dataslot="dataslot"></no-data-footer>
       </template>
-    </q-table> -->
-    </div>
-    <form-dialog
-      :rowData="currentRow"
-      :allSprav="allSprav"
-      v-model:showDialog="showDialog"
-      @onSave="onSave"
-      :title="tablabel"
-    ></form-dialog>
+    </q-table>
   </div>
+  <form-dialog
+    :rowData="rowCurrent"
+    :allSprav="allSprav"
+    v-model:showDialog="showDialog"
+    @onSave="onSave"
+    :title="tablabel"
+  ></form-dialog>
 </template>
 
 <script>
@@ -99,33 +79,52 @@ import {
   unref,
 } from "vue";
 import { useArkUtils } from "src/utils/arkUtils"; // const arkUtils = useArkUtils();
+import NoDataFooter from "components/NoDataFooter.vue";
 import FormDialog from "./FormDialog.vue";
+import TableBody from "./TableBody.vue";
+import FindTable from "./FindTable.vue";
 import { useQuasar } from "quasar";
-import TableTemplate from "src/components/template/table/TableTemplate.vue";
+import { arkVuex } from "src/utils/arkVuex.js";
 export default defineComponent({
   name: "SpravTable",
   components: {
+    NoDataFooter,
+    TableBody,
     FormDialog,
-    TableTemplate,
+    FindTable,
   },
   props: {
-    tabname: { type: String, default: "productassortment" },
-    tablabel: { type: String, default: "Ассортимент" },
+    tabname: { type: String, default: "products" },
+    tablabel: { type: String, default: "Продукция" },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const $q = useQuasar();
     const arkUtils = useArkUtils();
+    const { selectedRowsVuex } = arkVuex();
     const rows = ref([]);
     const visibleColumns = ref([]);
     const showDialog = ref(false);
-    const currentRow = ref({});
-    const allSprav = ref({});
+    const rowCurrent = ref({});
+    const selectedRows = ref([]);
+    //const selectedRows = ref(currentRow.products);
+    const refTable = ref(null);
+
+    selectedRowsVuex.products = selectedRows;
+    const allSprav = ref();
     //const visibleOffDefault = ref([]);
     //const columns = ref([]);
     onMounted(async () => {
       await loadTable();
       columnFilter();
     });
+    function onRowClick(row, isCtrl) {
+      if (selectedRows.value.indexOf(row) == -1) {
+        if (!isCtrl) selectedRows.value.length = 0;
+        selectedRows.value.push(row);
+      } else {
+        selectedRows.value.splice(selectedRows.value.indexOf(row), 1);
+      }
+    }
     async function onSave(row) {
       if (row?.id) console.log("Готов записывать Обновления", row);
       else console.log("Готов записывать Новый объект", row);
@@ -134,14 +133,15 @@ export default defineComponent({
     }
     function columnFilter() {
       visibleColumns.value = [];
-      columns.forEach((item, index, array) => {
-        if (visibleOffDefault.includes(item.name)) return;
-        visibleColumns.value.push(item.name);
-      });
+      // columns.forEach((item, index, array) => {
+      //   if (visibleOffDefault.includes(item.name)) return;
+      //   visibleColumns.value.push(item.name);
+      // });
     }
 
     async function loadTable() {
-      let mess = "Загрузка типов продукции";
+      let mess = "Загрузка Видов продукции";
+      console.log("load: ", props.tabname);
       let res = await arkUtils.dataLoad(
         "/api/products",
         { cmd: "load", tabname: props.tabname },
@@ -181,7 +181,7 @@ export default defineComponent({
       }
     }
     async function addTable(row) {
-      let mess = "Добавление вида сырья";
+      let mess = "Добавление Продукция";
       console.log("SAVE-0: ", row);
       let res = await arkUtils.dataLoad(
         "/api/products",
@@ -219,6 +219,8 @@ export default defineComponent({
       }
     }
     async function onDelete(val) {
+      onRowClick(val);
+      // selectedRowsVuex.products = val;
       //------------- Dialog
       $q.dialog({
         title: "Удалить запись?",
@@ -249,25 +251,25 @@ export default defineComponent({
       let res = await arkUtils.dataLoad(
         "/api/products",
         { cmd: "allSprav", tabname: props.tabname },
-        "Чтение справочников для ассортимента"
+        "Чтение справочников для вида продукции"
       );
       return res?.result || [];
     }
     async function showDialogStart(row) {
       allSprav.value = await loadAllSprav();
-      currentRow.value = row;
+      rowCurrent.value = row;
       showDialog.value = true;
     }
-    function onRowClick(row) {
-      currentRow.value = row;
-      emit("selectedRow", row);
-    }
     return {
-      allSprav,
+      refTable,
+      selectedRows,
+      onRowClick,
       showDialog,
+      showDialogStart,
+      allSprav,
       onDelete,
       onSave,
-      currentRow,
+      rowCurrent,
       rows,
       filter: ref(""),
       paginationСatalog: ref({
@@ -276,30 +278,25 @@ export default defineComponent({
       columns,
       visibleColumns,
       visibleOffDefault,
-
       async onAdd(row) {
         await showDialogStart(row);
       },
       async onEdit(row) {
+        onRowClick(row);
         await showDialogStart(row);
       },
-      onRowClick,
     };
   },
 });
-let visibleOffDefault = [
-  "user_email",
-  "user_date",
-  "territory_name",
-  "region_name",
-  "address",
-  "dateopen",
-  "dateclose",
-  "area",
-  "kolbakers",
-  "description",
-];
+let visibleOffDefault = ["user_email", "user_date"];
 let columns = [
+  {
+    name: "count_ingredients",
+    label: "*",
+    align: "right",
+    field: "count_ingredients",
+    required: true,
+  },
   {
     name: "producttype_prefix",
     label: "Тип",
@@ -307,18 +304,68 @@ let columns = [
     field: "producttype_prefix",
   },
   {
+    name: "productvid_name",
+    label: "Вид продукта",
+    align: "left",
+    field: "productvid_name",
+    required: true,
+  },
+  {
     name: "name",
-    label: "Наименование",
+    label: "Дополнение",
     align: "left",
     field: "name",
     required: true,
   },
   {
-    name: "prefix",
-    label: "Префикс",
+    name: "massa",
+    label: "Вес изд.",
     align: "left",
-    field: "prefix",
+    field: "massa",
     required: true,
+  },
+  {
+    name: "unit_name",
+    label: "ед.изм.",
+    align: "left",
+    field: "unit_name",
+    style: "width: 50px",
+  },
+
+  {
+    name: "document_num",
+    label: "Номер докумнта TTK",
+    align: "left",
+    field: "document_num",
+  },
+  {
+    name: "document_date",
+    label: "Дата документа",
+    align: "left",
+    field: "document_date",
+  },
+  {
+    name: "article_buh",
+    label: "Артикул Б",
+    align: "left",
+    field: "article_buh",
+  },
+  {
+    name: "article",
+    label: "Артикул",
+    align: "left",
+    field: "article",
+  },
+  {
+    name: "description",
+    label: "Примечание",
+    align: "left",
+    field: "description",
   },
 ];
 </script>
+<style lang="scss" scoped>
+.select-row {
+  color: red;
+}
+</style>

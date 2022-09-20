@@ -7,7 +7,7 @@
 
       <q-item-section>
         <q-item-label>Главная</q-item-label>
-        <q-item-label caption> "в начало" </q-item-label>
+        <q-item-label caption>В начало</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-checkbox
@@ -21,12 +21,16 @@
       </q-item-section>
     </q-item>
     <q-item
-      v-if="userInfo.email != '1Arkadii@yandex.ru'"
+      v-if="spravochnik"
       clickable
       @click="$emit('update:drawerPanel', 'treeMenu')"
     >
+      <q-item-section avatar>
+        <q-icon name="eva-menu-2" color="blue-grey-4" />
+      </q-item-section>
       <q-item-section>
-        <q-item-label>?</q-item-label>
+        <q-item-label>Справочники</q-item-label>
+        <q-item-label caption>меню справочника</q-item-label>
       </q-item-section>
     </q-item>
     <q-separator />
@@ -41,7 +45,7 @@
 
 <script>
 // tab main
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import MenuSideItems from "./MenuSideItems.vue";
 import { useStartPageStore, storeToRefs } from "src/stores/startPageStore";
@@ -58,14 +62,27 @@ export default defineComponent({
   setup() {
     //>tag="a" :href="link">
     const router = useRouter();
+    const route = useRoute();
     const { listMenuSide } = storeToRefs(useStartPageStore());
     const { userInfo } = storeToRefs(useUserStore());
-
+    const spravochnik = ref(false);
+    watch(
+      () => route.path,
+      (val) => {
+        if (route.path.includes("/tbl/")) {
+          spravochnik.value = true;
+        } else {
+          spravochnik.value = false;
+        }
+      },
+      { immediate: true }
+    );
     return {
       listMenuSide,
       router,
       pinCheckbox: ref(false),
       userInfo,
+      spravochnik,
     };
   },
 });

@@ -82,7 +82,7 @@ export default defineComponent({
     tableName: String,
     title: {
       type: String,
-      default: "tabUsers",
+      default: "Пользователи",
     },
   },
   emits: [""],

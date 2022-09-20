@@ -18,9 +18,11 @@
         :id="prop.node.itemValue"
         @click.right="rightClick($event, prop.node)"
         @click="clickTreeNode(prop.node)"
-        @dblclick="onDblClick($event, prop.node)"
         :class="[
-          { 'text-weight-bold': prop.node.itemValue === selectedKey },
+          {
+            'text-weight-bold':
+              prop.node.itemValue === route.params.tblRouteParam,
+          },
           'text-black',
           'text-no-wrap',
           'non-selectable',
@@ -47,8 +49,8 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { defineComponent, onMounted, ref, watch, nextTick } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { useTreeList } from "./treeList.js";
 export default defineComponent({
   name: "TreeGlobal",
@@ -59,19 +61,42 @@ export default defineComponent({
     const treeNodes = ref([]);
     const selectedKey = ref("");
     const router = useRouter();
+    const route = useRoute();
     const expanded = ref(["config"]);
     onMounted(() => {
       treeNodes.value = treeList.getList();
     });
-    // watch(
-    //   () => selectedKey.value,
-    //   (item) => {
-    //     console.log("werwrwr", item);
-    //     if (item.pathUrl) {
-    //       router.push({ path: item.pathUrl });
-    //     }
-    //   }
-    // );
+    watch(
+      () => route.params, //tblRouteParam
+      (val) => {
+        if (val.tblRouteParam) {
+          console.log("ПАРАМЕТР РОУТА:", val.tblRouteParam);
+          nextTick(async () => {
+            if (refTree.value) {
+              //  refTree.value.setExpanded(val.tblRouteParam, true);
+              let nodeKey = refTree.value.getNodeByKey(val.tblRouteParam);
+              console.log(">>>>> nodeKey:", nodeKey, ">>", nodeKey.parentPath);
+              if (nodeKey && nodeKey.parentPath) {
+                for (let el of nodeKey.parentPath) {
+                  //nodeKey.parentPath.forEach((el) => {
+                  console.log("раскроем:", el);
+                  await refTree.value.setExpanded(el, true);
+                }
+              } else {
+                // если нет, в элементе parentPath, то попробуем открыть по tblRouteParam
+                await refTree.value.setExpanded(val.tblRouteParam, true);
+              }
+              // console.log(
+              //   "node.tree",
+              //   refTree.value.getNodeByKey(val.tblRouteParam)
+              // );
+            }
+            //   selectedKey.value = val.tblRouteParam;
+          });
+        }
+      },
+      { immediate: true }
+    );
     function clickTreeNode(node) {
       let isExp = refTree.value.isExpanded(node.itemValue);
       refTree.value.setExpanded(node.itemValue, !isExp);
@@ -79,14 +104,14 @@ export default defineComponent({
         router.push({ path: node.pathUrl });
       }
     }
-    function onDblClick(event, node) {
-      //let nodeCl = refTree.value.getNodeByKey(node.id);
-      if (refTree.value.isExpanded(node.itemValue)) {
-        refTree.value.setExpanded(node.itemValue, false);
-      } else {
-        refTree.value.setExpanded(node.itemValue, true);
-      }
-    }
+    // function onDblClick(event, node) {
+    //   //let nodeCl = refTree.value.getNodeByKey(node.id);
+    //   if (refTree.value.isExpanded(node.itemValue)) {
+    //     refTree.value.setExpanded(node.itemValue, false);
+    //   } else {
+    //     refTree.value.setExpanded(node.itemValue, true);
+    //   }
+    // }
     async function rightClick(event, node) {}
     return {
       refTree,
@@ -94,8 +119,9 @@ export default defineComponent({
       selectedKey,
       clickTreeNode,
       rightClick,
-      onDblClick,
+      //  onDblClick,
       expanded,
+      route,
     };
   },
 });

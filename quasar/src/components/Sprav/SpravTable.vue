@@ -40,6 +40,7 @@
       <template v-slot:top-left>
         <div class="row">
           <q-btn flat round color="green" icon="add" @click="addNew" />
+          qw
           <div style="min-width: 25px"></div>
           <find-table v-model:filter="filter"></find-table>
         </div>
@@ -149,6 +150,7 @@ export default defineComponent({
       spravStore.selectedRow = row;
     }
     onMounted(async () => {
+      console.log("tables:::", props);
       columnFilter();
       createAddDialog();
       await restartComponent();

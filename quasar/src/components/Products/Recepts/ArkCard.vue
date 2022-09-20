@@ -1,5 +1,11 @@
 <template>
-  <q-card flat bordered class="ark-card-panel" style="overflow: auto">
+  <q-card
+    flat
+    bordered
+    class="ark-card-panel"
+    style="overflow: auto"
+    :key="keyReset"
+  >
     <div>
       <q-resize-observer @resize="(val) => (topSectionSize = val)" />
       <q-card-section>
@@ -36,13 +42,18 @@
     </div>
     <div>
       <q-resize-observer @resize="(val) => (bodySectionSize = val)" />
-      <q-card-section style="padding: 0 16px 16px 16px" class="maxBodyHeight">
-        <div class="ark-grid" :style="{ maxHeight: tableLeftHeight }">
+      <q-card-section
+        class="row maxBodyHeight q-py-none"
+        :style="{ maxHeight: tableLeftHeight }"
+      >
+        <div class="col-6" style="max-height: inherit">
+          <slot name="leftCenter"></slot>
+        </div>
+        <div class="col-6" style="max-height: inherit">
+          <slot name="rightCenter"></slot>
+        </div>
+        <!-- <div class="ark-grid" :style="{ maxHeight: tableLeftHeight }">
           <div class="ark-grid-left">
-            <!-- <div :ref="(el) => (refLeftTop = el)">
-              <q-resize-observer @resize="(val) => (infoSectionSize = val)" />
-              <slot name="leftTop"></slot>
-            </div> -->
             <div :style="{ maxHeight: tableLeftHeight }">
               <slot name="leftCenter"></slot>
             </div>
@@ -52,7 +63,7 @@
               <slot name="rightCenter"></slot>
             </div>
           </div>
-        </div>
+        </div> -->
       </q-card-section>
     </div>
     <div style="position: absolute; bottom: 0; width: 100%">
@@ -107,6 +118,7 @@ export default {
     const { style, height } = dom;
     const buttonArrProp = ref([]);
     const tableLeftHeight = ref("");
+    const keyReset = ref(Date.now());
     const {
       topSectionSize,
       infoSectionSize,
@@ -122,16 +134,33 @@ export default {
         nextTick(() => {
           reResize();
         });
+        console.log(
+          "Размеры...",
+          "top " + topSectionSize.value.height,
+          "info " + infoSectionSize.value.height,
+          "body " + bodySectionSize.value.height,
+          "bottom " + bottomSectionSize.value.height,
+          "maxbody " + maxBodyHeight.value,
+          "css " + maxBodyHeightCss.value
+        );
       },
       { immediate: true }
     );
     function reResize() {
       tableLeftHeight.value = `calc( ${maxBodyHeight.value} - ${infoSectionSize.value.height}px )`;
-      console.log("MMMMMMMMMMMMMMMMME", tableLeftHeight.value);
+      console.log(
+        "MMMMMMMMMMMMMMMMME",
+        tableLeftHeight.value,
+        infoSectionSize.value
+      );
     }
     // -----------------------------------^^^^^^^--------------------
     onMounted(() => {
+      keyReset.value = Date.now();
       buttonArrProp.value = props?.buttonArr;
+    });
+    onActivated(() => {
+      keyReset.value = Date.now();
     });
     watch(props, () => {
       buttonArrProp.value = props.buttonArr;
@@ -151,6 +180,7 @@ export default {
       onClose() {
         emit("onClose");
       },
+      keyReset,
     };
   },
 };

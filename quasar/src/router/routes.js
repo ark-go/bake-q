@@ -80,12 +80,12 @@ const routes = [
         path: "specstore",
         component: () => import("pages/PageSpecStore.vue"),
       },
-      {
-        path: "bakeryconf",
-        name: "bakeryconf",
-        component: () => import("components/Sprav/PageSprav.vue"),
-        meta: { checkAccess: true, title: "Конфигурация пекарен" },
-      },
+      // {
+      //   path: "bakeryconf",
+      //   name: "bakeryconf",
+      //   component: () => import("components/Sprav/PageSprav.vue"),
+      //   meta: { checkAccess: true, title: "Конфигурация пекарен" },
+      // },
       {
         path: "spravochnik",
         component: () =>
@@ -146,20 +146,20 @@ const routes = [
         path: "charts/:id",
         component: () => import("components/Chart/PageCharts.vue"),
       },
+      // {
+      //   path: "tbl",
+      //   props: true,
+      //   component: () => import("components/CatalogAllTables/PageTbl.vue"),
+      //   meta: { checkAccess: true, title: "Конфигурация пекарен" },
+      // },
       {
-        path: "tbl",
-        props: true,
-        component: () => import("components/Sprav/PageSprav.vue"),
-        meta: { checkAccess: true, title: "Конфигурация пекарен" },
-      },
-      {
-        path: "tbl/:paramTabName/:formFactor",
+        path: "tbl/:tblRouteParam/:formFactor",
         props: true,
         component: () =>
           import("components/CatalogAllTables/SpravPageTables.vue"),
       },
       {
-        path: "tbl/:paramTabName",
+        path: "tbl/:tblRouteParam",
         props: true,
         component: () =>
           import("components/CatalogAllTables/SpravPageTables.vue"),

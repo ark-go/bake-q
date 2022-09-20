@@ -108,7 +108,7 @@ export default defineComponent({
     /** Титульная строка */
     title: {
       type: String,
-      default: "Поль",
+      default: "Пользователи",
     },
     subTitle: String,
     /**Кнопки для меню */

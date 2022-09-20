@@ -1,7 +1,10 @@
 <template>
-  <q-field dense class="full-width">
+  <q-field dense class="full-width cursor-pointer">
     <template v-slot:control>
-      <div class="self-center full-width no-outline">
+      <div
+        class="self-center full-width no-outline non-selectable"
+        @dblclick="$emit('update:extendPanel', !extendPanel)"
+      >
         {{ title }}
       </div>
     </template>

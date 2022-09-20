@@ -23,6 +23,11 @@
     <template v-if="titlePanel || extendPanel" v-slot:top>
       <table-top>
         <template v-if="titlePanel" #title>
+          <table-top-find
+            v-if="!noTitleFind"
+            v-model:filter="filter"
+          ></table-top-find>
+          <q-separator v-if="!noTitleFind" spaced inset vertical />
           <table-top-title :title="title" v-model:extendPanel="extendPanel">
           </table-top-title>
         </template>
@@ -32,7 +37,7 @@
             @onAdd="$emit('onAdd')"
           ></table-top-btn>
           <table-top-find
-            v-if="!noTopFind"
+            v-if="!noTopFind && noTitleFind"
             v-model:filter="filter"
           ></table-top-find>
           <q-space />
@@ -167,6 +172,10 @@ export default defineComponent({
       default: false,
     },
     noTitlePanel: {
+      type: Boolean,
+      default: false,
+    },
+    noTitleFind: {
       type: Boolean,
       default: false,
     },

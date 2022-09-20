@@ -118,7 +118,9 @@ export default defineComponent({
       (val) => {
         // если открыли страницу по пути справочника tbl то симитируем переход по пути дерева, на продукцию
         if (val.includes("/tbl/")) {
-          console.warn("Удалииить++++++:ЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖ");
+          console.log(
+            "В продукци имитируем выбор дерева продукция, если вход из справочника"
+          );
           yesCatalogAll.value = true;
           onSelectedNode({
             key: "start",
