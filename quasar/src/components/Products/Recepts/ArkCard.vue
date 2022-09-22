@@ -1,11 +1,5 @@
 <template>
-  <q-card
-    flat
-    bordered
-    class="ark-card-panel"
-    style="overflow: auto"
-    :key="keyReset"
-  >
+  <q-card flat class="ark-card-panel" style="overflow: auto; max-width: 800px">
     <div>
       <q-resize-observer @resize="(val) => (topSectionSize = val)" />
       <q-card-section>
@@ -35,41 +29,28 @@
         </div>
       </q-card-section>
     </div>
-    <div class="row">
+    <div>
       <q-resize-observer @resize="(val) => (infoSectionSize = val)" />
-      <div class="col-6"><slot name="leftTop"></slot></div>
-      <div class="col-6"><slot name="rightTop"></slot></div>
+      <q-card-section class="row q-py-none">
+        <div class="col-6 q-pr-xs"><slot name="leftTop"></slot></div>
+        <div class="col-6 q-pl-xs"><slot name="rightTop"></slot></div>
+      </q-card-section>
     </div>
     <div>
       <q-resize-observer @resize="(val) => (bodySectionSize = val)" />
-      <q-card-section
-        class="row maxBodyHeight q-py-none"
-        :style="{ maxHeight: tableLeftHeight }"
-      >
-        <div class="col-6" style="max-height: inherit">
+      <q-card-section class="row maxBodyHeight q-py-none">
+        <div class="col-6 q-pr-xs" style="max-height: inherit">
           <slot name="leftCenter"></slot>
         </div>
-        <div class="col-6" style="max-height: inherit">
+        <div class="col-6 q-pl-xs" style="max-height: inherit">
           <slot name="rightCenter"></slot>
         </div>
-        <!-- <div class="ark-grid" :style="{ maxHeight: tableLeftHeight }">
-          <div class="ark-grid-left">
-            <div :style="{ maxHeight: tableLeftHeight }">
-              <slot name="leftCenter"></slot>
-            </div>
-          </div>
-          <div class="ark-grid-right">
-            <div :style="{ maxHeight: tableLeftHeight }">
-              <slot name="rightCenter"></slot>
-            </div>
-          </div>
-        </div> -->
       </q-card-section>
     </div>
     <div style="position: absolute; bottom: 0; width: 100%">
       <q-resize-observer @resize="(val) => (bottomSectionSize = val)" />
       <q-separator v-if="buttonArrProp" />
-      <q-card-actions class="q-py-none" style="background-color: whitesmoke">
+      <q-card-actions class="q-py-none">
         <slot v-if="buttonArrProp" name="buttons">
           <q-btn
             flat
@@ -117,8 +98,7 @@ export default {
   setup(props, { emit }) {
     const { style, height } = dom;
     const buttonArrProp = ref([]);
-    const tableLeftHeight = ref("");
-    const keyReset = ref(Date.now());
+    // const keyReset = ref(Date.now());
     const {
       topSectionSize,
       infoSectionSize,
@@ -128,40 +108,40 @@ export default {
       maxBodyHeightCss,
     } = storeToRefs(useArkCardStore());
     // вычисляем размер рабочей области
-    watch(
-      [() => maxBodyHeight.value, () => infoSectionSize.value.height],
-      () => {
-        nextTick(() => {
-          reResize();
-        });
-        console.log(
-          "Размеры...",
-          "top " + topSectionSize.value.height,
-          "info " + infoSectionSize.value.height,
-          "body " + bodySectionSize.value.height,
-          "bottom " + bottomSectionSize.value.height,
-          "maxbody " + maxBodyHeight.value,
-          "css " + maxBodyHeightCss.value
-        );
-      },
-      { immediate: true }
-    );
-    function reResize() {
-      tableLeftHeight.value = `calc( ${maxBodyHeight.value} - ${infoSectionSize.value.height}px )`;
-      console.log(
-        "MMMMMMMMMMMMMMMMME",
-        tableLeftHeight.value,
-        infoSectionSize.value
-      );
-    }
+    // watch(
+    //   [() => maxBodyHeight.value, () => infoSectionSize.value.height],
+    //   () => {
+    //     nextTick(() => {
+    //       reResize();
+    //     });
+    //     console.log(
+    //       "Размеры...",
+    //       "top " + topSectionSize.value.height,
+    //       "info " + infoSectionSize.value.height,
+    //       "body " + bodySectionSize.value.height,
+    //       "bottom " + bottomSectionSize.value.height,
+    //       "maxbody " + maxBodyHeight.value,
+    //       "css " + maxBodyHeightCss.value
+    //     );
+    //   },
+    //   { immediate: true }
+    // );
+    // function reResize() {
+    //   tableLeftHeight.value = `calc( ${maxBodyHeight.value} - ${infoSectionSize.value.height}px )`;
+    //   console.log(
+    //     "MMMMMMMMMMMMMMMMME",
+    //     tableLeftHeight.value,
+    //     infoSectionSize.value
+    //   );
+    // }
     // -----------------------------------^^^^^^^--------------------
     onMounted(() => {
-      keyReset.value = Date.now();
+      // keyReset.value = Date.now();
       buttonArrProp.value = props?.buttonArr;
     });
-    onActivated(() => {
-      keyReset.value = Date.now();
-    });
+    // onActivated(() => {
+    //   keyReset.value = Date.now();
+    // });
     watch(props, () => {
       buttonArrProp.value = props.buttonArr;
       console.log("Кнопки:", buttonArrProp.value);
@@ -176,11 +156,10 @@ export default {
       Screen,
       buttonArrProp,
       emit,
-      tableLeftHeight,
       onClose() {
         emit("onClose");
       },
-      keyReset,
+      //  keyReset,
     };
   },
 };

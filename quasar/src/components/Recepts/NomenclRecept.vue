@@ -3,6 +3,7 @@
     <div class="">
       <div class="row">
         <q-table
+          flat
           style="min-width: 100px"
           dense
           no-data-label="Нет данных."

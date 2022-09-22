@@ -153,8 +153,20 @@ const routes = [
       //   meta: { checkAccess: true, title: "Конфигурация пекарен" },
       // },
       {
+        // рецепты, отдельное окно тоже что для /tbl/ пока так
+        // TODO Вопрос с отдельным окном для рецепта !
+        path: "products/:tblRouteParam/:formFactor",
+        props: true,
+        name: "recept",
+        component: () =>
+          import("components/CatalogAllTables/SpravPageTables.vue"),
+        meta: { checkAccess: true, title: "Рецепт" },
+      },
+      {
+        // INFO /tbl/ используется для глобального дерева Справочника
         path: "tbl/:tblRouteParam/:formFactor",
         props: true,
+        name: "tbl",
         component: () =>
           import("components/CatalogAllTables/SpravPageTables.vue"),
       },
@@ -166,6 +178,18 @@ const routes = [
       },
     ],
   },
+  // {
+  //   path: "/recept",
+  //   component: () => import("layouts/MainLayoutMin.vue"),
+  //   // component: () => import("layouts/MainLayout.vue"),
+  //   children: [
+  //     {
+  //       path: "",
+  //       component: () => import("components/PageStart/PageStart.vue"),
+  //       meta: { checkAccess: true, title: "Главная" },
+  //     },
+  //   ]
+  // },
   {
     path: "/charts2/:id",
     component: () => import("layouts/MainLayout.vue"),

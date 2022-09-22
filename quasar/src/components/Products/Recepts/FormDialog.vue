@@ -101,13 +101,13 @@ export default defineComponent({
   },
   emits: ["update:showDialog"],
   setup(props, { emit }) {
-    const { selectedRowsVuex } = arkVuex();
+   // const { selectedRowsVue1x } = arkVuex();
     const $q = useQuasar();
     const currentRow = ref(null);
     async function onBeforeShowDialog() {
       // перед открытием, скопируем текущую строку таблицы если она есть
       currentRow.value = { ...props.rowData };
-      console.log("Показываем у нас есть : ", selectedRowsVuex.products);
+    //  console.log("Показываем у нас есть : ", selectedRowsVue1x.products);
       console.log("Показываем окно из ингредиент: ", currentRow.value);
     }
     return {

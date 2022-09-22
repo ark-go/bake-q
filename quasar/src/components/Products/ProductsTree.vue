@@ -25,10 +25,9 @@ export default defineComponent({
   name: "ProductsTree",
   components: {},
   props: {
-    // selectedNode: Object,
     onSelectedNode: Function,
   },
-  emits: ["update:selectedNode", "onSelectedNode"],
+  emits: ["onSelectedNode"],
   setup(props, { emit }) {
     const expanded = ref([1]);
     const selected = ref(null);
@@ -40,7 +39,7 @@ export default defineComponent({
     // });
     onMounted(() => {
       selected.value = "start"; // установим выбор
-      onSelected("start"); // вызовем событие?
+      // onSelected("start"); // вызовем событие?
       // let nodeStat = refTree.value.getNodeByKey("start");
       // console.log(nodeStat);
       // nodeStat.selected = true;
@@ -52,7 +51,7 @@ export default defineComponent({
       console.log("раскрыт", key, isExp);
       refTree.value.setExpanded(key, !isExp);
       //node = refTree.value.getNodeByKey(key); // после снятия
-      if (node) emit("update:selectedNode", node);
+      // if (node) emit("update:selectedNode", node);
       console.log("on selected tree", key, node);
       emit("onSelectedNode", node);
     }

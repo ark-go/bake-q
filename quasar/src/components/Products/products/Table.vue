@@ -14,7 +14,7 @@
       @onRowClick="onRowClick"
       @onAdd="onAdd"
       @onRowDblClick="dblClickRow"
-      :currentRow="selectedRows.length > 0 && selectedRows[0]"
+      :currentRow="selectedRow"
       noExpandPanel
       :noEditTable="false"
       :store="store"
@@ -47,6 +47,7 @@ import FormDialog from "./FormDialog.vue";
 import { useQuasar } from "quasar";
 import { arkVuex } from "src/utils/arkVuex.js";
 import TableTemplate from "src/components/template/table/TableTemplate.vue";
+import { useProductsStore, storeToRefs } from "stores/productsStore.js";
 export default defineComponent({
   name: "SpravTable",
   components: {
@@ -60,16 +61,17 @@ export default defineComponent({
   setup(props) {
     const $q = useQuasar();
     const arkUtils = useArkUtils();
-    const { selectedRowsVuex } = arkVuex();
+    //const { selectedRowsVue1x } = arkVuex();
     const rows = ref([]);
     const visibleColumns = ref([]);
     const showDialog = ref(false);
     const rowCurrent = ref({});
-    const selectedRows = ref([]);
+    //const selectedRows = ref([]);
+    const { selectedRow } = storeToRefs(useProductsStore());
     //const selectedRows = ref(currentRow.products);
     const refTable = ref(null);
 
-    selectedRowsVuex.products = selectedRows;
+    //s/electedRowsVuex.products = selectedRows;
     const allSprav = ref();
     //const visibleOffDefault = ref([]);
     //const columns = ref([]);
@@ -77,13 +79,17 @@ export default defineComponent({
       await loadTable();
       columnFilter();
     });
-    function onRowClick(row, isCtrl) {
-      if (selectedRows.value.indexOf(row) == -1) {
-        if (!isCtrl) selectedRows.value.length = 0;
-        selectedRows.value.push(row);
-      } else {
-        selectedRows.value.splice(selectedRows.value.indexOf(row), 1);
-      }
+    function onRowClick(row, isButton) {
+      //  console.log("RowClick", row);
+      if (selectedRow.value?.id && selectedRow.value.id == row.id)
+        selectedRow.value = {};
+      else selectedRow.value = row;
+      // if (selectedRows.value.indexOf(row) == -1) {
+      //   if (!isCtrl) selectedRows.value.length = 0;
+      //   selectedRows.value.push(row);
+      // } else {
+      //   selectedRows.value.splice(selectedRows.value.indexOf(row), 1);
+      // }
     }
     async function onSave(row) {
       if (row?.id) console.log("Готов записывать Обновления", row);
@@ -122,7 +128,8 @@ export default defineComponent({
       );
       if (res.result) {
         //  rows.value = res.result;
-        selectedRows.value = []; // сбросим выделение
+        selectedRow.value = {};
+        //selectedRows.value = []; // сбросим выделение
         // await loadTable();
         try {
           // мы не перечитываем всю таблицу, а просто удаляем из списка, то что удалили
@@ -184,11 +191,13 @@ export default defineComponent({
       }
     }
     async function onDelete(val) {
-      onRowClick(val);
+      selectedRow.value = val;
+      onRowClick(val, true); //TODO добавлен ключ true, обход пеерключения выбора строки
+      // BUG необходимо рассмотертьт вопрос, на уровне таблицы теплате блокировать переход клика с кнопок body на стоку, это заденет весь сайт
       //------------- Dialog
       $q.dialog({
         title: "Удалить запись?",
-        message: val.name,
+        message: val.productvid_name + ", " + val.name,
         cancel: true,
         persistent: true,
         ok: { label: "Удалить", color: "red-3" }, // q-btn
@@ -225,7 +234,8 @@ export default defineComponent({
     }
     return {
       refTable,
-      selectedRows,
+      // selectedRows,
+      selectedRow,
       onRowClick,
       showDialog,
       showDialogStart,
@@ -245,7 +255,8 @@ export default defineComponent({
         await showDialogStart(row);
       },
       async onEdit(row) {
-        onRowClick(row);
+        selectedRow.value = row;
+        onRowClick(row, true);
         await showDialogStart(row);
       },
     };

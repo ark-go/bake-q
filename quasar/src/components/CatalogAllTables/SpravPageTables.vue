@@ -41,7 +41,6 @@ export default defineComponent({
     pageSetup.currentPage = "SpravPageTables";
     const { cardMain } = storeToRefs(usePagesSetupStore());
     function clickHelp() {}
-    console.log("propssssssssss", props.tblRouteParam);
     watch(
       () => props.tblRouteParam,
       (val) => {
@@ -156,7 +155,18 @@ export default defineComponent({
           );
           setTitle("Торговые сети");
           break;
+        case "recept":
+          currentComponent.value = defineAsyncComponent(() =>
+            import("src/components/Products/Recepts/Recepts.vue")
+          );
+          setTitle("x Рецепт");
+          break;
         default:
+          currentComponent.value = defineAsyncComponent(
+            () => import("src/components/CatalogAllTables/PageTbl.vue") //"src/components/Sprav/tabBakery/TablePanel.vue")
+          );
+          setTitle("Справочники");
+          break;
         // currentComponent.value = defineAsyncComponent(() =>
         //   import("src/components/Sprav/tabBrand/TablePanel.vue")
         // );

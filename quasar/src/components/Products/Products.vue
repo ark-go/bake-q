@@ -7,40 +7,36 @@
     :menuObj="{ pdf: 'Получить PDF' }"
     @menuClick="menuClick"
   >
-    <keep-alive include="ProductsTree">
-      <div class="row" style="max-height: inherit">
-        <div class="col-4" style="max-height: inherit">
-          <div v-if="!currentRowText" style="max-height: inherit">
-            <div v-if="yesCatalogAll">Выберите продукт</div>
-            <products-tree
-              v-else
-              style="min-width: 100px"
-              @on-selected-node="onSelectedNode"
-            ></products-tree>
-          </div>
-          <products-action
+    <!-- <keep-alive include="ProductsTree"> -->
+    <div class="row" style="max-height: inherit">
+      <div class="col-4" style="max-height: inherit">
+        <div v-if="!currentRowText" style="max-height: inherit">
+          <div v-if="yesCatalogAll">Выберите продукт</div>
+          <products-tree
             v-else
-            @on-click-recept="$emit('onToRecept')"
-            @on-click-pdf="menuClick('pdf')"
-          >
-          </products-action>
+            style="min-width: 100px"
+            @on-selected-node="onSelectedNode"
+          ></products-tree>
         </div>
-
-        <div class="col-8 ark-grid-right88" style="max-height: inherit">
-          <!-- <transition appear name="comp-fade" mode="out-in"> -->
-          <component
-            v-if="!!currentTable"
-            :is="currentTable"
-            v-bind="{
-              tableInfo: selectedNode2,
-              tabname: currentTabname,
-              tablabel: currentLabel,
-            }"
-          ></component>
-          <!-- </transition> -->
-        </div>
+        <products-action v-else @on-click-pdf="menuClick('pdf')">
+        </products-action>
       </div>
-    </keep-alive>
+
+      <div class="col-8 ark-grid-right88" style="max-height: inherit">
+        <!-- <transition appear name="comp-fade" mode="out-in"> -->
+        <component
+          v-if="!!currentTable"
+          :is="currentTable"
+          v-bind="{
+            tableInfo: selectedNode2,
+            tabname: currentTabname,
+            tablabel: currentLabel,
+          }"
+        ></component>
+        <!-- </transition> -->
+      </div>
+    </div>
+    <!-- </keep-alive> -->
     <Pdf-Dialog
       v-model:showDialog="showPdfDialog"
       :param="pdfDialogParam"
@@ -69,6 +65,7 @@ import { arkVuex } from "src/utils/arkVuex.js";
 import ProductsAction from "./ProductsAction.vue";
 import PdfDialog from "../PDF/PdfDialog.vue";
 import { usePagesSetupStore, storeToRefs } from "stores/pagesSetupStore.js";
+import { useProductsStore } from "stores/productsStore.js";
 //import { arkVuex } from "src/utils/arkVuex"; // const { pdfWindow } = createArkVuex();
 export default defineComponent({
   name: "f-products",
@@ -82,9 +79,10 @@ export default defineComponent({
   emits: ["onToRecept"],
   setup(props, { emit }) {
     const { pdfWindow } = arkVuex();
+    const { selectedRow } = storeToRefs(useProductsStore());
     const $q = useQuasar();
     const { cardMain, currentPage } = storeToRefs(usePagesSetupStore());
-    const { selectedRowsVuex } = arkVuex();
+    // const { selectedRowsVue1x } = arkVuex();
     const selectedNode = ref({});
     const selectedNode2 = ref({});
     const currentTabname = ref("");
@@ -99,19 +97,22 @@ export default defineComponent({
       currentPage.value = "products";
     });
     const currentRowText = computed(() => {
-      let row = selectedRowsVuex?.products[0];
-      if (row) {
-        let str =
-          row.productvid_name + "<br> " + row.name + " " + row.description;
-        return str;
-      }
+      if (selectedRow.value?.id)
+        return `${selectedRow.value.productvid_name}<br>${selectedRow.value.name} ${selectedRow.value.description}`;
+      // let row = selectedRowsVue1x?.products[0];
+      // if (row) {
+      //   let str =
+      //     row.productvid_name + "<br> " + row.name + " " + row.description;
+      //   return str;
+      // }
       return "";
     });
     onActivated(() => {
-      // Возникает при выходе из keep-alive
+      // Возникает при входе при keep-alive
       // если был сброшен выбор дерева то очищаем выбор продукта
       // выбор сбросится при переходе с другой страницы
-      if (!currentLabel.value) selectedRowsVuex.products.length = 0;
+      // if (!currentLabel.value) selectedRowsVue1x.products.length = 0;
+      if (!currentLabel.value) selectedRow.value = {};
     });
     watch(
       () => route.path,
@@ -127,13 +128,20 @@ export default defineComponent({
             label: "Продукция",
             table: "products",
           });
+        } else {
+          onSelectedNode({
+            key: "start",
+            label: "Продукция",
+            table: "products",
+          });
         }
       },
       { immediate: true }
     );
 
     function onSelectedNode(node) {
-      selectedRowsVuex.products.length = 0;
+      //selectedRowsVue1x.products.length = 0;
+      //selectedRow.value = {};
       currentLabel.value = node.label;
       switch (node.table) {
         case "producttype":
@@ -191,9 +199,6 @@ export default defineComponent({
         console.log(val);
         router.go(-1);
       }
-      if (val == "onToRecept") {
-        emit("onToRecept");
-      }
     }
     async function menuClick(val, val2) {
       if (val == "pdf") {
@@ -202,7 +207,8 @@ export default defineComponent({
           tgFormat: "pdf", // pdf/jpg
           command: "products",
           fileName: "Продукты",
-          id: selectedRowsVuex?.products[0]?.id,
+          // id: selectedRowsVue1x?.products[0]?.id,
+          id: selectedRow.value?.id,
         };
         nextTick(() => {
           showPdfDialog.value = true;
@@ -222,7 +228,7 @@ export default defineComponent({
       currentTabname,
       buttonArr,
       buttonClick,
-      selectedRowsVuex,
+      // selectedRowsVue1x,
       currentRowText,
       route,
       yesCatalogAll,

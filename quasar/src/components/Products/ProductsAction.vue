@@ -12,12 +12,7 @@
       </q-item-section>
     </q-item>
     <q-separator v-if="productOne" />
-    <q-item
-      v-if="productOne"
-      clickable
-      v-ripple
-      @click="$emit('onClickRecept')"
-    >
+    <q-item v-if="productOne" clickable v-ripple @click="onClickRecept">
       <q-item-section avatar>
         <q-avatar color="primary" text-color="white"> R </q-avatar>
       </q-item-section>
@@ -30,10 +25,10 @@
       </q-item-section>
     </q-item>
     <q-item
-      v-if="productOne && selectedRowsVuex.products[0]?.count_ingredients > 0"
+      v-if="productOne && selectedRow?.count_ingredients > 0"
       clickable
       v-ripple
-      @click="$emit('onClickPdf', selectedRowsVuex.products[0])"
+      @click="$emit('onClickPdf', selectedRow)"
     >
       <q-item-section avatar>
         <q-icon name="picture_as_pdf" size="3em" color="primary"></q-icon>
@@ -51,7 +46,8 @@
 <script>
 import { defineComponent, ref, watchEffect } from "vue";
 import { arkVuex } from "src/utils/arkVuex.js";
-
+import { useProductsStore, storeToRefs } from "stores/productsStore.js";
+import { useRouter, useRoute } from "vue-router";
 export default defineComponent({
   name: "ProductsAction",
   components: {},
@@ -61,39 +57,50 @@ export default defineComponent({
   },
   emits: ["update:selectedNode", "onSelectedNode", "onClickPdf"],
   setup(props, { emit }) {
-    const { selectedRowsVuex } = arkVuex();
+    const { selectedRow } = storeToRefs(useProductsStore());
     const nameProduct = ref("");
     const nameFullProduct = ref("");
     const shortVidProducts = ref("");
     const productOne = ref(false);
-    //const currentRow = ref({});
-    watchEffect(() => {
-      //currentRow.value =
-      let selectRow = selectedRowsVuex.products;
-      if (Array.isArray(selectRow) && selectRow.length == 1) {
-        productOne.value = true;
-        nameProduct.value = selectRow[0].productvid_name;
-        nameFullProduct.value =
-          selectRow[0].productvid_name +
-          " " +
-          selectRow[0].name +
-          " " +
-          (selectRow[0].document_num && " TTK№ " + selectRow[0].document_num);
-        shortVidProducts.value = selectRow[0].prefix;
+    const router = useRouter();
+    const route = useRoute();
+    function onClickRecept() {
+      if (route.path.includes("/tbl/")) {
+        router.push({
+          name: "tbl",
+          params: { tblRouteParam: "recept", formFactor: "none" },
+        });
       } else {
-        nameProduct.value = "Выбрано больше одного продукта";
-        nameFullProduct.value = "";
-        shortVidProducts.value = "";
-        productOne.value = false;
+        router.push({
+          name: "recept",
+          params: { tblRouteParam: "recept", formFactor: "none" },
+        });
+      }
+    }
+    watchEffect(() => {
+      nameFullProduct.value = "";
+      nameProduct.value = "";
+      shortVidProducts.value = "";
+      productOne.value = false;
+      if (selectedRow.value?.id) {
+        productOne.value = true;
+        nameProduct.value = selectedRow.value.productvid_name;
+        nameFullProduct.value = `${selectedRow.value.productvid_name} ${selectedRow.value.name} `;
+        if (selectedRow.value.document_num)
+          nameFullProduct.value += ` ТТК№ ${selectedRow.value.document_num}`;
+        shortVidProducts.value = selectedRow.value.prefix;
       }
     });
     return {
       //  currentRow,
-      selectedRowsVuex,
+      //selectedRowsVue1x,
+      selectedRow,
       nameProduct,
       nameFullProduct,
       shortVidProducts,
       productOne,
+      router,
+      onClickRecept,
     };
   },
 });

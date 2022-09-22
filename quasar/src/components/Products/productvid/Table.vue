@@ -21,62 +21,6 @@
       :rowsPerPage="0"
     >
     </Table-Template>
-    <!-- <q-table
-      flat
-      style="min-width: 100px; display: grid; overflow: auto"
-      dense
-      :filter="filter"
-      no-data-label="Нет данных."
-      no-results-label="Ничего не найдено."
-      class="my-sticky-virtscroll-table table-kagent-column-table"
-      virtual-scroll
-      v-model:pagination="paginationСatalog"
-      :rows-per-page-options="[0]"
-      :virtual-scroll-sticky-size-start="48"
-      row-key="id"
-      title="Тип продукции"
-      :rows="rows"
-      :columns="columns"
-      :visible-columns="visibleColumns"
-      @row-dblclick="dblClickRow"
-    >
-      <template v-slot:body="props">
-        <table-body
-          :propsV="props"
-          @on-btn-edit="onEdit"
-          @on-btn-delete="onDelete"
-          @onRowClick="onRowClick"
-          :selected-row="selectedRow"
-        ></table-body>
-      </template>
-      <template v-slot:top-left>
-        <div class="row">
-          <q-btn flat round color="green" icon="add" @click="onAdd()" />
-          <div style="min-width: 25px"></div>
-          <find-table v-model:filter="filter"></find-table>
-        </div>
-      </template>
-      <template v-slot:top-right>
-        <q-space />
-
-        <q-select
-          v-model="visibleColumns"
-          multiple
-          dense
-          options-dense
-          display-value="Вид"
-          emit-value
-          map-options
-          :options="columns"
-          option-value="name"
-          options-cover
-          style="min-width: 30px"
-        />
-      </template>
-      <template v-slot:no-data="dataslot">
-        <no-data-footer :dataslot="dataslot"></no-data-footer>
-      </template>
-    </q-table> -->
   </div>
   <form-dialog
     :rowData="currentRow"

@@ -1,10 +1,5 @@
 <template>
-  <q-btn-dropdown
-    class="glossy"
-    style="width: 100%"
-    color="blue-6"
-    :label="label"
-  >
+  <q-btn-dropdown flat style="width: 100%" class="" :label="label">
     <q-list style="max-width: fit-content">
       <q-item>
         <q-item-section>
@@ -24,7 +19,7 @@
         @click="$emit('onChangeRazdel', 'products')"
       >
         <q-item-section avatar>
-          <q-avatar color="primary" text-color="white"> П </q-avatar>
+          <q-avatar color="blue-3" text-color="white"> П </q-avatar>
         </q-item-section>
 
         <q-item-section>
@@ -39,14 +34,12 @@
         @click="$emit('onChangeRazdel', 'productraw')"
       >
         <q-item-section avatar>
-          <q-avatar color="primary" text-color="white"> С </q-avatar>
+          <q-avatar color="blue-3" text-color="white"> С </q-avatar>
         </q-item-section>
 
         <q-item-section>
           <q-item-label>Сырье</q-item-label>
-          <q-item-label caption
-            >Сырье из магазина, со склада, или из дома.</q-item-label
-          >
+          <q-item-label caption>Сырье со склада.</q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
@@ -54,7 +47,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onUnmounted } from "vue";
 
 export default {
   props: {

@@ -75,8 +75,9 @@ export default defineComponent({
             if (refTree.value) {
               //  refTree.value.setExpanded(val.tblRouteParam, true);
               let nodeKey = refTree.value.getNodeByKey(val.tblRouteParam);
-              console.log(">>>>> nodeKey:", nodeKey, ">>", nodeKey.parentPath);
+
               if (nodeKey && nodeKey.parentPath) {
+                // console.log(">>>>> nodeKey:", nodeKey.parentPath);
                 for (let el of nodeKey.parentPath) {
                   //nodeKey.parentPath.forEach((el) => {
                   console.log("раскроем:", el);
@@ -84,7 +85,8 @@ export default defineComponent({
                 }
               } else {
                 // если нет, в элементе parentPath, то попробуем открыть по tblRouteParam
-                await refTree.value.setExpanded(val.tblRouteParam, true);
+                let nodeKey = refTree.value.getNodeByKey("title");
+                if (nodeKey) await refTree.value.setExpanded("title", true);
               }
               // console.log(
               //   "node.tree",

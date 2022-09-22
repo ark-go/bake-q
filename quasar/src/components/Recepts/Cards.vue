@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md row items-start q-gutter-md">
-    <q-card flat bordered class="ark-card-panel">
+    <q-card flat class="ark-card-panel">
       <q-card-section>
         <div class="row items-center no-wrap">
           <div class="col">

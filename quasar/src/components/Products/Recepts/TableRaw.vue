@@ -1,6 +1,7 @@
 <template>
   <div class="column no-wrap" style="max-height: inherit">
     <q-table
+      flat
       style="min-width: 100px; display: grid; overflow: auto"
       dense
       :filter="filter"
@@ -42,8 +43,6 @@
       </template>
       <template v-slot:top-left>
         <div class="row">
-          <!-- <q-btn flat round color="green" icon="add" @click="onAdd()" />
-          <div style="min-width: 25px"></div> -->
           <find-table v-model:filter="filter"></find-table>
         </div>
       </template>
@@ -79,13 +78,21 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, computed, watchEffect } from "vue";
+import {
+  defineComponent,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  watchEffect,
+} from "vue";
 import { useArkUtils } from "src/utils/arkUtils"; // const arkUtils = useArkUtils();
 import NoDataFooter from "components/NoDataFooter.vue";
 import FormDialog from "./FormDialog.vue";
 import TableBody from "./TableBody.vue";
 import FindTable from "./FindTable.vue";
-import { arkVuex } from "src/utils/arkVuex.js";
+//import { arkVuex } from "src/utils/arkVuex.js";
+import { useProductsStore, storeToRefs } from "stores/productsStore.js";
 import { useQuasar } from "quasar";
 
 export default defineComponent({
@@ -98,6 +105,7 @@ export default defineComponent({
   },
   props: {
     tabname: String,
+    loadTableName: String,
     tablabel: String,
     isLeft: Boolean,
   },
@@ -105,39 +113,34 @@ export default defineComponent({
   setup(props, { emit }) {
     const $q = useQuasar();
     const arkUtils = useArkUtils();
-    const { selectedRowsVuex } = arkVuex();
+    // const { selectedRowsVue1x } = arkVuex();
+    const { selectedRow } = storeToRefs(useProductsStore());
     const rows = ref([]);
     const visibleColumns = ref([]);
     const showDialog = ref(false);
     const rowCurrent = ref({});
     const currentTab = ref("");
     const allSprav = ref();
-    //const visibleOffDefault = ref([]);
-    //const columns = ref([]);
-    onMounted(async () => {
-      await loadTable();
-      columnFilter();
-    });
-
-    // watchEffect(
-    //   () => props.tabname,
-    //   async () => {
-    //     await loadTable();
-    //   }
-    // );
+    watch(
+      () => props.loadTableName,
+      async () => {
+        await loadTable(props.loadTableName, "recept");
+        columnFilter();
+      },
+      { immediate: true }
+    );
     function columnFilter() {
       visibleColumns.value = [];
-      // columns.forEach((item, index, array) => {
-      //   if (visibleOffDefault.includes(item.name)) return;
-      //   visibleColumns.value.push(item.name);
-      // });
     }
-    //"loadRaw", "recept"
 
     async function loadTable(cmd = "loadRaw", tabname = "recept") {
       //! вызывается снаружи из родительского компонента напрямую
       currentTab.value = cmd;
-      let mess = "Загрузка продукции " + tabname;
+      let mess = "продукции";
+      if (cmd == "loadRaw") {
+        mess = "сырья";
+      }
+      mess = "Загрузка " + mess;
       let res = await arkUtils.dataLoad(
         "/api/products",
         { cmd: cmd, tabname: tabname },
@@ -157,7 +160,8 @@ export default defineComponent({
       // в row - строка из таблицы, нам необходимо переложить ее в
       // в другую таблицу
       let dat = {
-        products_id: selectedRowsVuex.products[0].id,
+        // products_id: selectedRowsVue1x.products[0].id,
+        products_id: selectedRow.value.id,
         is_raw: row.is_raw,
         massbrutto: row.massbrutto,
         massnetto: row.massnetto,
@@ -179,8 +183,6 @@ export default defineComponent({
       if (res.result) {
         // получим строку в []
         console.log("Записали", res.result);
-        //  console.log("return one row", res.result[0]);
-        //! await loadTable();
         emit("addIngredient");
         showDialog.value = false;
       } else {
@@ -205,20 +207,10 @@ export default defineComponent({
         ok: { label: "Удалить", color: "red-3" }, // q-btn
         cancel: { label: "Отменить", color: "blue-5" },
         focus: "cancel",
-      })
-        .onOk(async () => {
-          // console.log('>>>> OK')
-          // await deleteTable(val);
-        })
-        .onOk(() => {
-          console.log(">>>> second OK catcher");
-        })
-        .onCancel(() => {
-          // console.log('>>>> Cancel')
-        })
-        .onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
-        });
+      }).onOk(async () => {
+        // console.log('>>>> OK')
+        // await deleteTable(val);
+      });
 
       //--------------------
     }
@@ -240,7 +232,7 @@ export default defineComponent({
       rows,
       filter: ref(""),
       paginationСatalog: ref({
-        rowsPerPage: 10,
+        rowsPerPage: 50,
       }),
       columns,
       visibleColumns,

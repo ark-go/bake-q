@@ -1,9 +1,10 @@
 <template>
   <ark-card
-    class="ark-card-panel arkadiii"
+    flat
+    class="ark-card-panel"
+    style="overflow: auto"
     :title="'Составление рецепта' + ttkNumberStr"
     :subTitle="curentRowName"
-    style="width: 700px"
     :buttonArr="buttonArr"
     @buttonClick="buttonClick"
     :menuObj="{ pdf: 'Получить PDF' }"
@@ -18,16 +19,25 @@
     <template v-slot:leftCenter>
       <table-raw
         :tabname="currentTableName"
+        :loadTableName="loadTableName"
         @add-ingredient="addIngredient"
         :ref="(el) => (refTable = el)"
       ></table-raw>
     </template>
     <template v-slot:rightTop>
-      <button-down
-        :disable-main-btn="true"
-        @on-change-razdel="onChangeRazdel"
-        label="Ингредиенты"
-      ></button-down>
+      <q-field dense class="text-center text-black">
+        <div
+          style="
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            display: flex;
+            color: black;
+          "
+        >
+          ИНГРЕДИЕНТЫ
+        </div>
+      </q-field>
     </template>
     <template v-slot:rightCenter>
       <table-ingred
@@ -43,25 +53,32 @@
 import {
   defineComponent,
   onMounted,
+  onUnmounted,
   defineAsyncComponent,
   ref,
   watchEffect,
 } from "vue";
 import ArkCard from "./ArkCard.vue";
-import { arkVuex } from "src/utils/arkVuex.js";
+//import { arkVuex } from "src/utils/arkVuex.js";
 import { dom } from "quasar";
 //import FormSelectIngr from "./FormSelectIngr.vue";
 import ButtonDown from "./ButtonDown.vue";
 import TableRaw from "./TableRaw.vue";
 import TableIngred from "./TableIngred.vue";
+import { useProductsStore, storeToRefs } from "stores/productsStore.js";
+import { useRoute, useRouter } from "vue-router";
+
 export default defineComponent({
   name: "p-recept",
   props: [],
   components: { ArkCard, TableRaw, TableIngred, ButtonDown },
-  emits: ["onToMain"],
+  // emits: ["onToMain"],
   setup(props, { emit }) {
     const { height } = dom;
-    const { selectedRowsVuex } = arkVuex();
+    //const { selectedRowsVue1x } = arkVuex();
+    const { selectedRow } = storeToRefs(useProductsStore());
+    const route = useRoute();
+    const router = useRouter();
     const currentRow = ref({});
     const curentRowName = ref("");
     const ttkNumberStr = ref("");
@@ -70,17 +87,18 @@ export default defineComponent({
     const topElement = ref({});
     const refTable = ref(null);
     const refTableIngred = ref(null);
-    async function onChangeRazdel(val) {
+    const loadTableName = ref("loadRaw");
+    function onChangeRazdel(val) {
       currentTableName.value = val;
 
       switch (val) {
         case "products":
           labelButtonDown.value = "Раздел продукции";
-          await refTable.value.loadTable("loadProducts", "recept");
+          loadTableName.value = "loadProducts";
           break;
         case "productraw":
           labelButtonDown.value = "Раздел сырья";
-          await refTable.value.loadTable("loadRaw", "recept");
+          loadTableName.value = "loadRaw";
           break;
         default:
           break;
@@ -95,11 +113,17 @@ export default defineComponent({
       }
     }
     onMounted(() => {
-      onChangeRazdel("productraw");
+      if (selectedRow.value?.id) {
+        onChangeRazdel("productraw");
+      } else {
+        //Данных о выбранном продукте не поступило
+        router.push({ name: "tbl", params: { tblRouteParam: "products" } });
+      }
     });
+
     watchEffect(() => {
-      if (selectedRowsVuex.products.length == 1) {
-        currentRow.value = selectedRowsVuex.products[0];
+      if (selectedRow.value?.id) {
+        currentRow.value = selectedRow.value;
         curentRowName.value =
           currentRow.value.productvid_name + ", " + currentRow.value.name;
         ttkNumberStr.value = " ТТК№ " + currentRow.value.document_num;
@@ -118,8 +142,14 @@ export default defineComponent({
     ]);
     function buttonClick(val) {
       if (val == "back") {
-        emit("onToMain");
+        if (route.path.includes("/recept/")) {
+          router.go(-1);
+        }
+        // else {
+        //   emit("onToMain");
+        // }
       }
+      ////////////////////////////////
     }
     return {
       buttonArr,
@@ -135,6 +165,7 @@ export default defineComponent({
       topElement,
       refTable,
       refTableIngred,
+      loadTableName,
     };
   },
 });

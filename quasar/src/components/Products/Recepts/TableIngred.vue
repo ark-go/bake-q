@@ -1,6 +1,7 @@
 <template>
   <div class="column no-wrap" style="max-height: inherit">
     <q-table
+      flat
       style="min-width: 100px; display: grid; overflow: auto"
       dense
       :filter="filter"
@@ -85,8 +86,9 @@ import NoDataFooter from "components/NoDataFooter.vue";
 import FormDialog from "./FormDialog.vue";
 import TableBody from "./TableBody.vue";
 import FindTable from "./FindTable.vue";
-import { arkVuex } from "src/utils/arkVuex.js";
+//import { arkVuex } from "src/utils/arkVuex.js";
 import { useQuasar } from "quasar";
+import { useProductsStore, storeToRefs } from "stores/productsStore.js";
 
 export default defineComponent({
   name: "TableRaw",
@@ -105,7 +107,8 @@ export default defineComponent({
   setup(props) {
     const $q = useQuasar();
     const arkUtils = useArkUtils();
-    const { selectedRowsVuex } = arkVuex();
+    //const { selectedRowsVue1x } = arkVuex();
+    const { selectedRow } = storeToRefs(useProductsStore());
     const rows = ref([]);
     const visibleColumns = ref([]);
     const showDialog = ref(false);
@@ -132,19 +135,14 @@ export default defineComponent({
     }
 
     async function loadTable(cmd = "load") {
-      let mess = "Загрузка Видов продукции";
-      console.log(
-        "load: ингредиенты ",
-        props.tabname,
-        selectedRowsVuex.products[0].id
-      );
-
+      let mess = "Загрузка ингредиентов";
       let res = await arkUtils.dataLoad(
         "/api/products",
         {
           cmd: cmd,
           tabname: "productingred",
-          products_id: selectedRowsVuex.products[0].id,
+          // products_id: selectedRowsVue1x.products[0].id,
+          products_id: selectedRow.value.id,
         },
         mess
       );
@@ -230,7 +228,7 @@ export default defineComponent({
       rows,
       filter: ref(""),
       paginationСatalog: ref({
-        rowsPerPage: 10,
+        rowsPerPage: 50,
       }),
       columns,
       visibleColumns,
