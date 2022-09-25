@@ -13,19 +13,19 @@
     <q-tab
       name="groupBakery"
       icon="event"
-      label="В группе"
+      label="У контрагента"
       style="justify-content: left"
     />
     <q-tab
       name="freeBakery"
       icon="event_available"
-      label="Свободные"
+      label="Свободные пекарни"
       style="justify-content: left"
     />
     <q-tab
       name="busyBakery"
       icon="event_busy"
-      label="В других группах"
+      label="У других контрагентов"
       style="justify-content: left"
     />
     <q-tab

@@ -1,25 +1,19 @@
 <template>
-  <q-list
-    bordered
-    class="rounded-borders maxBodyHeight"
-    style="overflow-x: hidden"
-  >
-    <q-expansion-item
+  <q-list flat class="rounded-borders maxBodyHeight" style="overflow-x: hidden">
+    <q-item>
+      <q-item-section class="text-center">{{ spravStore.selectedRow.name }}</q-item-section>
+    </q-item>
+    <!-- <q-expansion-item
       dense-toggle
       v-model="territoryExpand"
       :label="spravStore.selectedRow.name"
       caption="печник Вася"
       header-style="padding-right:1px"
     >
-      <!-- <template v-slot:header>
-        <span class="text-weight-bold" style="width: 100%">{{
-          spravStore.selectedRow.name
-        }}</span>
-      </template> -->
       <q-card>
         <q-card-section> Информация </q-card-section>
       </q-card>
-    </q-expansion-item>
+    </q-expansion-item> -->
     <q-item>
       <q-item-section>
         <Tabs-Tables

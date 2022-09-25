@@ -21,6 +21,7 @@ export async function load(req, res, tabname, timezone, idOne) {
     -- concat(ustm.u_fam,' ',ustm.u_name,' ',ustm.u_otch) as territory_manager_name,
      -- ustm.email as territory_manager_name,
       reg.name as region_name,
+      to_char(rt.date_start at time zone $2,  'DD.MM.YYYY') as "date_start_region",
       concat(usrm.u_fam,' ',substring(usrm.u_name,1,1),' ',substring(usrm.u_otch,1,1))  as region_manager_name,
     --  concat(usrm.u_fam,' ',usrm.u_name,' ',usrm.u_otch) as region_manager_name,
      -- usrm.email as region_manager_name,

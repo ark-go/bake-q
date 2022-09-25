@@ -1,9 +1,5 @@
 <template>
-  <q-list
-    bordered
-    class="rounded-borders maxBodyHeight"
-    style="overflow-x: hidden"
-  >
+  <q-list flat class="rounded-borders maxBodyHeight" style="overflow-x: hidden">
     <q-expansion-item
       dense-toggle
       v-model="sideExpand"

@@ -12,11 +12,11 @@ export const useStartPageStore = defineStore("StartPageStore", {
   state: () => {
     return {
       listMenuDef: [
-        {
-          id: 1,
-          header: "Отчеты",
-          visible: true,
-        },
+        // {
+        //   id: 1,
+        //   header: "Отчеты",
+        //   visible: true,
+        // },
         {
           id: 2,
           title: "Chart",
@@ -24,11 +24,11 @@ export const useStartPageStore = defineStore("StartPageStore", {
           icon: "bar_chart",
           visible: true,
         },
-        {
-          id: 3,
-          header: "Документы",
-          visible: true,
-        },
+        // {
+        //   id: 3,
+        //   header: "Документы",
+        //   visible: true,
+        // },
         {
           id: 4,
           title: "Продажи",
@@ -51,11 +51,11 @@ export const useStartPageStore = defineStore("StartPageStore", {
           visible: true,
         },
 
-        {
-          id: 7,
-          header: "Справочники",
-          visible: true,
-        },
+        // {
+        //   id: 7,
+        //   header: "Справочники",
+        //   visible: true,
+        // },
         {
           id: 8,
           title: "Справочники",
@@ -85,11 +85,11 @@ export const useStartPageStore = defineStore("StartPageStore", {
         //   visible: true,
         //   hiddenMenuCard: true, //  скрываем из кнопок на экране
         // },
-        {
-          id: 12,
-          header: "Администрирование",
-          visible: true,
-        },
+        // {
+        //   id: 12,
+        //   header: "Администрирование",
+        //   visible: true,
+        // },
         {
           id: 13,
           title: "Пекарни<br>конфигурация",
@@ -104,10 +104,17 @@ export const useStartPageStore = defineStore("StartPageStore", {
         //   icon: "arrow_right",
         //   visible: true,
         // },
+        {
+          id: 15,
+          title: "Документы",
+          link: "/doc/title",
+          icon: "arrow_right",
+          visible: true,
+        },
       ],
       listMenu: [],
       listMenuSorted: [],
-      toggleStorage: "19-09-2022-2",
+      toggleStorage: "23-09-2022-2",
       //  listMenu: [],
     };
   },

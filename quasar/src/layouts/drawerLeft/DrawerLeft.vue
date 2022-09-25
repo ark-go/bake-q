@@ -31,6 +31,11 @@
       <q-tab-panel name="treeMenu" style="padding: 0">
         <Tree-Global-Menu v-model:drawerPanel="drawerPanel"></Tree-Global-Menu>
       </q-tab-panel>
+      <q-tab-panel name="documentsMenu" style="padding: 0">
+        <Tree-Documetns-Menu
+          v-model:drawerPanel="drawerPanel"
+        ></Tree-Documetns-Menu>
+      </q-tab-panel>
     </q-tab-panels>
     <div
       v-touch-pan.horizontal.prevent.mouse="handlePan"
@@ -55,6 +60,7 @@ import EssentialLink from "components/EssentialLink.vue";
 import MenuSide from "./MenuSide/MenuSide.vue";
 import MenuSideBakeryConfig from "./tabsSide/MenuSideBakeryConfig.vue";
 import TreeGlobalMenu from "./tabsSide/TreeGlobalMenu.vue";
+import TreeDocumetnsMenu from "./tabsSide/TreeDocumetnsMenu.vue";
 import { useRoute } from "vue-router";
 
 export default defineComponent({
@@ -66,6 +72,7 @@ export default defineComponent({
     MenuSide,
     TreeGlobalMenu,
     MenuSideBakeryConfig,
+    TreeDocumetnsMenu,
   },
   setup() {
     const { userInfo } = storeToRefs(useUserStore());
@@ -88,6 +95,8 @@ export default defineComponent({
         console.log(" переход роута", val);
         if (val.includes("/tbl/")) {
           drawerPanel.value = "treeMenu";
+        } else if (val.includes("/doc/")) {
+          drawerPanel.value = "documentsMenu";
         } else {
           drawerPanel.value = "main";
         }

@@ -216,6 +216,13 @@ const dataTree = [
     expandable: true,
     children: [
       {
+        key: 51,
+        label: "Города",
+        tableName: "city",
+        tableType: "city",
+        helpCode: "Города вкладка",
+      },
+      {
         key: 311,
         label: "Пекарни",
         helpCode: "Пекарни вкладка", // менять коды нельзя.. это ключи в базу данных
@@ -230,6 +237,7 @@ const dataTree = [
         tableName: "tabBakery", // имя для запроса на сервер
         tableType: "tabBakery", //! убрать после замены всех таблиц - не скоро, оперделяет что таблица внешняя
         component: "TabBakery", // расширение по умолчанию vue
+        //permiss: "Arkadii@yandex.ru",
         buttonPanel: [
           // { name: "bakeryBaker", label: "Пекари", icon: "person" }, // панель вверху
           //  { name: "manager", label: "Менеджер", icon: "person" },
@@ -274,16 +282,24 @@ const dataTree = [
 
       // { key: 34, label: "Регионы", tableName: "region", component: "Tabxxx" },
       {
-        key: 35,
-        label: "Менеджеры (управляющие)",
-        tableName: "tabUsers",
-        tableType: "tabUsers",
-        component: "TabManager", // расширение по умолчанию vue, будет TabManager.vue
+        key: 37,
+        label: "Торговые сети (пекарни)",
+        tableName: "tabTrademark",
+        tableType: "tabTrademark",
+        component: "TabTrademark", // расширение по умолчанию vue, будет TabTrademark.vue
+        // permiss: "Arkadii@yandex.ru",
         buttonPanel: [
           // name - название панели в TabManager.vue
-          { name: "managerRegion", label: "Регионы", icon: "terrain" },
-          { name: "managerTerritory", label: "Территории", icon: "terrain" },
-          { name: "managerBakery", label: "Пекарни", icon: "home" },
+          { name: "trademarkBakery", label: "Пекарни", icon: "home" },
+        ],
+        children: [
+          {
+            key: 371,
+            label: "Бренды",
+            tableName: "tabBrand",
+            tableType: "tabBrand",
+            //  component: "tabBrand",
+          },
         ],
       },
       {
@@ -300,6 +316,7 @@ const dataTree = [
             label: "Справочники",
             helpCode: "TreeHelp-1", //! менять коды нельзя.. это ключи в базу данных
             //icon: "restaurant_menu",
+            permiss: "Arkadii@yandex.ru",
             children: [
               {
                 key: 11,
@@ -356,27 +373,7 @@ const dataTree = [
           },
         ],
       },
-      {
-        key: 37,
-        label: "Торговые сети (пекарни)",
-        tableName: "tabTrademark",
-        tableType: "tabTrademark",
-        component: "TabTrademark", // расширение по умолчанию vue, будет TabTrademark.vue
-        // permiss: "Arkadii@yandex.ru",
-        buttonPanel: [
-          // name - название панели в TabManager.vue
-          { name: "trademarkBakery", label: "Пекарни", icon: "home" },
-        ],
-        children: [
-          {
-            key: 371,
-            label: "Бренды",
-            tableName: "tabBrand",
-            tableType: "tabBrand",
-            //  component: "tabBrand",
-          },
-        ],
-      },
+
       {
         key: 39,
         label: "Принадлежность (пекарни)",
@@ -391,6 +388,19 @@ const dataTree = [
         ],
       },
       {
+        key: 35,
+        label: "Менеджеры (управляющие)",
+        tableName: "tabUsers",
+        tableType: "tabUsers",
+        component: "TabManager", // расширение по умолчанию vue, будет TabManager.vue
+        buttonPanel: [
+          // name - название панели в TabManager.vue
+          { name: "managerRegion", label: "Регионы", icon: "terrain" },
+          { name: "managerTerritory", label: "Территории", icon: "terrain" },
+          { name: "managerBakery", label: "Пекарни", icon: "home" },
+        ],
+      },
+      {
         key: 50,
         label: "Упаковка (пекарни)",
         helpCode: "Упаковка вкладка",
@@ -402,13 +412,6 @@ const dataTree = [
           // name - название панели в TabManager.vue
           { name: "packtypeBakery", label: "Пекарни", icon: "home" },
         ],
-      },
-      {
-        key: 51,
-        label: "Города",
-        tableName: "city",
-        tableType: "city",
-        helpCode: "Города вкладка",
       },
     ],
   },

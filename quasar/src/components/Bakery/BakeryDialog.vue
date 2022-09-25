@@ -107,7 +107,7 @@
           <q-input
             filled
             dense
-            label="Аренда франчайзи"
+            label="Франшиза"
             :model-value="currentRow.fr_kagent_name || 'Нет'"
             readonly
           ></q-input>

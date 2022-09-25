@@ -6,7 +6,8 @@
     :style="maxHeigh"
     @click.right.prevent="$emit('stop')"
   >
-    <div ref="refTopSection">
+    <div>
+      <q-resize-observer @resize="(val) => (topSectionSize = val)" />
       <q-card-section class="q-pb-xs q-pt-xs">
         <div class="row items-center no-wrap">
           <div class="col">
@@ -36,12 +37,13 @@
         </div>
       </q-card-section>
     </div>
-    <div :ref="(el) => (refInfoSection = el)">
+    <div>
+      <q-resize-observer @resize="(val) => (infoSectionSize = val)" />
       <q-card-section class="q-py-xs">
         <Tab-Button></Tab-Button>
       </q-card-section>
     </div>
-    <div :ref="(el) => (refBodySection = el)">
+    <div>
       <q-card-section
         style="padding: 0 16px 16px 16px"
         :style="{ maxHeight: maxBodyHeight }"
@@ -49,10 +51,8 @@
         <slot> </slot>
       </q-card-section>
     </div>
-    <div
-      :ref="(el) => (refBottomSection = el)"
-      style="position: absolute; bottom: 0; width: 100%"
-    >
+    <div style="position: absolute; bottom: 0; width: 100%">
+      <q-resize-observer @resize="(val) => (bottomSectionSize = val)" />
       <!-- <q-separator v-if="buttonArrProp" />
 
         <q-card-actions>
@@ -85,6 +85,7 @@ import PageSetupDialog from "./PageSetupDialog.vue";
 import TabButton from "./TabButton.vue";
 import { useQuasar, dom } from "quasar";
 import { usePriceStore, storeToRefs } from "src/stores/priceStore";
+import { useArkCardStore } from "src/stores/arkCardStore";
 
 //import { getComponent } from "./selectComponent.js"; //defineComponents
 //import SelectDateExt from "./SelectDateExt.vue";
@@ -116,20 +117,25 @@ export default defineComponent({
     const priceStore = usePriceStore();
 
     const { style, height } = dom;
-    const refTopSection = ref();
-    const refBodySection = ref();
-    const refInfoSection = ref();
-    const refBottomSection = ref();
-    const refAllForm = ref(null);
-    const cardHeight = ref(400);
+    // const refTopSection = ref();
+    // const refBodySection = ref();
+    // const refInfoSection = ref();
+    // const refBottomSection = ref();
+    // const refAllForm = ref(null);
+    // const cardHeight = ref(400);
     const buttonArrProp = ref();
     const splitterModel = ref(30);
     const splitHorizont = ref(false);
     const menuDialogShow = ref(false);
     const currentTabComponent = ref();
-    const { tabModel, maxBodyHeight, maxBodyHeightResize } = storeToRefs(
-      usePriceStore()
-    );
+    const { tabModel, maxBodyHeightResize } = storeToRefs(usePriceStore());
+    const {
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
+      maxBodyHeight,
+    } = storeToRefs(useArkCardStore());
     priceStore.watchStore(() => {
       return watch(
         () => tabModel.value,
@@ -179,51 +185,51 @@ export default defineComponent({
         splitHorizont.value = $q.screen.width < $q.screen.height;
       });
     });
-    priceStore.watchStore(() => {
-      return watch(
-        [() => priceStore.selectedRowDoc.name, () => maxBodyHeightResize.value],
-        () => {
-          reSizeCard();
-        }
-      );
-    });
-    const maxHeigh = computed(() => {
-      return props.pageMaxHeight;
-    });
+    // priceStore.watchStore(() => {
+    //   return watch(
+    //     [() => priceStore.selectedRowDoc.name, () => maxBodyHeightResize.value],
+    //     () => {
+    //       reSizeCard();
+    //     }
+    //   );
+    // });
+    // const maxHeigh = computed(() => {
+    //   return props.pageMaxHeight;
+    // });
     // const maxBodyHeight = ref("");
-    function reSizeCard() {
-      // console.log("maxHeighmaxHeighmaxHeigh", maxHeigh.value);
-      // if (!$q.fullscreen.isActive) {
-      try {
-        let topBottom =
-          height(refTopSection.value) +
-          height(refInfoSection.value) +
-          height(refBottomSection.value);
-        // if (maxHeigh.value?.maxHeight) {
-        // если есть размер
-        maxBodyHeight.value = `calc(${maxHeigh.value.maxHeight} - ${topBottom}px)`;
-        // } else {
-        //   // если нет, т.е. полный экран
-        //   maxBodyHeight.value = `${topBottom}px`;
-        // }
-      } catch (e) {
-        console.log("нет элемента. пропуск", e);
-        maxBodyHeight.value = maxHeigh.value; //! не правильно
-      }
-      // }else{
-      // if($q.platform.is.electron){
+    // function reSizeCard() {
+    //   // console.log("maxHeighmaxHeighmaxHeigh", maxHeigh.value);
+    //   // if (!$q.fullscreen.isActive) {
+    //   try {
+    //     let topBottom =
+    //       height(refTopSection.value) +
+    //       height(refInfoSection.value) +
+    //       height(refBottomSection.value);
+    //     // if (maxHeigh.value?.maxHeight) {
+    //     // если есть размер
+    //     maxBodyHeight.value = `calc(${maxHeigh.value.maxHeight} - ${topBottom}px)`;
+    //     // } else {
+    //     //   // если нет, т.е. полный экран
+    //     //   maxBodyHeight.value = `${topBottom}px`;
+    //     // }
+    //   } catch (e) {
+    //     console.log("нет элемента. пропуск", e);
+    //     maxBodyHeight.value = maxHeigh.value; //! не правильно
+    //   }
+    //   // }else{
+    //   // if($q.platform.is.electron){
 
-      // }
-      // }
-      console.log("test size", maxBodyHeight.value, props.pageMaxHeight);
-    }
+    //   // }
+    //   // }
+    //   console.log("test size", maxBodyHeight.value, props.pageMaxHeight);
+    // }
 
-    onUpdated(() => {
-      // помоему срабатывает если
-      reSizeCard();
-    });
+    // onUpdated(() => {
+    //   // помоему срабатывает если
+    //   reSizeCard();
+    // });
     onMounted(() => {
-      reSizeCard();
+      // reSizeCard();
       console.log("Чтото тут", props?.buttonArr);
       //   if (buttonArrProp.value.length > 0) {
       buttonArrProp.value = props.buttonArr; // кнопки пришли
@@ -270,21 +276,21 @@ export default defineComponent({
       tabModel,
       priceStore,
       clickSelectButton,
-      refTopSection,
-      refBodySection,
-      refInfoSection,
-      refBottomSection,
-      refAllForm,
+      // refAllForm,
       maxBodyHeight,
-      maxHeigh,
+      // maxHeigh,
       splitterModel,
       splitHorizont,
-      cardHeight,
+      //  cardHeight,
       buttonArrProp,
       emit,
       onClose() {
         emit("onClose");
       },
+      topSectionSize,
+      infoSectionSize,
+      bodySectionSize,
+      bottomSectionSize,
     };
   },
 });

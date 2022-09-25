@@ -13,7 +13,7 @@
     <q-tab
       name="groupBakery"
       icon="event"
-      label="В группе"
+      label="В регионе"
       style="justify-content: left"
     />
     <q-tab
@@ -25,7 +25,7 @@
     <q-tab
       name="busyBakery"
       icon="event_busy"
-      label="В других группах"
+      label="В других регионах"
       style="justify-content: left"
     />
     <q-tab

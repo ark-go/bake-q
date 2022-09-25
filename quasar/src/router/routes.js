@@ -176,6 +176,20 @@ const routes = [
         component: () =>
           import("components/CatalogAllTables/SpravPageTables.vue"),
       },
+      {
+        // INFO /doc/ используется для глобального дерева Справочника
+        path: "doc/:tblRouteParam/:formFactor",
+        props: true,
+        name: "doc",
+        component: () =>
+          import("components/CatalogDocuments/PageCatalogDocuments.vue"),
+      },
+      {
+        path: "doc/:tblRouteParam",
+        props: true,
+        component: () =>
+          import("components/CatalogDocuments/PageCatalogDocuments.vue"),
+      },
     ],
   },
   // {

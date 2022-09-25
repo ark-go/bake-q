@@ -33,6 +33,19 @@
         <q-item-label caption>меню справочника</q-item-label>
       </q-item-section>
     </q-item>
+    <q-item
+      v-if="documentsMenu"
+      clickable
+      @click="$emit('update:drawerPanel', 'documentsMenu')"
+    >
+      <q-item-section avatar>
+        <q-icon name="eva-menu-2" color="blue-grey-4" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>Документы</q-item-label>
+        <q-item-label caption>Меню документы</q-item-label>
+      </q-item-section>
+    </q-item>
     <q-separator />
     <!-- <q-item-label header> </q-item-label> -->
     <Menu-Side-Items
@@ -66,13 +79,24 @@ export default defineComponent({
     const { listMenuSide } = storeToRefs(useStartPageStore());
     const { userInfo } = storeToRefs(useUserStore());
     const spravochnik = ref(false);
+    const documentsMenu = ref(false);
     watch(
       () => route.path,
       (val) => {
+        // switch (key) {
+        //   case value:
+
+        //     break;
+
+        //   default:
+        //     break;
+        // }
         if (route.path.includes("/tbl/")) {
           spravochnik.value = true;
+        } else if (route.path.includes("/doc/")) {
+          documentsMenu.value = true;
         } else {
-          spravochnik.value = false;
+          documentsMenu.value = false;
         }
       },
       { immediate: true }
@@ -83,6 +107,7 @@ export default defineComponent({
       pinCheckbox: ref(false),
       userInfo,
       spravochnik,
+      documentsMenu,
     };
   },
 });

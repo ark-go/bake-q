@@ -25,7 +25,7 @@
     <q-tab
       name="busyBakery"
       icon="event_busy"
-      label="Чужие территории"
+      label="Занятые территории"
       style="justify-content: left"
     />
     <q-tab

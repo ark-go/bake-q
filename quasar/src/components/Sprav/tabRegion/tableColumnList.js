@@ -7,6 +7,14 @@ export const columns = [
     required: true,
     sortable: true,
   },
+  // {
+  //   name: "date_start_region",
+  //   label: "С даты",
+  //   align: "right",
+  //   field: "date_start_region",
+  //   required: true,
+  //   sortable: true,
+  // },
 
   {
     name: "region_manager_name",

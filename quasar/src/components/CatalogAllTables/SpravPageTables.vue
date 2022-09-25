@@ -161,6 +161,25 @@ export default defineComponent({
           );
           setTitle("x Рецепт");
           break;
+        case "sale":
+          currentComponent.value = defineAsyncComponent(() =>
+            import("components/Sale/PageSale.vue")
+          );
+          setTitle("Продажи");
+          break;
+        case "products":
+        case "products2":
+          currentComponent.value = defineAsyncComponent(() =>
+            import("components/Products/PageProducts.vue")
+          );
+          setTitle("Продукция");
+          break;
+        case "price":
+          currentComponent.value = defineAsyncComponent(() =>
+            import("components/Price/PagePrice.vue")
+          );
+          setTitle("Прайс ТТК");
+          break;
         default:
           currentComponent.value = defineAsyncComponent(
             () => import("src/components/CatalogAllTables/PageTbl.vue") //"src/components/Sprav/tabBakery/TablePanel.vue")

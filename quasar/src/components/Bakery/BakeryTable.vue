@@ -308,7 +308,7 @@ let columns = [
   },
   {
     name: "ispack",
-    label: "Уп. к/а",
+    label: "Упак.",
     align: "left",
     field: "ispack",
   },

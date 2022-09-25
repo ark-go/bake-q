@@ -13,7 +13,7 @@
         @onBtnDelete="onDelete"
         @onBtnEdit="onEdit"
         @onRowClick="onRowClick"
-        @onAdd="addNew"
+        @onAdd="onAdd"
         @onRowDblClick="dblClickRow"
         :currentRow="currentRow"
         noExpandPanel
