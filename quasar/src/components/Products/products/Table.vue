@@ -308,13 +308,13 @@ let columns = [
 
   {
     name: "document_num",
-    label: "Номер докумнта TTK",
+    label: "Номер TTK",
     align: "left",
     field: "document_num",
   },
   {
     name: "document_date",
-    label: "Дата документа",
+    label: "Дата ТТК",
     align: "left",
     field: "document_date",
     hidden: true,

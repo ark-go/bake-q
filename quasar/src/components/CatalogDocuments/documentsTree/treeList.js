@@ -5,7 +5,7 @@ export function useTreeList() {
     const treeArr = [
       {
         itemLabel: "Документы",
-        itemValue: "documents",
+        itemValue: "title",
         pathUrl: "/doc/title",
         description: "",
         disabled: false,

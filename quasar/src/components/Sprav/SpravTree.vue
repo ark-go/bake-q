@@ -311,29 +311,29 @@ const dataTree = [
         tableName: "tabKagentMain", // хрен знает
         disabled: false,
         children: [
-          {
-            key: 10,
-            label: "Справочники",
-            helpCode: "TreeHelp-1", //! менять коды нельзя.. это ключи в базу данных
-            //icon: "restaurant_menu",
-            permiss: "Arkadii@yandex.ru",
-            children: [
-              {
-                key: 11,
-                label: "Вид контрагента",
-                tableName: "kagentvid",
-              },
-              { key: 12, label: "Вид регистрации", tableName: "kagentvidreg" },
-              {
-                key: 13,
-                label: "Группы контрагента",
-                tableName: "kagentgroup",
-              },
-            ],
+          // {
+          //   key: 10,
+          //   label: "Справочники",
+          //   helpCode: "TreeHelp-1", //! менять коды нельзя.. это ключи в базу данных
+          //   //icon: "restaurant_menu",
+          //   permiss: "Arkadii@yandex.ru",
+          //   children: [
+          //     {
+          //       key: 11,
+          //       label: "Вид контрагента",
+          //       tableName: "kagentvid",
+          //     },
+          //     { key: 12, label: "Вид регистрации", tableName: "kagentvidreg" },
+          //     {
+          //       key: 13,
+          //       label: "Группы контрагента",
+          //       tableName: "kagentgroup",
+          //     },
+          //   ],
 
-            // { label: " ? Вид регистрации", tableName: "kage+ntvidreg" },
-            // { label: " ? Вид контрагента", tableName: "kage+ntvid" },
-          },
+          //   // { label: " ? Вид регистрации", tableName: "kage+ntvidreg" },
+          //   // { label: " ? Вид контрагента", tableName: "kage+ntvid" },
+          // },
           {
             key: 41,
             label: "Торговых сетей (пекарни)",

@@ -1,5 +1,12 @@
 <template>
-  <q-item-label dense header v-if="header">{{ header }}</q-item-label>
+  <q-separator inset v-if="header" />
+  <q-item-label
+    dense
+    header
+    v-if="header"
+    style="text-transform: uppercase; color: #2d158f; font-weight: bold"
+    >{{ header }}</q-item-label
+  >
   <q-item dense v-if="visible && !header" clickable @click="onClick(link)">
     <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" color="blue-grey-4" />

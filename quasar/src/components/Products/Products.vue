@@ -1,6 +1,6 @@
 <template>
   <ark-card
-    title="Продукция"
+    title="Рецептура ТТК"
     :subTitle="currentLabel"
     :buttonArr="buttonArr"
     @buttonClick="buttonClick"

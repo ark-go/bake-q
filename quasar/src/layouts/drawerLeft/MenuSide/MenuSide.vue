@@ -91,13 +91,16 @@ export default defineComponent({
         //   default:
         //     break;
         // }
+        spravochnik.value = false;
+        documentsMenu.value = false;
         if (route.path.includes("/tbl/")) {
           spravochnik.value = true;
         } else if (route.path.includes("/doc/")) {
           documentsMenu.value = true;
-        } else {
-          documentsMenu.value = false;
         }
+        //  else {
+        //   documentsMenu.value = false;
+        // }
       },
       { immediate: true }
     );

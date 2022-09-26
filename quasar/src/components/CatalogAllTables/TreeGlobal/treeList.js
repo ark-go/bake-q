@@ -50,7 +50,7 @@ export function useTreeList() {
             expandable: true,
           },
           {
-            itemLabel: "Продукция ТТК",
+            itemLabel: "Рецептура ТТК",
             itemValue: "products",
             pathUrl: "/tbl/products",
             description: "Установка ТТК",

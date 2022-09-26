@@ -12,23 +12,23 @@ export const useStartPageStore = defineStore("StartPageStore", {
   state: () => {
     return {
       listMenuDef: [
-        // {
-        //   id: 1,
-        //   header: "Отчеты",
-        //   visible: true,
-        // },
+        {
+          id: 1,
+          header: "Отчеты",
+          visible: true,
+        },
         {
           id: 2,
-          title: "Chart",
+          title: "Отчет №1",
           link: "/charts/3",
           icon: "bar_chart",
           visible: true,
         },
-        // {
-        //   id: 3,
-        //   header: "Документы",
-        //   visible: true,
-        // },
+        {
+          id: 3,
+          header: "Документы",
+          visible: true,
+        },
         {
           id: 4,
           title: "Продажи",
@@ -38,26 +38,33 @@ export const useStartPageStore = defineStore("StartPageStore", {
         },
         {
           id: 5,
-          title: "Установка цен<br>прайсы",
+          title: "Цены продажи",
           link: "/price",
           icon: "arrow_right",
           visible: true,
         },
         {
           id: 6,
-          title: "Продукция<br>рецепты по ТТК",
+          title: "Конфигурация пекарен",
+          link: "/spravochnik",
+          icon: "arrow_right",
+          visible: true,
+        },
+        {
+          id: 7,
+          title: "Рецептура ТТК",
           link: "/products",
           icon: "arrow_right",
           visible: true,
         },
 
-        // {
-        //   id: 7,
-        //   header: "Справочники",
-        //   visible: true,
-        // },
         {
           id: 8,
+          header: "Справочники",
+          visible: true,
+        },
+        {
+          id: 9,
           title: "Справочники",
           link: "/tbl/title",
           icon: "arrow_right",
@@ -85,36 +92,36 @@ export const useStartPageStore = defineStore("StartPageStore", {
         //   visible: true,
         //   hiddenMenuCard: true, //  скрываем из кнопок на экране
         // },
-        // {
-        //   id: 12,
-        //   header: "Администрирование",
-        //   visible: true,
-        // },
         {
-          id: 13,
-          title: "Пекарни<br>конфигурация",
-          link: "/spravochnik",
-          icon: "arrow_right",
+          id: 10,
+          header: "Настройки",
           visible: true,
         },
         // {
-        //   id: 14,
-        //   title: "Пользователи<br>управляющие",
-        //   link: "/departments",
+        //   id: 13,
+        //   title: "Пекарни<br>конфигурация",
+        //   link: "/spravochnik",
         //   icon: "arrow_right",
         //   visible: true,
         // },
         {
-          id: 15,
-          title: "Документы",
-          link: "/doc/title",
+          id: 11,
+          title: "Пользователи",
+          link: "/departments",
           icon: "arrow_right",
           visible: true,
         },
+        // {
+        //   id: 15,
+        //   title: "Документы",
+        //   link: "/doc/title",
+        //   icon: "arrow_right",
+        //   visible: true,
+        // },
       ],
       listMenu: [],
       listMenuSorted: [],
-      toggleStorage: "23-09-2022-2",
+      toggleStorage: "25-09-2022-2",
       //  listMenu: [],
     };
   },
