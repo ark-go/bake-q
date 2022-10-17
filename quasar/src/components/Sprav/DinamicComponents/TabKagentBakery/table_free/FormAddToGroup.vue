@@ -15,10 +15,7 @@
       </q-card-section>
       <q-card-section style="max-height: 20vh" class="scroll">
         <code>{{ infoBakery }}</code>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-        repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
-        perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-        minima, porro labore.
+        тест 731
       </q-card-section>
       <q-card-section class="row items-center">
         <q-checkbox

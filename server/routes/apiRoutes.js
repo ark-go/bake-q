@@ -96,7 +96,7 @@ import { exportPriceExcel } from "../modules/excel/exportPriceExcel/exportPriceE
 import { exportSaleExcel } from "../modules/excel/exportSaleExcel/exportSaleExcel.js";
 import { chartQuery } from "../postgreSQL/command/chartQuery/chartQuery.js";
 
-import { testParser } from "../modules/excel/testParser/testParser.js";
+//import { testParser } from "../modules/excel/testParser/testParser.js";
 //import { pdfmain } from "../modules/PDF/pdfmain.js";
 //import { pdfMainLoad } from "../modules/PDF/pdfMainLoad.js";
 import { pdf } from "../modules/PDF/pdf.js";
@@ -229,10 +229,10 @@ export async function apiRoutes() {
     // await chartQuery(req, res);
   });
 
-  router.post("/testParser", async (req, res) => {
-    console.log("/testParser");
-    await testParser(req, res);
-  });
+  // router.post("/testParser", async (req, res) => {
+  //   console.log("/testParser");
+  //   await testParser(req, res);
+  // });
 
   // router.post("/pdfmain", async (req, res) => {
   //   console.log("/pdfmain");

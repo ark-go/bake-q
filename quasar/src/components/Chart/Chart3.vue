@@ -131,7 +131,7 @@ export default defineComponent({
             },
           },
           title: {
-            text: "Деньга",
+            text: "Выручка",
             style: {
               fontSize: "14px",
               color: "#008FFB",

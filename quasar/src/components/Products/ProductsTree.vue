@@ -96,20 +96,26 @@ export default defineComponent({
  */
 const dataTree = [
   {
+    key: "start",
+    label: "Рецептура ТТК",
+    table: "products",
+    //selectable: true,
+  },
+  {
     key: 1,
     label: "Продукция",
     //icon: "restaurant_menu",
     disabled: false,
     children: [
-      {
-        key: "start",
-        label: "Продукция",
-        table: "products",
-        //selectable: true,
-      },
+      // {
+      //   key: "start",
+      //   label: "Продукция",
+      //   table: "products",
+      //   //selectable: true,
+      // },
       {
         key: 12,
-        label: "Товар",
+        label: "Продукты",
         table: "productvid",
       },
       {

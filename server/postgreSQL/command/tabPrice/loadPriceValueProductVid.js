@@ -18,7 +18,8 @@ export async function loadPriceValueProductVid(
     text: /*sql*/ `
       SELECT
       productvid.id as id,
-      concat(ptype.prefix,' ',assort.name,' ',productvid.name,' ',productvid.nameext,' ',unit.name) AS name
+      -- concat(ptype.prefix,' ',assort.name,' ',productvid.name,' ',productvid.nameext,' ',unit.name) AS name
+      concat(ptype.prefix,' ',assort.name,' ',productvid.name,' ',productvid.nameext) AS name
 
       from productvid
       LEFT JOIN productassortment as assort on assort.id = productvid.productassortment_id

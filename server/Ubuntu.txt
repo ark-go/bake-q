@@ -1,0 +1,52 @@
+Сделан rc.local
+и sysctl vm.overcommit_memory=1
+
+........... Redis ругался и попросил отключить transparent_hugepage 
+про THP  https://habr.com/ru/company/tinkoff/blog/446342/
+
+WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. 
+To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf 
+and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+310055:M 28 Sep 2022 01:30:41.132 # 
+WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. 
+This will create latency and memory usage issues with Redis. 
+To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, 
+and add it to your /etc/rc.local in order to retain the setting after a reboot. 
+Redis must be restarted after THP is disabled.
+
+
+...............  Включаем rc.local
+в него запишем 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+
+Enable rc.local on Ubuntu 20.04
+DECEMBER 22, 2020 ~ ALLEN
+For compatible reason, rc.local support is still supported by new version of Ubuntu. But it is disabled by default. This will guide you to enable running rc.local while starting system.
+
+Create rc.local if it does not exist.
+Run nano /etc/rc.local. If the file does not exist, place this code below as the default rc.local file.
+
+#!/bin/bash
+
+exit 0
+Run chmod +x /etc/rc.local to give the executing permission.
+
+2. Create systemd service file.
+
+Run nano /etc/systemd/system/rc-local.service to create the systemd service file and paste this text below.
+
+[Unit]
+Description=/etc/rc.local Support
+ConditionPathExists=/etc/rc.local
+
+[Service]
+ExecStart=/etc/rc.local start
+TimeoutSec=0
+StandardOutput=tty
+RemainAfterExit=yes
+SysVStartPriority=99
+
+[Install]
+WantedBy=multi-user.target
+3. Config systemd using this bash command below.
+
+systemctl enable rc-local

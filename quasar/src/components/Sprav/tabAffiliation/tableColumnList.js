@@ -1,7 +1,7 @@
 export const columns = [
   {
     name: "name",
-    label: "Тип упаковки",
+    label: "Принадлежность",
     align: "left",
     field: "name",
     required: true,
@@ -11,7 +11,7 @@ export const columns = [
   {
     name: "bakery_count",
     label: "Пекарни шт.",
-    align: "left",
+    align: "right",
     field: "bakery_count",
     sortable: true,
   },

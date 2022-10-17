@@ -16,7 +16,8 @@ export async function loadPriceValue(req, res, tabname, timezone, idOne) {
       price_value.article as article,
       price_value.price_name as price_name,
       price_value.productvid_id as productvid_id,
-      concat(ptype.prefix,' ',assort.name,' ',pvid.name,' ',pvid.nameext,' ',unit.name) AS productvid_name,
+     -- concat(ptype.prefix,' ',assort.name,' ',pvid.name,' ',pvid.nameext,' ',unit.name) AS productvid_name,
+      concat(ptype.prefix,' ',assort.name,' ',pvid.name,' ',pvid.nameext) AS productvid_name,
       price_value.cena as cena,
       price_value.description as description,
       --

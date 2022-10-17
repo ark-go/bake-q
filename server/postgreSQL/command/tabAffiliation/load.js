@@ -16,8 +16,11 @@ export async function load(req, res, tabname, timezone, idOne) {
       ${tabname}.id,
       ${tabname}.name as name,
 
-      NullIf( (select count(*) from packtype_x_bakery_get_bakery_ondate(${tabname}.id, $1 AT TIME ZONE $2) )
+     -- NullIf( (select count(*) from packtype_x_bakery_get_bakery_ondate(${tabname}.id, $1 AT TIME ZONE $2) )
+     -- ,0) as bakery_count
+    NullIf( (select count(*) from affiliation_x_bakery_get_bakery_ondate(${tabname}.id, $1 AT TIME ZONE $2) )
       ,0) as bakery_count
+      
      -- concat(ustm.u_fam,' ',ustm.u_name,' ',ustm.u_otch) as territory_manager_name,
     --  reg.name as region_name,
     --  concat(usrm.u_fam,' ',usrm.u_name,' ',usrm.u_otch) as region_manager_name,

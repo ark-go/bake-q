@@ -9,7 +9,7 @@ export const columns = [
   },
   {
     name: "date_start_packtype",
-    label: "с этого?",
+    label: "с даты",
     align: "left",
     field: "date_start_packtype",
   },

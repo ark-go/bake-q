@@ -2,6 +2,9 @@
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 
+import { getLocalIp } from "./getLocalIp.js";
+getLocalIp(); // INFO просто так захотелось получить IP в докере
+
 //console.log("Environment", process.env);
 import { log } from "./utils/arkLog.js"; //  логи цветные...
 //import { initSoket } from "./modules/ioSocket/initSocket.js";
@@ -10,7 +13,7 @@ import { rootDir } from "./dirModule.cjs";
 import http from "http";
 //import { Server as ioServer } from "socket.io";
 import { startIoSocket } from "./modules/ioSocket/startIoSocket.js";
-import { groupNomenclName } from "./postgreSQL/command/groupNomenclName.js";
+//import { groupNomenclName } from "./postgreSQL/command/groupNomenclName.js";
 //require("../modules/logger");
 let workDir = path.join(rootDir, ".");
 process.chdir(workDir); // установим текущую рабочую каталог
@@ -89,3 +92,21 @@ function onListening() {
   var addr = server.address();
   log(log.warning, "Старт сервера на порту " + addr.port + "  ==>");
 }
+function shutdown() {
+  console.log("Сигнал на закрытие. SIGINT");
+  setTimeout(() => {
+    console.log("Закрыли по таймауту"); // BUG Тербуется закрывать соединения , база, IoSocket
+    process.exit();
+  }, 2000);
+  server.close(() => {
+    console.log("Сервер остановлен.");
+    process.exit();
+  });
+}
+process.on("SIGINT", shutdown);
+
+// process.on("SIGINT", function () {
+//   console.log("Сигнал на закрытие. SIGINT");
+//   server.close();
+//   process.exit();
+// });

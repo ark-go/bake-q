@@ -14,7 +14,7 @@
         <b>{{ parentRow.name }}</b>
       </q-card-section>
       <q-card-section style="max-height: 20vh" class="scroll">
-        <code>{{ infoBakery }}</code> пекарня-тест
+        <code>{{ infoBakery }}</code> тест 731
       </q-card-section>
       <q-card-section class="row items-center">
         <q-checkbox

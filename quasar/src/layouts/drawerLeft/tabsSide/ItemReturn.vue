@@ -41,7 +41,8 @@ export default defineComponent({
       router,
       pinCheckbox: ref(false),
       onClick() {
-        emit("click", props.returnName);
+        // emit("click", props.returnName);
+        router.push({ path: "/" });
       },
     };
   },

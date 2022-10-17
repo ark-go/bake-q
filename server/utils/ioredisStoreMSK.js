@@ -14,7 +14,7 @@ if (process.env.RedisMSK) {
       autoResendUnfulfilledCommands: false, // отключить завершать отправку после обрыва
       // enableOfflineQueue: false, // false - не отправлять,не повторять, команду , если не получилось сразу
       reconnectOnError(err) {
-        console.log("redis 10.9.0.1", err);
+        console.log("redis", process.env.RedisMSK, err);
         return true;
       },
       maxRetriesPerRequest: null, // все ожидающие команды будут сбрасываться, кол-во попыток до выброса ошибки - null ждать вечно

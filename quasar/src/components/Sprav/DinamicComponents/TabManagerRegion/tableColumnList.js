@@ -1,7 +1,7 @@
 export const columns = [
   {
     name: "name",
-    label: "Пекарь",
+    label: "Сотрудник",
     align: "left",
     field: "name",
     required: true,

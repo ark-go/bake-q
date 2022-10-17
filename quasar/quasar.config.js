@@ -29,7 +29,9 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
+      "bus", // шина событий
       "i18n",
+      "setProvide",
       "socketBoot",
       "startApp",
       "axios",
@@ -66,7 +68,7 @@ module.exports = configure(function (/* ctx */) {
       },
       vueRouterMode: "history", // available values: 'hash', 'history'
       // vueRouterBase,
-      // vueDevtools,
+      //vueDevtools: true,
       // vueOptionsAPI: false,
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup

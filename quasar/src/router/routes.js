@@ -43,6 +43,10 @@ const routes = [
         component: () => import("pages/PageTest.vue"),
       },
       {
+        path: "apdf",
+        component: () => import("components/ArkPDF/PagePDF.vue"),
+      },
+      {
         path: "departments",
         component: () => import("components/Users/PageUsersTree.vue"),
         meta: { checkAccess: true, title: "Пользователи" },

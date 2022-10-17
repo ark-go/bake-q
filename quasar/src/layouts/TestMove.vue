@@ -2,7 +2,7 @@
   <img
     ref="refDrag"
     alt="Тындыр"
-    src="/images/logo.png"
+    src="/images/tandir-40.png"
     :style="{
       left: `${x}px`,
       top: `${y}px`,
@@ -28,8 +28,8 @@ export default {
     const dragging = ref(false);
     const mouseX = ref(0);
     const mouseY = ref(0);
-    const x = ref(330);
-    const y = ref(5);
+    const x = ref(230);
+    const y = ref(1);
     function listeningGmame(val) {
       x.value = val.x;
       y.value = val.y;

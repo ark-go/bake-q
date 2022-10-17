@@ -12,6 +12,7 @@ import { rootDir } from "./dirModule.cjs";
 import { mainRoutes } from "./routes/mainRoutes.js";
 import { botSendMessage } from "./tg/startTgBot.js";
 import { configureSession } from "./configureSession.js";
+import cors from "cors";
 import {
   rateLimiterMiddleware,
   rateLimiterMiddlewareLogin,
@@ -72,6 +73,22 @@ app.use(
     },
   })
 );
+//------------------------------
+var whitelist = ["https://go.x.arkadii.ru"]; //"http://10.9.0.3:8018"]; //, "http://10.9.0.3:8877"];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: "GET,PUT,POST",
+};
+app.use(cors(whitelist));
+//--------------------------------
+
 // app.use(function (req, res, next) {
 //   // разрешаем грузить изображения с URL-адресами данных и PDF в том числе
 //   // res.setHeader("Content-Security-Policy", "img-src 'self' 'data:';");

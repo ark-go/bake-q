@@ -29,7 +29,7 @@ export async function mainRoutes(app, express) {
   //   //console.log("HOST: ", req.header("Host"));
   //   next();
   // });
-
+  console.log("Путьдля квазара", vueDir);
   app.use(express.static(vueDir)); // vue static
   //app.use("/", await emptyRoutes()); // будет отвечать
   app.use("/api", await apiRoutes());

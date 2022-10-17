@@ -1,14 +1,14 @@
 //https://luin.github.io/ioredis/classes/Redis.html#getex
 import Redis from "ioredis";
 //import moment from "moment-timezone";
-const redis = new Redis();
-// const redis = new Redis({
-//   port: process.env.Redis_host, // Redis port
-//   host: process.env.Redis_host, // Redis host
-//   //username: process.env., // needs Redis >= 6
-//   //password: process.env.,
-//   db: process.env.Redis_db, // Defaults to 0
-// });
+//const redis = new Redis();
+const redis = new Redis({
+  port: process.env.Redis_host, // Redis port
+  host: process.env.Redis_host, // Redis host
+  //username: process.env., // needs Redis >= 6
+  //password: process.env.,
+  db: process.env.Redis_db, // Defaults to 0
+});
 //process.argv  2 нужен
 
 //let mom = moment.tz(Date.now(), "Asia/Yekaterinburg");

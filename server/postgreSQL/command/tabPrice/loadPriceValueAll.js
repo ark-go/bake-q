@@ -21,7 +21,8 @@ export async function loadPriceValueAll(req, res, tabname, timezone, idOne) {
     kg.name as kagent_franch_name,
     prv.article as article,
     prv.price_name as tovar_name,
-    concat(ptype.prefix,' ',assort.name,' ',pvid.name,' ',pvid.nameext,' ',unit.name) AS productvid_name,
+    --concat(ptype.prefix,' ',assort.name,' ',pvid.name,' ',pvid.nameext,' ',unit.name) AS productvid_name,
+    concat(ptype.prefix,' ',assort.name,' ',pvid.name,' ',pvid.nameext) AS productvid_name,
     prv.cena as cena_tovar,
     prbf.cena as cena_franch   -- franch
     from price pr

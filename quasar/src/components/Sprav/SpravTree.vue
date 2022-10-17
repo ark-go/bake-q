@@ -59,7 +59,7 @@ export default defineComponent({
   emits: ["update:selectedNode"],
   setup(props, { emit }) {
     const userStore = useUserStore();
-    const expanded = ref([1]);
+    const expanded = ref([]); //ref([1]);
     const selected = ref(null);
     const refTree = ref(null);
     const filter = ref("");
@@ -206,215 +206,216 @@ const dataTree = [
   //     }, //tableName: "brand"
   //   ],
   // },
+  // {
+  //   key: 1,
+  //   label: "Конфигурация",
+  //   description: " настройка установка назначение размещение управление",
+  //   helpCode: "TreeHelp-3", //! менять коды нельзя.. это ключи в базу данных
+  //   // icon: "room_service",
+  //   disabled: false,
+  //   expandable: true,
+  //   children: [
   {
-    key: 1,
-    label: "Конфигурация",
-    description: " настройка установка назначение размещение управление",
-    helpCode: "TreeHelp-3", //! менять коды нельзя.. это ключи в базу данных
+    key: 311,
+    label: "Пекарни",
+    helpCode: "Пекарни вкладка", // менять коды нельзя.. это ключи в базу данных
     // icon: "room_service",
-    disabled: false,
-    expandable: true,
+    tableType: "tabBakeryMain", // для выбора
+    tableName: "tabBakeryMain", // хрен знает
+  },
+  {
+    key: 51,
+    label: "Города",
+    tableName: "city",
+    tableType: "city",
+    helpCode: "Города вкладка",
+  },
+
+  // {
+  //   key: 32,
+  //   label: "Территории (группы пекарен)",
+  //   description: "по территориям",
+  //   tableName: "territory",
+  //   component: "TabTerritory", // расширение по умолчанию vue
+  //   buttonPanel: [
+  //     { name: "bakeryTerritory", label: "Пекарни", icon: "home" },
+  //     // { name: "manager", label: "Менеджер", icon: "person" },
+  //   ],
+  // },
+  {
+    key: 321,
+    label: "Территории (группы пекарен)",
+    description: "по территориям",
+    tableName: "tabTerritory",
+    tableType: "tabTerritory",
+    component: "TabTerritory", // расширение по умолчанию vue
+    buttonPanel: [
+      { name: "bakeryTerritory", label: "Пекарни", icon: "home" },
+      // { name: "manager", label: "Менеджер", icon: "person" },
+    ],
+  },
+  {
+    key: 33,
+    label: "Регионы (группы территорий)",
+    // tableName: "region",
+    tableName: "tabRegion",
+    tableType: "tabRegion",
+    component: "TabRegion", // расширение по умолчанию vue
+    //  tableType: "bakery",
+    buttonPanel: [
+      { name: "TabRegion", label: "Территории", icon: "terrain" },
+      //  { name: "manager", label: "Менеджер", icon: "person" },
+    ],
+  },
+
+  // { key: 34, label: "Регионы", tableName: "region", component: "Tabxxx" },
+  {
+    key: 37,
+    label: "Торговые сети (пекарни)",
+    tableName: "tabTrademark",
+    tableType: "tabTrademark",
+    component: "TabTrademark", // расширение по умолчанию vue, будет TabTrademark.vue
+    // permiss: "Arkadii@yandex.ru",
+    buttonPanel: [
+      // name - название панели в TabManager.vue
+      { name: "trademarkBakery", label: "Пекарни", icon: "home" },
+    ],
     children: [
       {
-        key: 51,
-        label: "Города",
-        tableName: "city",
-        tableType: "city",
-        helpCode: "Города вкладка",
+        key: 371,
+        label: "Бренды",
+        tableName: "tabBrand",
+        tableType: "tabBrand",
+        //  component: "tabBrand",
       },
-      {
-        key: 311,
-        label: "Пекарни",
-        helpCode: "Пекарни вкладка", // менять коды нельзя.. это ключи в базу данных
-        // icon: "room_service",
-        tableType: "tabBakeryMain", // для выбора
-        tableName: "tabBakeryMain", // хрен знает
-      },
-      {
-        key: 31,
-        label: "Пекарни (тест)",
-        //tableName: "bakery", // tableType: "bakery",
-        tableName: "tabBakery", // имя для запроса на сервер
-        tableType: "tabBakery", //! убрать после замены всех таблиц - не скоро, оперделяет что таблица внешняя
-        component: "TabBakery", // расширение по умолчанию vue
-        //permiss: "Arkadii@yandex.ru",
-        buttonPanel: [
-          // { name: "bakeryBaker", label: "Пекари", icon: "person" }, // панель вверху
-          //  { name: "manager", label: "Менеджер", icon: "person" },
-        ],
-      },
+    ],
+  },
+  {
+    key: 4,
+    label: "Контрагенты",
+    helpCode: "Контрагенты вкладка", //! менять коды нельзя.. это ключи в базу данных
+    // icon: "room_service",
+    tableType: "tabKagentMain", // для выбора
+    tableName: "tabKagentMain", // хрен знает
+    disabled: false,
+    children: [
       // {
-      //   key: 32,
-      //   label: "Территории (группы пекарен)",
-      //   description: "по территориям",
-      //   tableName: "territory",
-      //   component: "TabTerritory", // расширение по умолчанию vue
-      //   buttonPanel: [
-      //     { name: "bakeryTerritory", label: "Пекарни", icon: "home" },
-      //     // { name: "manager", label: "Менеджер", icon: "person" },
+      //   key: 10,
+      //   label: "Справочники",
+      //   helpCode: "TreeHelp-1", //! менять коды нельзя.. это ключи в базу данных
+      //   //icon: "restaurant_menu",
+      //   permiss: "Arkadii@yandex.ru",
+      //   children: [
+      //     {
+      //       key: 11,
+      //       label: "Вид контрагента",
+      //       tableName: "kagentvid",
+      //     },
+      //     { key: 12, label: "Вид регистрации", tableName: "kagentvidreg" },
+      //     {
+      //       key: 13,
+      //       label: "Группы контрагента",
+      //       tableName: "kagentgroup",
+      //     },
       //   ],
+
+      //   // { label: " ? Вид регистрации", tableName: "kage+ntvidreg" },
+      //   // { label: " ? Вид контрагента", tableName: "kage+ntvid" },
       // },
       {
-        key: 321,
-        label: "Территории (группы пекарен)",
-        description: "по территориям",
-        tableName: "tabTerritory",
-        tableType: "tabTerritory",
-        component: "TabTerritory", // расширение по умолчанию vue
+        key: 41,
+        label: "Торговых сетей",
+        tableName: "tabKagent",
+        tableType: "tabKagent",
+        component: "TabKagent", // расширение по умолчанию vue, будет TabKagent.vue
+        helpCode: "TreeHelp-2",
+        //  permiss: "Arkadii@yandex.ru",
         buttonPanel: [
-          { name: "bakeryTerritory", label: "Пекарни", icon: "home" },
-          // { name: "manager", label: "Менеджер", icon: "person" },
+          // name - название панели в TabManager.vue
+          { name: "kagentBakery", label: "Пекарни", icon: "home" },
         ],
       },
       {
-        key: 33,
-        label: "Регионы (группы территорий)",
-        // tableName: "region",
-        tableName: "tabRegion",
-        tableType: "tabRegion",
-        component: "TabRegion", // расширение по умолчанию vue
-        //  tableType: "bakery",
-        buttonPanel: [
-          { name: "TabRegion", label: "Территории", icon: "terrain" },
-          //  { name: "manager", label: "Менеджер", icon: "person" },
-        ],
-      },
-
-      // { key: 34, label: "Регионы", tableName: "region", component: "Tabxxx" },
-      {
-        key: 37,
-        label: "Торговые сети (пекарни)",
-        tableName: "tabTrademark",
-        tableType: "tabTrademark",
-        component: "TabTrademark", // расширение по умолчанию vue, будет TabTrademark.vue
+        key: 42,
+        label: "Собственных",
+        tableName: "tabKagentOwn",
+        tableType: "tabKagentOwn",
+        component: "TabKagentOwn", // расширение по умолчанию vue, будет TabKagent.vue
         // permiss: "Arkadii@yandex.ru",
         buttonPanel: [
           // name - название панели в TabManager.vue
-          { name: "trademarkBakery", label: "Пекарни", icon: "home" },
-        ],
-        children: [
-          {
-            key: 371,
-            label: "Бренды",
-            tableName: "tabBrand",
-            tableType: "tabBrand",
-            //  component: "tabBrand",
-          },
+          { name: "kagentBakery", label: "Пекарни", icon: "home" },
         ],
       },
       {
-        key: 4,
-        label: "Контрагенты",
-        helpCode: "Контрагенты вкладка", //! менять коды нельзя.. это ключи в базу данных
-        // icon: "room_service",
-        tableType: "tabKagentMain", // для выбора
-        tableName: "tabKagentMain", // хрен знает
-        disabled: false,
-        children: [
-          // {
-          //   key: 10,
-          //   label: "Справочники",
-          //   helpCode: "TreeHelp-1", //! менять коды нельзя.. это ключи в базу данных
-          //   //icon: "restaurant_menu",
-          //   permiss: "Arkadii@yandex.ru",
-          //   children: [
-          //     {
-          //       key: 11,
-          //       label: "Вид контрагента",
-          //       tableName: "kagentvid",
-          //     },
-          //     { key: 12, label: "Вид регистрации", tableName: "kagentvidreg" },
-          //     {
-          //       key: 13,
-          //       label: "Группы контрагента",
-          //       tableName: "kagentgroup",
-          //     },
-          //   ],
-
-          //   // { label: " ? Вид регистрации", tableName: "kage+ntvidreg" },
-          //   // { label: " ? Вид контрагента", tableName: "kage+ntvid" },
-          // },
-          {
-            key: 41,
-            label: "Торговых сетей (пекарни)",
-            tableName: "tabKagent",
-            tableType: "tabKagent",
-            component: "TabKagent", // расширение по умолчанию vue, будет TabKagent.vue
-            helpCode: "TreeHelp-2",
-            //  permiss: "Arkadii@yandex.ru",
-            buttonPanel: [
-              // name - название панели в TabManager.vue
-              { name: "kagentBakery", label: "Пекарни", icon: "home" },
-            ],
-          },
-          {
-            key: 42,
-            label: "Собственные (пекарни)",
-            tableName: "tabKagentOwn",
-            tableType: "tabKagentOwn",
-            component: "TabKagentOwn", // расширение по умолчанию vue, будет TabKagent.vue
-            // permiss: "Arkadii@yandex.ru",
-            buttonPanel: [
-              // name - название панели в TabManager.vue
-              { name: "kagentBakery", label: "Пекарни", icon: "home" },
-            ],
-          },
-          {
-            key: 43,
-            label: "Франчайзинг (пекарни)",
-            tableName: "tabKagentFranch",
-            tableType: "tabKagentFranch",
-            component: "TabKagentFranch", // расширение по умолчанию vue, будет TabKagent.vue
-            // permiss: "Arkadii@yandex.ru",
-            buttonPanel: [
-              // name - название панели в TabManager.vue
-              { name: "kagentBakery", label: "Пекарни", icon: "home" },
-            ],
-          },
-        ],
-      },
-
-      {
-        key: 39,
-        label: "Принадлежность (пекарни)",
-        helpCode: "Принадлежность вкладка",
-        tableName: "tabAffiliation",
-        tableType: "tabAffiliation",
-        component: "TabAffiliation", // расширение по умолчанию vue, будет TabTrademark.vue
+        key: 43,
+        label: "Франчайзи",
+        tableName: "tabKagentFranch",
+        tableType: "tabKagentFranch",
+        component: "TabKagentFranch", // расширение по умолчанию vue, будет TabKagent.vue
         // permiss: "Arkadii@yandex.ru",
         buttonPanel: [
           // name - название панели в TabManager.vue
-          { name: "affiliationBakery", label: "Пекарни", icon: "home" },
-        ],
-      },
-      {
-        key: 35,
-        label: "Менеджеры (управляющие)",
-        tableName: "tabUsers",
-        tableType: "tabUsers",
-        component: "TabManager", // расширение по умолчанию vue, будет TabManager.vue
-        buttonPanel: [
-          // name - название панели в TabManager.vue
-          { name: "managerRegion", label: "Регионы", icon: "terrain" },
-          { name: "managerTerritory", label: "Территории", icon: "terrain" },
-          { name: "managerBakery", label: "Пекарни", icon: "home" },
-        ],
-      },
-      {
-        key: 50,
-        label: "Упаковка (пекарни)",
-        helpCode: "Упаковка вкладка",
-        tableName: "tabPacktype",
-        tableType: "tabPacktype",
-        component: "TabPacktype", // расширение по умолчанию vue, будет TabTrademark.vue
-        // permiss: "Arkadii@yandex.ru",
-        buttonPanel: [
-          // name - название панели в TabManager.vue
-          { name: "packtypeBakery", label: "Пекарни", icon: "home" },
+          { name: "kagentBakery", label: "Пекарни", icon: "home" },
         ],
       },
     ],
   },
+
+  {
+    key: 39,
+    label: "Принадлежность (пекарни)",
+    helpCode: "Принадлежность вкладка",
+    tableName: "tabAffiliation",
+    tableType: "tabAffiliation",
+    component: "TabAffiliation", // расширение по умолчанию vue, будет TabTrademark.vue
+    // permiss: "Arkadii@yandex.ru",
+    buttonPanel: [
+      // name - название панели в TabManager.vue
+      { name: "affiliationBakery", label: "Пекарни", icon: "home" },
+    ],
+  },
+  {
+    key: 35,
+    label: "Менеджеры (управляющие)",
+    tableName: "tabUsers",
+    tableType: "tabUsers",
+    component: "TabManager", // расширение по умолчанию vue, будет TabManager.vue
+    buttonPanel: [
+      // name - название панели в TabManager.vue
+      { name: "managerRegion", label: "Регионы", icon: "terrain" },
+      { name: "managerTerritory", label: "Территории", icon: "terrain" },
+      { name: "managerBakery", label: "Пекарни", icon: "home" },
+    ],
+  },
+  {
+    key: 50,
+    label: "Упаковка (пекарни)",
+    helpCode: "Упаковка вкладка",
+    tableName: "tabPacktype",
+    tableType: "tabPacktype",
+    component: "TabPacktype", // расширение по умолчанию vue, будет TabTrademark.vue
+    // permiss: "Arkadii@yandex.ru",
+    buttonPanel: [
+      // name - название панели в TabManager.vue
+      { name: "packtypeBakery", label: "Пекарни", icon: "home" },
+    ],
+  },
+  {
+    key: 31,
+    label: "Пекарни (тест)",
+    //tableName: "bakery", // tableType: "bakery",
+    tableName: "tabBakery", // имя для запроса на сервер
+    tableType: "tabBakery", //! убрать после замены всех таблиц - не скоро, оперделяет что таблица внешняя
+    component: "TabBakery", // расширение по умолчанию vue
+    //permiss: "Arkadii@yandex.ru",
+    buttonPanel: [
+      // { name: "bakeryBaker", label: "Пекари", icon: "person" }, // панель вверху
+      //  { name: "manager", label: "Менеджер", icon: "person" },
+    ],
+  },
+  //   ],
+  // },
   // {
   //   key: 4,
   //   label: "Ассортимент",

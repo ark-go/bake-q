@@ -106,7 +106,7 @@ export default defineComponent({
     function handlePan({ evt, ...newInfo }) {
       info.value = newInfo;
       widthDrawer.value = newInfo.position.left;
-      console.log("panning", newInfo.position.left, info.value);
+      //  console.log("panning", newInfo.position.left, info.value);
       // native Javascript event
       // console.log(evt)
 
