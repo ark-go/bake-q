@@ -14,17 +14,18 @@ import (
 	"time"
 
 	_ "github.com/ark-go/bake-go/cmd/utils"
+	"github.com/fatih/color"
 	"github.com/go-redis/redis/v8"
 )
 
 var ClientRedis *redis.Client
 
-func init() {
-	log.Println("Redis адрес: ", os.Getenv("Redis_host")+":"+os.Getenv("Redis_port"))
-	ClientRedis = redis.NewClient(&redis.Options{
-		Addr: os.Getenv("Redis_host") + ":" + os.Getenv("Redis_port"),
-	})
-}
+// func init() {
+// 	log.Println("Redis адрес: ", os.Getenv("Redis_host")+":"+os.Getenv("Redis_port"))
+// 	ClientRedis = redis.NewClient(&redis.Options{
+// 		Addr: os.Getenv("Redis_host") + ":" + os.Getenv("Redis_port"),
+// 	})
+// }
 
 type SessionKey string
 
@@ -43,6 +44,19 @@ type RedisStore struct {
 // KeyGenFunc defines a function used by store to generate a key
 type KeyGenFunc func() (string, error)
 type JsonSerializer struct{}
+
+func StartRedis() {
+	// log.Println("Redis адрес: ", os.Getenv("Redis_host")+":"+os.Getenv("Redis_port"))
+	ClientRedis = redis.NewClient(&redis.Options{
+		Addr: os.Getenv("Redis_host") + ":" + os.Getenv("Redis_port"),
+	})
+	err := ClientRedis.Ping(context.Background()).Err()
+	if err == nil {
+		color.Set(color.FgGreen)
+		log.Println("Redis подключились:", ClientRedis.Options().Addr)
+		color.Unset()
+	}
+}
 
 // NewRedis Store returns a new RedisStore with default configuration
 func NewRedisStore(ctx context.Context, client redis.UniversalClient) (*RedisStore, error) {

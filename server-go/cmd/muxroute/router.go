@@ -8,6 +8,7 @@ import (
 	"net/url"
 
 	"github.com/ark-go/bake-go/cmd/aredis"
+	"github.com/ark-go/bake-go/cmd/postgres"
 	"github.com/fatih/color"
 	"github.com/gorilla/mux"
 )
@@ -19,14 +20,15 @@ var (
 func StartRouter() *mux.Router {
 	Router = mux.NewRouter()
 	Router.Use(sessionMiddleware)
-	Router.HandleFunc("/api/products", Products).Methods("POST")
+	// Router.Handle("/api/products", &postgres.PgDataStruct{}).Methods("POST")
+	Router.Handle("/api/products", &postgres.DbMakeResponse{}).Methods("POST")
+	//Router.HandleFunc("/api/products", Products).Methods("POST")
 	Router.HandleFunc("/api/{.*}", func(w http.ResponseWriter, r *http.Request) {
 		// проксируем эти запросы на Node Js
 		sess := r.Context().Value(aredis.SessionKey("sessKey")).(*aredis.SessionJson) // получаем указатель на структуру сессии
 		color.Set(color.FgYellow)
 		log.Println(r.RequestURI+"\t>>", sess.User.Email, sess.IPAddress, sess.UserBrowser.Timezone)
 		color.Unset()
-		//color.Yellow(r.RequestURI+"\t>> %s %s %s", sess.User.Email, sess.IPAddress, sess.UserBrowser.Timezone)
 		reverseProxy(w, r) // проксируем запрос на NodeJs
 	}).Methods("POST")
 	Router.HandleFunc("/socket.io/", func(w http.ResponseWriter, r *http.Request) {

@@ -26,7 +26,6 @@ func sessionMiddleware(next http.Handler) http.Handler {
 			// если был запущен Store то сохраним при выходе
 			store.Save(r, w)
 		}
-		//log.Println("Выход............")
 	})
 }
 func containsUri(str string, s []string) bool {

@@ -6,10 +6,6 @@ import (
 	"path/filepath"
 )
 
-func spaRoute(w http.ResponseWriter, r *http.Request) {
-
-}
-
 // spaHandler реализует интерфейс http.Handler, поэтому мы можем его использовать
 // для ответа на HTTP-запросы. Путь к статической директории и
 // путь к индексному файлу в этом статическом каталоге используется для

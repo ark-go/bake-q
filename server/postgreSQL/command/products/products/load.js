@@ -42,7 +42,7 @@ export async function load(pool, req, tabname, timezone, idOne) {
   try {
     let result = await pool.query(sqlP);
     result = result.rowCount > 0 ? result.rows : null;
-    //  console.log("sprav load", tabname, result);
+    //  console.log("sprav load", result);
     return {
       result: result,
     };
