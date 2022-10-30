@@ -1,0 +1,159 @@
+package postgres
+
+import (
+	"context"
+	"encoding/json"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/ark-go/bake-go/src/aredis"
+	"github.com/jackc/pgx/v5"
+)
+
+// "github.com/ark-go/bake-go/src/postgres"
+
+// type Queries interface {
+// 	Load(pg *Pg) string
+// 	insert()
+// 	update()
+// }
+
+type PgDataStruct struct {
+	Outstruct any
+	Timezone  string              // зона клиента
+	InParams  map[string]string   // входные данные запроса
+	Session   *aredis.SessionJson // сессия этого запроса
+	productS
+}
+
+//var Product = &PgDataStruct{}
+
+// func (p *PgDataStruct) init() {
+// 	p{}
+// }
+
+type productS struct {
+	Id                *int64       `json:"id"`
+	Name              *string      `json:"name"`
+	Massa             *string      `json:"massa"`
+	UnitName          *string      `json:"unit_name"`
+	ProducttypePrefix *string      `json:"producttype_prefix"`
+	CountIngredients  *float64     `json:"count_ingredients"`
+	ProductvidId      *int64       `json:"productvid_id"`
+	ProductvidName    *string      `json:"productvid_name"`
+	Prefix            *string      `json:"prefix"`
+	Description       *string      `json:"description"`
+	DocumentNum       *string      `json:"document_num"`
+	DocumentDate      *string      `json:"document_date"`
+	ArticleBuh        *string      `json:"article_buh"`
+	Article           *string      `json:"article"`
+	UserEmail         *string      `json:"user_email"`
+	UserDate          *string      `json:"user_date"`
+	UserDateTest      *time.Time   `json:"user_date_test"`
+	Meta              *interface{} `json:"meta"`
+}
+
+func (p *productS) ToStruct(rows pgx.Rows) {
+	_, err := pgx.CollectRows(rows, pgx.RowToStructByPos[productS])
+	if err != nil {
+		log.Println("ошибка преобразовния данных в структуру: ", err.Error())
+		return
+	}
+}
+
+type queryi interface {
+	productS
+}
+
+func (p *PgDataStruct) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")                            // Для ответа
+	sess := r.Context().Value(aredis.SessionKey("sessKey")).(*aredis.SessionJson) // получаем указатель на структуру сессии
+	log.Println("GO:", r.RequestURI+"\t>>", sess.User.Email, sess.IPAddress, sess.UserBrowser.Timezone)
+	p.Session = sess
+	p.Timezone = sess.Timezone
+	json.NewDecoder(r.Body).Decode(&p.InParams) // входные параметры
+	for l, m := range p.InParams {
+		log.Println(l, " : ", m)
+	}
+
+	_, err := p.LoadFromDatabase(w)
+	if err != nil {
+		var outcoming struct {
+			Error string `json:"error"`
+		}
+		outcoming.Error = err.Error()
+		err := json.NewEncoder(w).Encode(&outcoming)
+		if err != nil {
+			log.Fatalln("Произошла ошибка кодирования инициализированной структуры")
+		}
+	}
+}
+
+func execQuery[T queryi](p *PgDataStruct, h *T) ([]byte, error) {
+	query, values := p.sql_Load()
+	rows, err := PG.Pool.Query(context.Background(), query, values...)
+	// _, err1 := rows.Values().RawValues()
+	// log.Println("+++++++++\n", "+++++++++++++", err1.Error())
+	if err != nil {
+		log.Fatal("ошибка при выполнении запроса ", err.Error())
+		return nil, err
+	}
+	defer rows.Close()
+	result, err := pgx.CollectRows(rows, pgx.RowToMap)
+	//result, err := pgx.CollectRows(rows, pgx.RowToStructByPos[T])
+	if err != nil {
+		log.Println("ошибка преобразовния данных в структуру: ", err.Error())
+		return nil, err
+	}
+	// переводим в JSON NULL нормально проходит, за счет указателей в структуре
+	b, err := json.Marshal(result)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	log.Println(string(b))
+	return b, nil
+}
+
+func (p *PgDataStruct) sql_Load() (query string, values []any) {
+
+	query = `--sql
+SELECT
+products.id,
+products.name,
+products.massa,
+-- products.unit_id,
+-- unit.name AS unit_name,
+unit.name AS unit_name,
+producttype.prefix AS producttype_prefix,
+(select count(*) from productingred where productingred.products_id = products.id) AS count_ingredients,
+products.productvid_id,
+concat(productassortment.name,' ',productvid.name,' ',productvid.nameext) AS productvid_name,
+productassortment.prefix AS prefix,
+products.description,
+products.document_num, -- TTK
+-- products.document_date,
+to_char(products.document_date,  'DD.MM.YYYY') as document_date,
+products.article_buh,
+'PR-' ||products.article AS article,
+-- -- -- -- 
+users.email AS "user_email",
+to_char(products.user_date at time zone $1,  'DD.MM.YYYY HH12:MI:SS') as "user_date",
+products.user_date as "user_date_test",
+products.meta
+FROM products
+LEFT JOIN  users ON users.id = products.user_id
+
+LEFT JOIN  productvid ON productvid.id = products.productvid_id
+LEFT JOIN  productassortment ON productassortment.id = productvid.productassortment_id
+LEFT JOIN  producttype ON producttype.id = productassortment.producttype_id
+LEFT JOIN  unit ON unit.id = productvid.unit_id
+-- LEFT JOIN  productassortment ON productassortment.id = productvid.productassortment_id
+-- ${wher}
+ORDER BY productassortment.name, productvid.name,productvid.nameext, products.name
+
+`
+	values = []any{p.Timezone}
+	return
+}

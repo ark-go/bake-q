@@ -7,12 +7,14 @@ PROJECTNAME=$(shell basename `pwd`)
 
 .SILENT: build run getlasttag buildzip buildwin buildlinux buildwasm www buildandroid library
 
+test:
+	golangci-lint run
 
 buildlinux:
 #	@echo $$($(version))
 	$(info +Компиляция Linux)
 #	go build -ldflags "-s -w -X 'main.versionProg=$$($(version))'" -o ./bin/main/$(PROJECTNAME) cmd/main/main.go
-	go build -ldflags "-s -w" -o ../server ./...
+	go build -ldflags "-s -w" -o ../server ./src/main
 	../server/servergo
 
 buildzip:
@@ -25,11 +27,11 @@ buildwin:
 
 #buildwasm:
 #	$(info +Компиляция WASM)
-#	PROJECTNAME="xxxx" go run gioui.org/cmd/gogio -ldflags "-s -w -X 'main.versionProg=$$($(version))'" -o wasm -target js cmd/main/main.go 
+#	PROJECTNAME="xxxx" go run gioui.org/src/gogio -ldflags "-s -w -X 'main.versionProg=$$($(version))'" -o wasm -target js cmd/main/main.go 
 
 buildandroid:
 	$(info +Компиляция Android)
-	ANDROID_SDK_ROOT=/home/arkadii/Android/Sdk/ go run gioui.org/cmd/gogio -ldflags "-s -w -X 'main.versionProg=$$($(version))'" -o ./bin/main/$(PROJECTNAME).apk -target android -icon appicon.png -arch arm64 -appid Go.arkiv cmd/main/main.go
+	ANDROID_SDK_ROOT=/home/arkadii/Android/Sdk/ go run gioui.org/src/gogio -ldflags "-s -w -X 'main.versionProg=$$($(version))'" -o ./bin/main/$(PROJECTNAME).apk -target android -icon appicon.png -arch arm64 -appid Go.arkiv cmd/main/main.go
 
 run: buildlinux # buildwin 
 	$(info +Запуск)
